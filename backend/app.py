@@ -41,6 +41,7 @@ def audio():
   engine = pyttsx3.init()
   engine.say("I will speak this text")
   engine.runAndWait()
+  app.logger.info('%s logged in successfully')
   # See /src/components/App.js for frontend call
   return jsonify("Completed")
 
