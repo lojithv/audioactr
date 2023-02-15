@@ -42,25 +42,21 @@ const SequenceEditor = (props: Props) => {
       id: 1,
       text: "Step 1",
       width: 100,
-      fill: "green",
     },
     {
       id: 2,
       text: "Step 2",
       width: 100,
-      fill: "green",
     },
     {
       id: 3,
       text: "Step 3",
       width: 100,
-      fill: "green",
     },
     {
       id: 4,
       text: "Step 4",
       width: 100,
-      fill: "green",
     },
   ]);
 
