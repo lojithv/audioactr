@@ -1,11 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Rect, Text, Group, Line } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Text,
+  Group,
+  Line,
+  Transformer,
+} from "react-konva";
 import FormDialog from "./dialogForm/DialogForm";
 
-interface Step {
-  id: number;
-  text: string;
-}
+// interface Step {
+//   id: number;
+//   text: string;
+// }
 
 interface CanShowAlert {
   getAlert(id: any): void;
@@ -29,11 +37,31 @@ const SequenceEditor = (props: Props) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
-  const [sequenceData, setSequenceData] = useState<Step[]>([
-    { id: 1, text: "Step 1" },
-    { id: 2, text: "Step 2" },
-    { id: 3, text: "Step 3" },
-    { id: 4, text: "Step 4" },
+  const [sequenceData, setSequenceData] = useState<any[]>([
+    {
+      id: 1,
+      text: "Step 1",
+      width: 100,
+      fill: "green",
+    },
+    {
+      id: 2,
+      text: "Step 2",
+      width: 100,
+      fill: "green",
+    },
+    {
+      id: 3,
+      text: "Step 3",
+      width: 100,
+      fill: "green",
+    },
+    {
+      id: 4,
+      text: "Step 4",
+      width: 100,
+      fill: "green",
+    },
   ]);
 
   useEffect(() => {
@@ -57,6 +85,16 @@ const SequenceEditor = (props: Props) => {
     setSequenceData(newSequenceData);
   };
 
+  const [selectedId, selectShape] = React.useState("");
+
+  const checkDeselect = (e: { target: { getStage: () => any } }) => {
+    // deselect when clicked on empty area
+    const clickedOnEmpty = e.target === e.target.getStage();
+    if (clickedOnEmpty) {
+      selectShape("");
+    }
+  };
+
   return (
     <>
       <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
@@ -67,7 +105,7 @@ const SequenceEditor = (props: Props) => {
         height={window.innerHeight}
       >
         <Layer>
-          {sequenceData.map((step) => (
+          {sequenceData.map((step, i) => (
             <Group
               draggable
               key={"step_" + step.id}
@@ -93,18 +131,17 @@ const SequenceEditor = (props: Props) => {
                   height={40}
                   fill="#4B4B4B"
                 />
-                <Rect
-                  x={10 + 101}
-                  y={step.id * 50}
-                  width={120}
-                  height={40}
-                  fill="#BDBDBD"
-                  draggable
-                  dragBoundFunc={(pos) => {
-                    return {
-                      x: pos.x,
-                      y: step.id * 50,
-                    };
+                <SubLayer
+                  id={step.id}
+                  shapeProps={step}
+                  isSelected={step.id.toString() === selectedId}
+                  onSelect={() => {
+                    selectShape(step.id.toString());
+                  }}
+                  onChange={(newAttrs: { width: number; id: string }) => {
+                    const rects = sequenceData.slice();
+                    rects[i] = newAttrs;
+                    setSequenceData(rects);
                   }}
                 />
               </Group>
@@ -136,6 +173,82 @@ const SequenceEditor = (props: Props) => {
         </Layer>
       </Stage>
     </>
+  );
+};
+
+const SubLayer = ({ id, shapeProps, isSelected, onSelect, onChange }: any) => {
+  const shapeRef: any = React.useRef();
+  const trRef: any = React.useRef();
+
+  React.useEffect(() => {
+    if (isSelected) {
+      // we need to attach transformer manually
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
+  }, [isSelected]);
+
+  return (
+    <React.Fragment>
+      <Rect
+        x={10 + 101}
+        y={id * 50}
+        width={120}
+        height={40}
+        fill="#BDBDBD"
+        draggable
+        dragBoundFunc={(pos) => {
+          return {
+            x: pos.x,
+            y: id * 50,
+          };
+        }}
+        onClick={onSelect}
+        onTap={onSelect}
+        ref={shapeRef}
+        {...shapeProps}
+        onDragEnd={(e) => {
+          onChange({
+            ...shapeProps,
+            x: e.target.x(),
+            y: e.target.y(),
+          });
+        }}
+        onTransformEnd={(e) => {
+          // transformer is changing scale of the node
+          // and NOT its width or height
+          // but in the store we have only width and height
+          // to match the data better we will reset scale on transform end
+          const node = shapeRef.current;
+          const scaleX = node.scaleX();
+          const scaleY = node.scaleY();
+
+          // we will reset it back
+          node.scaleX(1);
+          node.scaleY(1);
+          onChange({
+            ...shapeProps,
+            x: node.x(),
+            y: node.y(),
+            // set minimal value
+            width: Math.max(5, node.width() * scaleX),
+            height: Math.max(node.height() * scaleY),
+          });
+        }}
+      />
+      {isSelected && (
+        <Transformer
+          ref={trRef}
+          boundBoxFunc={(oldBox, newBox) => {
+            // limit resize
+            if (newBox.width < 5 || newBox.height < 5) {
+              return oldBox;
+            }
+            return newBox;
+          }}
+        />
+      )}
+    </React.Fragment>
   );
 };
 

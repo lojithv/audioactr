@@ -6,6 +6,7 @@ import { axiosInstance } from "./config/axiosInstance";
 import theme from "./theme/mui-theme";
 import Editor from "./views/Editor";
 import Home from "./views/Home";
+import Demo from "./views/Test";
 
 function App() {
   const [resp, setRes] = React.useState({});
@@ -28,8 +29,9 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Editor/>} />
             <Route path="/editor" element={<Editor />} />
+            <Route path="/test" element={<Demo />} />
           </Routes>
         </Router>
       </ThemeProvider>
