@@ -28,6 +28,17 @@ const Editor = () => {
     }
   }, [play]);
 
+  const handleKeyDown = (event: { key: any; }) => {
+    handlePlay()
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [play]);
+
   const handlePlay = () => {
     if (!play) {
       setPlay(true);
