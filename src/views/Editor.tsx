@@ -11,6 +11,7 @@ import { axiosInstance } from "../config/axiosInstance";
 
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import StopRoundedIcon from "@mui/icons-material/StopRounded";
 import { IconButton } from "@mui/material";
 
 type Props = {};
@@ -63,6 +64,15 @@ const Editor = () => {
     >
       <div>
         <div style={{ color: "white" }}>{value}</div>
+        <IconButton
+          onClick={() => {
+            setValue(0);
+            setPlay(false);
+          }}
+        >
+          <StopRoundedIcon />
+        </IconButton>
+
         {!play && (
           <IconButton onClick={() => handlePlay()}>
             <PlayArrowRoundedIcon />
@@ -74,10 +84,6 @@ const Editor = () => {
             <PauseRoundedIcon />
           </IconButton>
         )}
-
-        <div style={{ color: "white" }} onClick={() => setValue(0)}>
-          reset
-        </div>
       </div>
       <SequenceEditor timer={value} />
     </div>
