@@ -42,21 +42,25 @@ const SequenceEditor = (props: Props) => {
       id: 1,
       text: "Step 1",
       width: 100,
+      layerIndex: 1,
     },
     {
       id: 2,
       text: "Step 2",
       width: 100,
+      layerIndex: 2,
     },
     {
       id: 3,
       text: "Step 3",
       width: 100,
+      layerIndex: 3,
     },
     {
       id: 4,
       text: "Step 4",
       width: 100,
+      layerIndex: 4,
     },
   ]);
 
@@ -91,6 +95,8 @@ const SequenceEditor = (props: Props) => {
     }
   };
 
+  const handleSequnceLayerDrag = () => {};
+
   return (
     <>
       <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
@@ -111,8 +117,11 @@ const SequenceEditor = (props: Props) => {
               sequenceData={sequenceData}
               setSequenceData={setSequenceData}
               handleStepClick={handleStepClick}
+              handleSequnceLayerDrag={handleSequnceLayerDrag}
             />
           ))}
+        </Layer>
+        <Layer>
           <Rect
             x={111 + props.timer}
             y={50}
@@ -143,17 +152,27 @@ const SequenceLayer = ({
   sequenceData,
   setSequenceData,
   handleStepClick,
+  handleSequnceLayerDrag,
 }: any) => {
+  const layerRef: any = React.useRef();
+
+  const roundnum = (num:number) => {
+    return Math.round(num / 50)*50;
+    }
+
   return (
     <Group
       draggable
       key={"step_" + step.id}
-      onDragStart={(evt) => {}}
+      ref={layerRef}
+      onDragStart={(evt) => {
+        layerRef.current.moveToTop();
+      }}
       dragBoundFunc={(pos) => {
-        return {
-          x: 0,
-          y: pos.y,
-        };
+          return {
+            x: 0,
+            y: roundnum(pos.y),
+          }
       }}
     >
       <Rect x={10} y={step.id * 50} width={100} height={40} fill="#4B4B4B" />
