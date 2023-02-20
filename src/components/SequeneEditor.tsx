@@ -102,54 +102,16 @@ const SequenceEditor = (props: Props) => {
       >
         <Layer>
           {sequenceData.map((step, i) => (
-            <Group
-              draggable
-              key={"step_" + step.id}
-              dragBoundFunc={(pos) => {
-                return {
-                  x: 0,
-                  y: pos.y,
-                };
-              }}
-            >
-              <Rect
-                x={10}
-                y={step.id * 50}
-                width={100}
-                height={40}
-                fill="#4B4B4B"
-              />
-              <Group>
-                <Rect
-                  x={10 + 101}
-                  y={step.id * 50}
-                  width={windowDimensions.width - 120}
-                  height={40}
-                  fill="#4B4B4B"
-                />
-                <SubLayer
-                  id={step.id}
-                  shapeProps={step}
-                  isSelected={step.id.toString() === selectedId}
-                  onSelect={() => {
-                    selectShape(step.id.toString());
-                  }}
-                  onChange={(newAttrs: { width: number; id: string }) => {
-                    const rects = sequenceData.slice();
-                    rects[i] = newAttrs;
-                    setSequenceData(rects);
-                  }}
-                />
-              </Group>
-              <Text
-                x={35}
-                y={step.id * 50 + 20}
-                text={step.text}
-                fontSize={20}
-                fill="white"
-                onClick={() => handleStepClick(step.id)}
-              />
-            </Group>
+            <SequenceLayer
+              step={step}
+              i={i}
+              windowDimensions={windowDimensions}
+              selectedId={selectedId}
+              selectShape={selectShape}
+              sequenceData={sequenceData}
+              setSequenceData={setSequenceData}
+              handleStepClick={handleStepClick}
+            />
           ))}
           <Rect
             x={111 + props.timer}
@@ -169,6 +131,63 @@ const SequenceEditor = (props: Props) => {
         </Layer>
       </Stage>
     </>
+  );
+};
+
+const SequenceLayer = ({
+  step,
+  windowDimensions,
+  selectedId,
+  selectShape,
+  i,
+  sequenceData,
+  setSequenceData,
+  handleStepClick,
+}: any) => {
+  return (
+    <Group
+      draggable
+      key={"step_" + step.id}
+      onDragStart={(evt) => {}}
+      dragBoundFunc={(pos) => {
+        return {
+          x: 0,
+          y: pos.y,
+        };
+      }}
+    >
+      <Rect x={10} y={step.id * 50} width={100} height={40} fill="#4B4B4B" />
+      <Group>
+        <Rect
+          x={10 + 101}
+          y={step.id * 50}
+          width={windowDimensions.width - 120}
+          height={40}
+          fill="#4B4B4B"
+        />
+        <SubLayer
+          id={step.id}
+          shapeProps={step}
+          isSelected={step.id.toString() === selectedId}
+          onSelect={() => {
+            selectShape(step.id.toString());
+          }}
+          onChange={(newAttrs: { width: number; id: string }) => {
+            const rects = sequenceData.slice();
+            rects[i] = newAttrs;
+            setSequenceData(rects);
+          }}
+        />
+      </Group>
+      <Text
+        x={35}
+        y={step.id * 50 + 20}
+        text={step.text}
+        fontSize={20}
+        fill="white"
+        onClick={() => handleStepClick(step.id)}
+      />
+    </Group>
   );
 };
 
