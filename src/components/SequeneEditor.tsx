@@ -143,6 +143,10 @@ const SequenceEditor = (props: Props) => {
   );
 };
 
+const roundnum = (num: number) => {
+  return Math.round(num / 50) * 50;
+};
+
 const SequenceLayer = ({
   step,
   windowDimensions,
@@ -155,10 +159,7 @@ const SequenceLayer = ({
   handleSequnceLayerDrag,
 }: any) => {
   const layerRef: any = React.useRef();
-
-  const roundnum = (num:number) => {
-    return Math.round(num / 50)*50;
-    }
+  const subLayerGroup: any = React.useRef();
 
   return (
     <Group
@@ -234,7 +235,7 @@ const SubLayer = ({ id, shapeProps, isSelected, onSelect, onChange }: any) => {
         dragBoundFunc={(pos) => {
           return {
             x: pos.x,
-            y: id * 50,
+            y: roundnum(pos.y),
           };
         }}
         onClick={onSelect}
