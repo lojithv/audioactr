@@ -236,8 +236,8 @@ const SubLayer = ({ id, shapeProps, isSelected, onSelect, onChange }: any) => {
         <Transformer
           ref={trRef}
           anchorStroke="transparent"
-          anchorFill= 'transparent'
-          borderStroke='transparent'
+          anchorFill="transparent"
+          borderStroke="transparent"
           boundBoxFunc={(oldBox, newBox) => {
             // limit resize
             if (newBox.width < 5 || newBox.height < 5) {
