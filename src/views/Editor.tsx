@@ -9,6 +9,11 @@ import { useEffect } from "react";
 import SequenceEditor from "../components/SequeneEditor";
 import { axiosInstance } from "../config/axiosInstance";
 
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import StopRoundedIcon from "@mui/icons-material/StopRounded";
+import { IconButton } from "@mui/material";
+
 type Props = {};
 
 const Editor = () => {
@@ -28,14 +33,14 @@ const Editor = () => {
     }
   }, [play]);
 
-  const handleKeyDown = (event: { key: any; }) => {
-    handlePlay()
+  const handleKeyDown = (event: { key: any }) => {
+    handlePlay();
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [play]);
 
@@ -59,12 +64,26 @@ const Editor = () => {
     >
       <div>
         <div style={{ color: "white" }}>{value}</div>
-        <div style={{ color: "white" }} onClick={() => handlePlay()}>
-          pause
-        </div>
-        <div style={{ color: "white" }} onClick={() => setValue(0)}>
-          reset
-        </div>
+        <IconButton
+          onClick={() => {
+            setValue(0);
+            setPlay(false);
+          }}
+        >
+          <StopRoundedIcon />
+        </IconButton>
+
+        {!play && (
+          <IconButton onClick={() => handlePlay()}>
+            <PlayArrowRoundedIcon />
+          </IconButton>
+        )}
+
+        {play && (
+          <IconButton onClick={() => handlePlay()}>
+            <PauseRoundedIcon />
+          </IconButton>
+        )}
       </div>
       <SequenceEditor timer={value} />
     </div>
