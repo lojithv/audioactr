@@ -1,15 +1,17 @@
 import { KonvaEventObject } from "konva/lib/Node";
-import React, { LegacyRef, useEffect, useRef, useState } from "react";
+import { Vector2d } from "konva/lib/types";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Stage,
   Layer,
   Rect,
   Text,
   Group,
-  Line,
   Transformer,
 } from "react-konva";
 import FormDialog from "./dialogForm/DialogForm";
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import { Html } from 'react-konva-utils';
 
 // interface Step {
 //   id: number;
@@ -199,6 +201,14 @@ const SequenceLayer = ({
     setSequenceData(newItems);
   };
 
+  const handleDrag = (e:Vector2d) => {
+    const { y } = e;
+
+    const newY = roundnum(y);
+
+    return { x: 0, y: newY }
+  };
+
   return (
     <Group
       draggable
@@ -207,14 +217,24 @@ const SequenceLayer = ({
       onDragStart={(event) =>{onDragStart(event, i);}}
       onDragOver={onDragOver}
       onDragEnd={(e) => onDrop(e)}
-      dragBoundFunc={(pos) => {
-        return {
-          x: 0,
-          y: roundnum(pos.y),
-        };
-      }}
+      dragBoundFunc={(pos)=>handleDrag(pos)}
     >
-      <Rect x={10} y={i * 50} width={100} height={40} fill="#4B4B4B" />
+      <Group x={10} y={i * 50} >
+      <Rect width={100} height={40} fill="#4B4B4B" />
+      <Html divProps={{
+              style: {
+                position:'absolute',
+                paddingTop:20,
+                height:'40px',
+                display:'flex',
+                alignItems:'center'
+              },
+            }}>
+        <DragIndicatorIcon/>
+      </Html>
+      </Group>
+      
+   
       <Group
         ref={subLayerGroup}
         id={"sub_layer_group"+step.id}
