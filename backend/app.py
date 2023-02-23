@@ -39,9 +39,11 @@ def example():
 @app.route("/audio",methods = ['POST'])
 def audio():
   data = request.get_json()
-  app.logger.info(data['phrase'])
+  app.logger.info(data)
   engine = pyttsx3.init()
-  engine.say(data['phrase'])
+  textLayers = data['textLayers']
+  for layer in textLayers:
+    engine.say(layer['phrase'])
   engine.runAndWait()
   # See /src/components/App.js for frontend call
   return jsonify("Completed")

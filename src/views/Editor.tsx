@@ -20,6 +20,8 @@ const Editor = () => {
   const [value, setValue] = React.useState<number>(0);
   const [play, setPlay] = React.useState(false);
 
+  const [currentTextLayer, setCurrentTextLayer] = useState(0);
+
   const [layerData, setLayerData] = useState<any[]>([
     {
       id: 1,
@@ -80,21 +82,18 @@ const Editor = () => {
   const handlePlay = () => {
     if (!play) {
       setPlay(true);
-      autoPlay(0)
+      autoPlay();
     } else {
       setPlay(!play);
     }
   };
 
-  const autoPlay = (prev:number) => {
-    const pending = textLayers.find((l) => prev <= l.startTime);
-    if (pending) {
-      axiosInstance.post("/audio", { phrase: pending.phrase }).then((res: any) => {
-        autoPlay(pending.startTime);
+  const autoPlay = () => {
+    axiosInstance
+      .post("/audio", { textLayers: textLayers })
+      .then((res: any) => {
+        console.log("completed");
       });
-    } else {
-      setPlay(false)
-    }
   };
 
   return (
