@@ -5,7 +5,7 @@ import VolumeDown from "@mui/icons-material/VolumeDown";
 import VolumeUp from "@mui/icons-material/VolumeUp";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SequenceEditor from "../components/SequeneEditor";
 import { axiosInstance } from "../config/axiosInstance";
 
@@ -19,6 +19,38 @@ type Props = {};
 const Editor = () => {
   const [value, setValue] = React.useState<number>(0);
   const [play, setPlay] = React.useState(false);
+
+  const [layerData, setLayerData] = useState<any[]>([
+    {
+      id: 1,
+      text: "Step 1",
+      width: 100,
+      layerIndex: 1,
+    },
+    {
+      id: 2,
+      text: "Step 2",
+      width: 100,
+      layerIndex: 2,
+    },
+    {
+      id: 3,
+      text: "Step 3",
+      width: 100,
+      layerIndex: 3,
+    },
+    {
+      id: 4,
+      text: "Step 4",
+      width: 100,
+      layerIndex: 4,
+    },
+  ]);
+
+  const [textLayers, setTextLayers] = useState([
+    { layerId: 1, phrase: "hello", startTime: 0 },
+    { layerId: 2, phrase: "world", startTime: 100 },
+  ]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number);
@@ -34,9 +66,8 @@ const Editor = () => {
   }, [play]);
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    console.log(event.code)
-    if(event.code === 'Space')
-    handlePlay();
+    console.log(event.code);
+    if (event.code === "Space") handlePlay();
   };
 
   useEffect(() => {
@@ -49,9 +80,20 @@ const Editor = () => {
   const handlePlay = () => {
     if (!play) {
       setPlay(true);
-      axiosInstance.get("/audio");
+      autoPlay(0)
     } else {
       setPlay(!play);
+    }
+  };
+
+  const autoPlay = (prev:number) => {
+    const pending = textLayers.find((l) => prev <= l.startTime);
+    if (pending) {
+      axiosInstance.post("/audio", { phrase: pending.phrase }).then((res: any) => {
+        autoPlay(pending.startTime);
+      });
+    } else {
+      setPlay(false)
     }
   };
 
@@ -87,7 +129,13 @@ const Editor = () => {
           </IconButton>
         )}
       </div>
-      <SequenceEditor timer={value} />
+      <SequenceEditor
+        timer={value}
+        layerData={layerData}
+        setLayerData={setLayerData}
+        textLayers={textLayers}
+        setTextLayers={setTextLayers}
+      />
     </div>
   );
 };

@@ -1,17 +1,10 @@
 import { KonvaEventObject } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Stage,
-  Layer,
-  Rect,
-  Text,
-  Group,
-  Transformer,
-} from "react-konva";
+import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
 import FormDialog from "./dialogForm/DialogForm";
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import { Html } from 'react-konva-utils';
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { Html } from "react-konva-utils";
 import SubLayerForm from "./subLayerForm/SubLayerForm";
 
 // interface Step {
@@ -33,42 +26,19 @@ function getWindowDimensions() {
 
 interface Props {
   timer: number;
+  textLayers:any;
+  setTextLayers:any;
+  layerData:any;
+  setLayerData:any;
 }
 
-const SequenceEditor = (props: Props) => {
+const SequenceEditor = ({timer,layerData, setLayerData,textLayers, setTextLayers}: Props) => {
   const stageRef = useRef(null);
   const childRef = useRef<CanShowAlert>();
   const subLayerEditorRef = useRef<CanShowAlert>();
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
-  const [layerData, setLayerData] = useState<any[]>([
-    {
-      id: 1,
-      text: "Step 1",
-      width: 100,
-      layerIndex: 1,
-    },
-    {
-      id: 2,
-      text: "Step 2",
-      width: 100,
-      layerIndex: 2,
-    },
-    {
-      id: 3,
-      text: "Step 3",
-      width: 100,
-      layerIndex: 3,
-    },
-    {
-      id: 4,
-      text: "Step 4",
-      width: 100,
-      layerIndex: 4,
-    },
-  ]);
-
 
 
   useEffect(() => {
@@ -85,9 +55,9 @@ const SequenceEditor = (props: Props) => {
     // const newData = prompt("Enter new text:", newSequenceData[index].text);
   };
 
-  const openSublayerEditor = (id:any) =>{
+  const openSublayerEditor = (id: any) => {
     subLayerEditorRef?.current?.getAlert(id);
-  }
+  };
 
   const handleStepDataChange = (id: any, newData: any) => {
     const newSequenceData = [...layerData];
@@ -98,21 +68,22 @@ const SequenceEditor = (props: Props) => {
 
   const [selectedId, selectShape] = React.useState("");
 
-  const handleSequnceLayerDrag = (id:any,newIndex:any) => {
+  const handleSequnceLayerDrag = (id: any, newIndex: any) => {
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].layerIndex = newIndex;
     setLayerData(newSequenceData);
   };
 
-  const handleSublayerPropsChange = () =>{
-
-  }
+  const handleSublayerPropsChange = () => {};
 
   return (
     <>
       <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
-      <SubLayerForm ref={subLayerEditorRef} handleValueChange={handleSublayerPropsChange} />
+      <SubLayerForm
+        ref={subLayerEditorRef}
+        handleValueChange={handleSublayerPropsChange}
+      />
 
       <Stage
         ref={stageRef}
@@ -120,11 +91,11 @@ const SequenceEditor = (props: Props) => {
         height={window.innerHeight}
       >
         <Layer>
-          {layerData.map((step, i) => (
+          {layerData.map((step:any, i:any) => (
             <SequenceLayer
               key={i}
               step={step}
-              i={i+1}
+              i={i + 1}
               windowDimensions={windowDimensions}
               selectedId={selectedId}
               selectShape={selectShape}
@@ -133,12 +104,13 @@ const SequenceEditor = (props: Props) => {
               handleStepClick={handleStepClick}
               handleSequnceLayerDrag={handleSequnceLayerDrag}
               openSublayerEditor={openSublayerEditor}
+              textLayers={textLayers.filter((l:any) => l.layerId === step.id)}
             />
           ))}
         </Layer>
         <Layer>
           <Rect
-            x={111 + props.timer}
+            x={111 + timer}
             y={50}
             height={windowDimensions.height - 50}
             width={2}
@@ -159,7 +131,7 @@ const SequenceEditor = (props: Props) => {
 };
 
 const roundnum = (num: number) => {
-  const index = Math.round(num / 50)
+  const index = Math.round(num / 50);
   return index * 50;
 };
 
@@ -173,45 +145,47 @@ const SequenceLayer = ({
   setLayerData,
   handleStepClick,
   handleSequnceLayerDrag,
-  openSublayerEditor
+  openSublayerEditor,
+  textLayers,
 }: any) => {
-  const layerRef:React.LegacyRef<any> = React.useRef();
+  const layerRef: React.LegacyRef<any> = React.useRef();
   const subLayerGroup: any = React.useRef();
 
-  const [draggingSubLayer,setDraggingSubLayer] = useState<any>()
+  const [draggingSubLayer, setDraggingSubLayer] = useState<any>();
 
-  const [oldIndex,setOldIndex] = useState(i)
+  const [oldIndex, setOldIndex] = useState(i);
 
   const onDragStart = (event: KonvaEventObject<DragEvent>, index: number) => {
-    event.target.setAttr('opacity', 0.5);
-    setOldIndex(index)
+    event.target.setAttr("opacity", 0.5);
+    setOldIndex(index);
     layerRef.current.moveToTop();
     // event.evt.dataTransfer?.setData('text/plain', index.toString())
     // event.dataTransfer.setData('text/plain', index);
   };
 
-  const onDragOver = (event: { preventDefault: () => void; }) => {
+  const onDragOver = (event: { preventDefault: () => void }) => {
     event.preventDefault();
   };
 
-  const onDrop = (event:KonvaEventObject<DragEvent>) => {
-    event.target.setAttr('opacity', 1);
-    const draggedIndex = oldIndex+ (layerRef.current.attrs.y? layerRef.current.attrs.y/50:0)
-    console.log(oldIndex)
-    console.log(draggedIndex)
+  const onDrop = (event: KonvaEventObject<DragEvent>) => {
+    event.target.setAttr("opacity", 1);
+    const draggedIndex =
+      oldIndex + (layerRef.current.attrs.y ? layerRef.current.attrs.y / 50 : 0);
+    console.log(oldIndex);
+    console.log(draggedIndex);
     const newItems = [...layerData];
     const [draggedItem] = newItems.splice(oldIndex, 1);
     newItems.splice(parseInt(draggedIndex), 0, draggedItem);
-    console.log(newItems)
+    console.log(newItems);
     setLayerData(newItems);
   };
 
-  const handleDrag = (e:Vector2d) => {
+  const handleDrag = (e: Vector2d) => {
     const { y } = e;
 
     const newY = roundnum(y);
 
-    return { x: 0, y: newY }
+    return { x: 0, y: newY };
   };
 
   return (
@@ -219,40 +193,39 @@ const SequenceLayer = ({
       draggable
       key={"step_" + step.id.toString()}
       ref={layerRef}
-      onDragStart={(event) =>{onDragStart(event, i);}}
+      onDragStart={(event) => {
+        onDragStart(event, i);
+      }}
       onDragOver={onDragOver}
       onDragEnd={(e) => onDrop(e)}
-      dragBoundFunc={(pos)=>handleDrag(pos)}
+      dragBoundFunc={(pos) => handleDrag(pos)}
     >
-      <Group x={10} y={i * 50} >
-      <Rect width={100} height={40} fill="#4B4B4B" />
-      <Html divProps={{
-              style: {
-                position:'absolute',
-                paddingTop:20,
-                height:'40px',
-                display:'flex',
-                alignItems:'center'
-              },
-            }}>
-        <DragIndicatorIcon/>
-      </Html>
-      <Text
-        text={step.text}
-        fontSize={20}
-        x={35}
-        y={10}
-
-        fill="white"
-        onClick={() => handleStepClick(step.id)}
-      />
+      <Group x={10} y={i * 50}>
+        <Rect width={100} height={40} fill="#4B4B4B" />
+        <Html
+          divProps={{
+            style: {
+              position: "absolute",
+              paddingTop: 20,
+              height: "40px",
+              display: "flex",
+              alignItems: "center",
+            },
+          }}
+        >
+          <DragIndicatorIcon />
+        </Html>
+        <Text
+          text={step.text}
+          fontSize={20}
+          x={35}
+          y={10}
+          fill="white"
+          onClick={() => handleStepClick(step.id)}
+        />
       </Group>
-      
-   
-      <Group
-        ref={subLayerGroup}
-        id={"sub_layer_group"+step.id}
-      >
+
+      <Group ref={subLayerGroup} id={"sub_layer_group" + step.id}>
         <Rect
           x={10 + 101}
           y={i * 50}
@@ -260,24 +233,26 @@ const SequenceLayer = ({
           height={40}
           fill="#4B4B4B"
         />
-        <SubLayer
-          id={step.id}
-          i={i}
-          shapeProps={step}
-          isSelected={step.id.toString() === selectedId}
-          onSelect={() => {
-            selectShape(step.id.toString());
-          }}
-          onChange={(newAttrs: { width: number; id: string }) => {
-            const rects = layerData.slice();
-            rects[i] = newAttrs;
-            setLayerData(rects);
-          }}
-          setDraggingSubLayer={setDraggingSubLayer}
-          openSublayerEditor={openSublayerEditor}
-        />
+        {textLayers.map((l: any) => (
+          <SubLayer
+            id={step.id}
+            i={i}
+            layerData={l}
+            shapeProps={step}
+            isSelected={step.id.toString() === selectedId}
+            onSelect={() => {
+              selectShape(step.id.toString());
+            }}
+            onChange={(newAttrs: { width: number; id: string }) => {
+              const rects = layerData.slice();
+              rects[i] = newAttrs;
+              setLayerData(rects);
+            }}
+            setDraggingSubLayer={setDraggingSubLayer}
+            openSublayerEditor={openSublayerEditor}
+          />
+        ))}
       </Group>
-
     </Group>
   );
 };
@@ -290,7 +265,8 @@ const SubLayer = ({
   onSelect,
   onChange,
   setDraggingSubLayer,
-  openSublayerEditor
+  openSublayerEditor,
+  layerData,
 }: any) => {
   const shapeRef: any = React.useRef();
   const trRef: any = React.useRef();
@@ -311,11 +287,9 @@ const SubLayer = ({
   // };
 
   return (
-    <React.Fragment>
+    <Group x={10 + 101 + layerData.startTime} y={i * 50}>
       <Rect
-      id={"sub_layer_"+id}
-        x={10 + 101}
-        y={i * 50}
+        id={"sub_layer_" + id}
         width={120}
         height={40}
         fill="#BDBDBD"
@@ -326,8 +300,8 @@ const SubLayer = ({
             y: roundnum(pos.y),
           };
         }}
-        onDragStart={()=>{
-          setDraggingSubLayer(shapeRef)
+        onDragStart={() => {
+          setDraggingSubLayer(shapeRef);
         }}
         onClick={onSelect}
         onDblClick={openSublayerEditor}
@@ -363,6 +337,7 @@ const SubLayer = ({
           });
         }}
       />
+      <Text text={layerData.phrase} fontSize={20} fill="black" />
       {isSelected && (
         <Transformer
           ref={trRef}
@@ -378,7 +353,7 @@ const SubLayer = ({
           }}
         />
       )}
-    </React.Fragment>
+    </Group>
   );
 };
 
