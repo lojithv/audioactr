@@ -26,20 +26,25 @@ function getWindowDimensions() {
 
 interface Props {
   timer: number;
-  textLayers:any;
-  setTextLayers:any;
-  layerData:any;
-  setLayerData:any;
+  textLayers: any;
+  setTextLayers: any;
+  layerData: any;
+  setLayerData: any;
 }
 
-const SequenceEditor = ({timer,layerData, setLayerData,textLayers, setTextLayers}: Props) => {
+const SequenceEditor = ({
+  timer,
+  layerData,
+  setLayerData,
+  textLayers,
+  setTextLayers,
+}: Props) => {
   const stageRef = useRef(null);
   const childRef = useRef<CanShowAlert>();
   const subLayerEditorRef = useRef<CanShowAlert>();
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
-
 
   useEffect(() => {
     function handleResize() {
@@ -91,7 +96,7 @@ const SequenceEditor = ({timer,layerData, setLayerData,textLayers, setTextLayers
         height={window.innerHeight}
       >
         <Layer>
-          {layerData.map((step:any, i:any) => (
+          {layerData.map((step: any, i: any) => (
             <SequenceLayer
               key={i}
               step={step}
@@ -104,7 +109,7 @@ const SequenceEditor = ({timer,layerData, setLayerData,textLayers, setTextLayers
               handleStepClick={handleStepClick}
               handleSequnceLayerDrag={handleSequnceLayerDrag}
               openSublayerEditor={openSublayerEditor}
-              textLayers={textLayers.filter((l:any) => l.layerId === step.id)}
+              textLayers={textLayers.filter((l: any) => l.layerId === step.id)}
             />
           ))}
         </Layer>
@@ -287,34 +292,37 @@ const SubLayer = ({
   // };
 
   return (
-    <Group x={10 + 101 + layerData.startTime} y={i * 50}>
+    <Group
+      x={10 + 101 + layerData.startTime}
+      y={i * 50}
+      draggable
+      ref={shapeRef}
+      dragBoundFunc={(pos) => {
+        return {
+          x: pos.x >= 111 ? pos.x : 111,
+          y: roundnum(pos.y),
+        };
+      }}
+      onDragStart={() => {
+        setDraggingSubLayer(shapeRef);
+      }}
+      onDragEnd={(e) => {
+        onChange({
+          ...shapeProps,
+          x: e.target.x(),
+          y: e.target.y(),
+        });
+      }}
+    >
       <Rect
         id={"sub_layer_" + id}
         width={120}
         height={40}
         fill="#BDBDBD"
-        draggable
-        dragBoundFunc={(pos) => {
-          return {
-            x: pos.x >= 111 ? pos.x : 111,
-            y: roundnum(pos.y),
-          };
-        }}
-        onDragStart={() => {
-          setDraggingSubLayer(shapeRef);
-        }}
         onClick={onSelect}
         onDblClick={openSublayerEditor}
         onTap={onSelect}
-        ref={shapeRef}
         {...shapeProps}
-        onDragEnd={(e) => {
-          onChange({
-            ...shapeProps,
-            x: e.target.x(),
-            y: e.target.y(),
-          });
-        }}
         onTransformEnd={(e) => {
           // transformer is changing scale of the node
           // and NOT its width or height
