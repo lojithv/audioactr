@@ -33,7 +33,9 @@ const Editor = () => {
     }
   }, [play]);
 
-  const handleKeyDown = (event: { key: any }) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
+    console.log(event.code)
+    if(event.code === 'Space')
     handlePlay();
   };
 

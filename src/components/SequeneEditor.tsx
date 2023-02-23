@@ -121,7 +121,7 @@ const SequenceEditor = (props: Props) => {
             <SequenceLayer
               key={i}
               step={step}
-              i={i}
+              i={i+1}
               windowDimensions={windowDimensions}
               selectedId={selectedId}
               selectShape={selectShape}

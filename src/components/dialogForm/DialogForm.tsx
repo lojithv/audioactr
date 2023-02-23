@@ -42,8 +42,8 @@ const FormDialog = forwardRef((props:Props, ref) => {
           <TextField
             autoFocus
             margin="dense"
-            id="phrase"
-            label="Phrase"
+            id="name"
+            label="Name"
             type="text"
             value={text}
             onChange={(e)=>setText(e.target.value)}
