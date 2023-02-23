@@ -12,6 +12,7 @@ import {
 import FormDialog from "./dialogForm/DialogForm";
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { Html } from 'react-konva-utils';
+import SubLayerForm from "./subLayerForm/SubLayerForm";
 
 // interface Step {
 //   id: number;
@@ -37,6 +38,7 @@ interface Props {
 const SequenceEditor = (props: Props) => {
   const stageRef = useRef(null);
   const childRef = useRef<CanShowAlert>();
+  const subLayerEditorRef = useRef<CanShowAlert>();
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
@@ -81,6 +83,10 @@ const SequenceEditor = (props: Props) => {
     // const newData = prompt("Enter new text:", newSequenceData[index].text);
   };
 
+  const openSublayerEditor = (id:any) =>{
+    subLayerEditorRef?.current?.getAlert(id);
+  }
+
   const handleStepDataChange = (id: any, newData: any) => {
     const newSequenceData = [...sequenceData];
     const index = newSequenceData.findIndex((step) => step.id === id);
@@ -107,9 +113,14 @@ const SequenceEditor = (props: Props) => {
     setSequenceData(newSequenceData);
   };
 
+  const handleSublayerPropsChange = () =>{
+
+  }
+
   return (
     <>
       <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
+      <SubLayerForm ref={subLayerEditorRef} handleValueChange={handleSublayerPropsChange} />
 
       <Stage
         ref={stageRef}
@@ -129,6 +140,7 @@ const SequenceEditor = (props: Props) => {
               setSequenceData={setSequenceData}
               handleStepClick={handleStepClick}
               handleSequnceLayerDrag={handleSequnceLayerDrag}
+              openSublayerEditor={openSublayerEditor}
             />
           ))}
         </Layer>
@@ -169,6 +181,7 @@ const SequenceLayer = ({
   setSequenceData,
   handleStepClick,
   handleSequnceLayerDrag,
+  openSublayerEditor
 }: any) => {
   const layerRef:React.LegacyRef<any> = React.useRef();
   const subLayerGroup: any = React.useRef();
@@ -269,6 +282,7 @@ const SequenceLayer = ({
             setSequenceData(rects);
           }}
           setDraggingSubLayer={setDraggingSubLayer}
+          openSublayerEditor={openSublayerEditor}
         />
       </Group>
 
@@ -283,7 +297,8 @@ const SubLayer = ({
   isSelected,
   onSelect,
   onChange,
-  setDraggingSubLayer
+  setDraggingSubLayer,
+  openSublayerEditor
 }: any) => {
   const shapeRef: any = React.useRef();
   const trRef: any = React.useRef();
@@ -323,6 +338,7 @@ const SubLayer = ({
           setDraggingSubLayer(shapeRef)
         }}
         onClick={onSelect}
+        onDblClick={openSublayerEditor}
         onTap={onSelect}
         ref={shapeRef}
         {...shapeProps}
