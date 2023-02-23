@@ -37,13 +37,13 @@ const FormDialog = forwardRef((props:Props, ref) => {
   return (
     <div>
       <Dialog open={open} onClose={handleClose} sx={{ color: "white" }}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Email Address"
+            id="phrase"
+            label="Phrase"
             type="text"
             value={text}
             onChange={(e)=>setText(e.target.value)}
@@ -56,7 +56,7 @@ const FormDialog = forwardRef((props:Props, ref) => {
             Cancel
           </Button>
           <Button sx={{ color: "white" }} onClick={handleSubmit}>
-            Subscribe
+            Save
           </Button>
         </DialogActions>
       </Dialog>

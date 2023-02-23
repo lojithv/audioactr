@@ -232,6 +232,15 @@ const SequenceLayer = ({
             }}>
         <DragIndicatorIcon/>
       </Html>
+      <Text
+        text={step.text}
+        fontSize={20}
+        x={35}
+        y={10}
+
+        fill="white"
+        onClick={() => handleStepClick(step.id)}
+      />
       </Group>
       
    
@@ -262,14 +271,7 @@ const SequenceLayer = ({
           setDraggingSubLayer={setDraggingSubLayer}
         />
       </Group>
-      <Text
-        x={35}
-        y={i * 50 + 20}
-        text={step.text}
-        fontSize={20}
-        fill="white"
-        onClick={() => handleStepClick(step.id)}
-      />
+
     </Group>
   );
 };
