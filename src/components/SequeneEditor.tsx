@@ -42,7 +42,7 @@ const SequenceEditor = (props: Props) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
-  const [sequenceData, setSequenceData] = useState<any[]>([
+  const [layerData, setLayerData] = useState<any[]>([
     {
       id: 1,
       text: "Step 1",
@@ -69,6 +69,8 @@ const SequenceEditor = (props: Props) => {
     },
   ]);
 
+
+
   useEffect(() => {
     function handleResize() {
       setWindowDimensions(getWindowDimensions());
@@ -88,10 +90,10 @@ const SequenceEditor = (props: Props) => {
   }
 
   const handleStepDataChange = (id: any, newData: any) => {
-    const newSequenceData = [...sequenceData];
+    const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].text = newData ? newData : "";
-    setSequenceData(newSequenceData);
+    setLayerData(newSequenceData);
   };
 
   const [selectedId, selectShape] = React.useState("");
@@ -107,10 +109,10 @@ const SequenceEditor = (props: Props) => {
   };
 
   const handleSequnceLayerDrag = (id:any,newIndex:any) => {
-    const newSequenceData = [...sequenceData];
+    const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].layerIndex = newIndex;
-    setSequenceData(newSequenceData);
+    setLayerData(newSequenceData);
   };
 
   const handleSublayerPropsChange = () =>{
@@ -128,7 +130,7 @@ const SequenceEditor = (props: Props) => {
         height={window.innerHeight}
       >
         <Layer>
-          {sequenceData.map((step, i) => (
+          {layerData.map((step, i) => (
             <SequenceLayer
               key={i}
               step={step}
@@ -136,8 +138,8 @@ const SequenceEditor = (props: Props) => {
               windowDimensions={windowDimensions}
               selectedId={selectedId}
               selectShape={selectShape}
-              sequenceData={sequenceData}
-              setSequenceData={setSequenceData}
+              layerData={layerData}
+              setLayerData={setLayerData}
               handleStepClick={handleStepClick}
               handleSequnceLayerDrag={handleSequnceLayerDrag}
               openSublayerEditor={openSublayerEditor}
@@ -177,8 +179,8 @@ const SequenceLayer = ({
   selectedId,
   selectShape,
   i,
-  sequenceData,
-  setSequenceData,
+  layerData,
+  setLayerData,
   handleStepClick,
   handleSequnceLayerDrag,
   openSublayerEditor
@@ -207,11 +209,11 @@ const SequenceLayer = ({
     const draggedIndex = oldIndex+ (layerRef.current.attrs.y? layerRef.current.attrs.y/50:0)
     console.log(oldIndex)
     console.log(draggedIndex)
-    const newItems = [...sequenceData];
+    const newItems = [...layerData];
     const [draggedItem] = newItems.splice(oldIndex, 1);
     newItems.splice(parseInt(draggedIndex), 0, draggedItem);
     console.log(newItems)
-    setSequenceData(newItems);
+    setLayerData(newItems);
   };
 
   const handleDrag = (e:Vector2d) => {
@@ -277,9 +279,9 @@ const SequenceLayer = ({
             selectShape(step.id.toString());
           }}
           onChange={(newAttrs: { width: number; id: string }) => {
-            const rects = sequenceData.slice();
+            const rects = layerData.slice();
             rects[i] = newAttrs;
-            setSequenceData(rects);
+            setLayerData(rects);
           }}
           setDraggingSubLayer={setDraggingSubLayer}
           openSublayerEditor={openSublayerEditor}
