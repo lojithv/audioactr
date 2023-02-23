@@ -293,7 +293,7 @@ const SubLayer = ({
         draggable
         dragBoundFunc={(pos) => {
           return {
-            x: pos.x,
+            x: pos.x >= 111 ? pos.x : 111,
             y: roundnum(pos.y),
           };
         }}
