@@ -276,6 +276,8 @@ const SubLayer = ({
   const shapeRef: any = React.useRef();
   const trRef: any = React.useRef();
 
+  const grpRef:any = React.useRef();
+
   React.useEffect(() => {
     if (isSelected) {
       // we need to attach transformer manually
@@ -296,7 +298,7 @@ const SubLayer = ({
       x={10 + 101 + layerData.startTime}
       y={i * 50}
       draggable
-      ref={shapeRef}
+      ref={grpRef}
       dragBoundFunc={(pos) => {
         return {
           x: pos.x >= 111 ? pos.x : 111,
@@ -304,7 +306,7 @@ const SubLayer = ({
         };
       }}
       onDragStart={() => {
-        setDraggingSubLayer(shapeRef);
+        setDraggingSubLayer(grpRef);
       }}
       onDragEnd={(e) => {
         onChange({
@@ -322,7 +324,7 @@ const SubLayer = ({
         onClick={onSelect}
         onDblClick={openSublayerEditor}
         onTap={onSelect}
-        {...shapeProps}
+        ref={shapeRef}
         onTransformEnd={(e) => {
           // transformer is changing scale of the node
           // and NOT its width or height

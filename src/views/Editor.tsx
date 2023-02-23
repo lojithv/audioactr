@@ -47,11 +47,23 @@ const Editor = () => {
       width: 100,
       layerIndex: 4,
     },
+    {
+      id: 5,
+      text: "Step 5",
+      width: 100,
+      layerIndex: 5,
+    },
   ]);
 
   const [textLayers, setTextLayers] = useState([
     { layerId: 1, phrase: "hello", startTime: 0 },
     { layerId: 2, phrase: "world", startTime: 100 },
+    { layerId: 1, phrase: "JUMPS", startTime: 200 },
+    { layerId: 2, phrase: "OVER", startTime: 300 },
+    { layerId: 3, phrase: "THE", startTime: 400 },
+    { layerId: 4, phrase: "LAZY", startTime: 500 },
+    { layerId: 5, phrase: "DOG", startTime: 600 },
+
   ]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
