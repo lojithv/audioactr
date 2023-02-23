@@ -98,16 +98,6 @@ const SequenceEditor = (props: Props) => {
 
   const [selectedId, selectShape] = React.useState("");
 
-  const [mouseOverSubLayerGroup, setMouseOverSubLayerGroup] = useState("");
-
-  const checkDeselect = (e: { target: { getStage: () => any } }) => {
-    // deselect when clicked on empty area
-    const clickedOnEmpty = e.target === e.target.getStage();
-    if (clickedOnEmpty) {
-      selectShape("");
-    }
-  };
-
   const handleSequnceLayerDrag = (id:any,newIndex:any) => {
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
