@@ -238,10 +238,11 @@ const SequenceLayer = ({
           height={40}
           fill="#4B4B4B"
         />
-        {textLayers.map((l: any) => (
+        {textLayers.map((l: any,j:number) => (
           <SubLayer
             id={step.id}
             i={i}
+            key={j}
             layerData={l}
             shapeProps={step}
             isSelected={step.id.toString() === selectedId}
@@ -271,7 +272,7 @@ const SubLayer = ({
   onChange,
   setDraggingSubLayer,
   openSublayerEditor,
-  layerData,
+  layerData
 }: any) => {
   const shapeRef: any = React.useRef();
   const trRef: any = React.useRef();
