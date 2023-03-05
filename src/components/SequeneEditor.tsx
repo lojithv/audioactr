@@ -178,12 +178,39 @@ const SequenceLayer = ({
       oldIndex + (layerRef.current.attrs.y ? layerRef.current.attrs.y / 50 : 0);
     console.log(oldIndex);
     console.log(draggedIndex);
-    const newItems = [...layerData];
-    const [draggedItem] = newItems.splice(oldIndex, 1);
-    newItems.splice(parseInt(draggedIndex), 0, draggedItem);
-    console.log(newItems);
-    setLayerData(newItems);
+    if(oldIndex !== draggedIndex){
+      if(oldIndex < draggedIndex){
+        const newItems = [...layerData];
+        const [draggedItem] = newItems.splice(oldIndex, 1);
+        newItems.splice(parseInt(draggedIndex), 0, draggedItem);
+        console.log(newItems);
+        setLayerData(newItems);
+      }
+    }
   };
+
+  var _el: any;
+
+function dragOver(e: { target: { parentNode: { insertBefore: (arg0: any, arg1: any) => void; }; nextSibling: any; }; }) {
+  if (isBefore(_el, e.target))
+    e.target.parentNode.insertBefore(_el, e.target);
+  else
+    e.target.parentNode.insertBefore(_el, e.target.nextSibling);
+}
+
+function dragStart(e: KonvaEventObject<DragEvent>) {
+  // e.dataTransfer.effectAllowed = "move";
+  // e.dataTransfer.setData("text/plain", null); // Thanks to bqlou for their comment.
+  _el = e.target;
+}
+
+function isBefore(el1: { parentNode: any; previousSibling: any; }, el2: { parentNode: any; }) {
+  if (el2.parentNode === el1.parentNode)
+    for (var cur = el1.previousSibling; cur && cur.nodeType !== 9; cur = cur.previousSibling)
+      if (cur === el2)
+        return true;
+  return false;
+}
 
   const handleDrag = (e: Vector2d) => {
     const { y } = e;
@@ -196,13 +223,13 @@ const SequenceLayer = ({
   return (
     <Group
       draggable
-      key={"step_" + step.id.toString()}
+      key={"step_" + step?.id?.toString()}
       ref={layerRef}
       onDragStart={(event) => {
-        onDragStart(event, i);
+        dragStart(event)
       }}
-      onDragOver={onDragOver}
-      onDragEnd={(e) => onDrop(e)}
+      onDragOver={dragOver}
+      // onDragEnd={(e) => onDrop(e)}
       dragBoundFunc={(pos) => handleDrag(pos)}
     >
       <Group x={10} y={i * 50}>
@@ -245,9 +272,9 @@ const SequenceLayer = ({
             key={j}
             layerData={l}
             shapeProps={step}
-            isSelected={step.id.toString() === selectedId}
+            isSelected={step?.id?.toString() === selectedId}
             onSelect={() => {
-              selectShape(step.id.toString());
+              selectShape(step?.id.toString());
             }}
             onChange={(newAttrs: { width: number; id: string }) => {
               const rects = layerData.slice();

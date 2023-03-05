@@ -63,12 +63,7 @@ const Editor = () => {
     { layerId: 3, phrase: "THE", startTime: 400 },
     { layerId: 4, phrase: "LAZY", startTime: 500 },
     { layerId: 5, phrase: "DOG", startTime: 600 },
-
   ]);
-
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
-  };
 
   useEffect(() => {
     if (play) {
@@ -140,13 +135,13 @@ const Editor = () => {
           </IconButton>
         )}
       </div>
-      <SequenceEditor
+      {/* <SequenceEditor
         timer={value}
         layerData={layerData}
         setLayerData={setLayerData}
         textLayers={textLayers}
         setTextLayers={setTextLayers}
-      />
+      /> */}
     </div>
   );
 };
