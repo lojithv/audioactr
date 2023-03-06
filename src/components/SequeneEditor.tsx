@@ -6,6 +6,8 @@ import FormDialog from "./dialogForm/DialogForm";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { Html } from "react-konva-utils";
 import SubLayerForm from "./subLayerForm/SubLayerForm";
+import { PlayerStore } from "../store/PlayerStore";
+import { EditorStore } from "../store/EditorStore";
 
 // interface Step {
 //   id: number;
@@ -32,16 +34,18 @@ interface Props {
   setLayerData: any;
 }
 
-const SequenceEditor = ({
-  timer,
-  layerData,
-  setLayerData,
-  textLayers,
-  setTextLayers,
-}: Props) => {
+const SequenceEditor = () => {
   const stageRef = useRef(null);
   const childRef = useRef<CanShowAlert>();
   const subLayerEditorRef = useRef<CanShowAlert>();
+
+  const timer = PlayerStore.useTimer()
+
+  const editorState = EditorStore.useEditorState()
+
+  const layerData = editorState.layers;
+
+
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
@@ -68,7 +72,8 @@ const SequenceEditor = ({
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].text = newData ? newData : "";
-    setLayerData(newSequenceData);
+    // setLayerData(newSequenceData);
+    EditorStore.setEditorState({...editorState,layers:newSequenceData})
   };
 
   const [selectedId, selectShape] = React.useState("");
@@ -77,7 +82,8 @@ const SequenceEditor = ({
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].layerIndex = newIndex;
-    setLayerData(newSequenceData);
+    // setLayerData(newSequenceData);
+    EditorStore.setEditorState({...editorState,layers:newSequenceData})
   };
 
   const handleSublayerPropsChange = () => {};
@@ -105,11 +111,10 @@ const SequenceEditor = ({
               selectedId={selectedId}
               selectShape={selectShape}
               layerData={layerData}
-              setLayerData={setLayerData}
               handleStepClick={handleStepClick}
               handleSequnceLayerDrag={handleSequnceLayerDrag}
               openSublayerEditor={openSublayerEditor}
-              textLayers={textLayers.filter((l: any) => l.layerId === step.id)}
+              textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
           ))}
         </Layer>

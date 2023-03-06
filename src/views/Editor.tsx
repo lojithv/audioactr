@@ -23,6 +23,7 @@ type Props = {};
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
+  const editorState = EditorStore.useEditorState();
 
   const timer = PlayerStore.useTimer();
 
@@ -78,7 +79,7 @@ const Editor = () => {
 
   const autoPlay = () => {
     axiosInstance
-      .post("/audio", { textLayers: textLayers })
+      .post("/audio", { textLayers: editorState.phrases })
       .then((res: any) => {
         console.log("completed");
         if(res){
@@ -120,13 +121,13 @@ const Editor = () => {
             </IconButton>
           )}
         </div>
-        {/* <SequenceEditor
-        timer={value}
-        layerData={layerData}
-        setLayerData={setLayerData}
-        textLayers={textLayers}
-        setTextLayers={setTextLayers}
-      /> */}
+        <SequenceEditor
+        // timer={value}
+        // layerData={layerData}
+        // setLayerData={setLayerData}
+        // textLayers={textLayers}
+        // setTextLayers={setTextLayers}
+      />
         <Storyboard />
       </Subscribe>
     </div>

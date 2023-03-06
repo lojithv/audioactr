@@ -37,8 +37,8 @@ export const initialEditorState:EditorState = {
     phrases:[
         { layerId: 1, phrase: "hello", startTime: 0 },
         { layerId: 2, phrase: "world", startTime: 100 },
-        { layerId: 1, phrase: "JUMPS", startTime: 200 },
-        { layerId: 2, phrase: "OVER", startTime: 300 },
+        { layerId: 1, phrase:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", startTime: 200 },
+        { layerId: 2, phrase: "Hello world!", startTime: 300 },
         { layerId: 3, phrase: "THE", startTime: 400 },
         { layerId: 4, phrase: "LAZY", startTime: 500 },
         { layerId: 5, phrase: "DOG", startTime: 600 },
