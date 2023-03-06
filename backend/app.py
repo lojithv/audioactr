@@ -36,12 +36,17 @@ def example():
   return jsonify("Example response from Flask! Learn more in /app.py & /src/components/App.js")
 
 # Convert text to audio
-@app.route("/audio")
+@app.route("/audio",methods = ['POST'])
 def audio():
+  data = request.get_json()
+  app.logger.info(data)
   engine = pyttsx3.init()
-  engine.say("I will speak this text")
+  textLayers = data['textLayers']
+  # engine.say("Hello world! Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+  # engine.runAndWait()
+  for layer in textLayers:
+    engine.say(layer['phrase'])
   engine.runAndWait()
-  app.logger.info('%s logged in successfully')
   # See /src/components/App.js for frontend call
   return jsonify("Completed")
 

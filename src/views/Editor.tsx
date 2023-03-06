@@ -1,57 +1,54 @@
 import * as React from "react";
-import Stack from "@mui/material/Stack";
-import Slider from "@mui/material/Slider";
-import VolumeDown from "@mui/icons-material/VolumeDown";
-import VolumeUp from "@mui/icons-material/VolumeUp";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import { useEffect } from "react";
-import SequenceEditor from "../components/SequeneEditor";
-import { axiosInstance } from "../config/axiosInstance";
-
+import { useEffect, useState } from "react";
+import Storyboard from "../core/Storyboard";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
-import { IconButton } from "@mui/material";
-
-type Props = {};
+import { IconButton, TextField } from "@mui/material";
+import {
+  EditorStore,
+  setEditorState,
+  setSelectedPhrase,
+  useSelectedPhrase,
+} from "../store/EditorStore";
+import { initialEditorState } from "../dump/editor";
+import { Subscribe } from "@react-rxjs/core";
+import { PlayerStore } from "../store/PlayerStore";
+import { handleKeyDown, handlePlay } from "../handlers/editor";
+import { defaultTheme, Provider, TextArea } from "@adobe/react-spectrum";
 
 const Editor = () => {
-  const [value, setValue] = React.useState<number>(0);
-  const [play, setPlay] = React.useState(false);
+  const playerState = PlayerStore.usePlayerState();
+  const editorState = EditorStore.useEditorState();
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
-  };
+  const timer = PlayerStore.useTimer();
 
   useEffect(() => {
-    if (play) {
-      const interval = setInterval(() => setValue((v) => v + 1), 1);
+    EditorStore.setEditorState(initialEditorState);
+    PlayerStore.setPlayerState({ isPlaying: false });
+  }, []);
+
+  useEffect(() => {
+    if (playerState.isPlaying) {
+      const interval = setInterval(() => PlayerStore.setTimerValue(1), 100);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [play]);
-
-  const handleKeyDown = (event: { key: any }) => {
-    handlePlay();
-  };
+  }, [playerState.isPlaying]);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", (e) =>
+      handleKeyDown(e, playerState, editorState)
+    );
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", (e) =>
+        handleKeyDown(e, playerState, editorState)
+      );
     };
-  }, [play]);
+  }, [playerState.isPlaying]);
 
-  const handlePlay = () => {
-    if (!play) {
-      setPlay(true);
-      axiosInstance.get("/audio");
-    } else {
-      setPlay(!play);
-    }
-  };
+  const selectedPhrase = useSelectedPhrase();
 
   return (
     <div
@@ -62,30 +59,54 @@ const Editor = () => {
         flexDirection: "column",
       }}
     >
-      <div>
-        <div style={{ color: "white" }}>{value}</div>
-        <IconButton
-          onClick={() => {
-            setValue(0);
-            setPlay(false);
+      <Subscribe>
+        <div style={{display:'flex'}}>
+          <div style={{ color: "white" }}>{timer}</div>
+          <IconButton
+            onClick={() => {
+              PlayerStore.setTimerValue(0);
+              PlayerStore.setPlayerState({ isPlaying: false });
+            }}
+          >
+            <StopRoundedIcon />
+          </IconButton>
+
+          {!playerState.isPlaying && (
+            <IconButton onClick={() => handlePlay(playerState, editorState)}>
+              <PlayArrowRoundedIcon />
+            </IconButton>
+          )}
+
+          {playerState.isPlaying && (
+            <IconButton onClick={() => handlePlay(playerState, editorState)}>
+              <PauseRoundedIcon />
+            </IconButton>
+          )}
+          <TextField
+          id="outlined-multiline-static"
+          // label="Multiline"
+          multiline
+          fullWidth
+          value={selectedPhrase?.phrase}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setSelectedPhrase({ ...selectedPhrase, phrase: event.target.value });
+            setEditorState({
+              ...editorState,
+              phrases: editorState.phrases.map((p) => {
+                if (p.id === selectedPhrase?.id) {
+                  return { ...p, phrase: event.target.value };
+                } else {
+                  return p;
+                }
+              }),
+            });
           }}
-        >
-          <StopRoundedIcon />
-        </IconButton>
-
-        {!play && (
-          <IconButton onClick={() => handlePlay()}>
-            <PlayArrowRoundedIcon />
-          </IconButton>
-        )}
-
-        {play && (
-          <IconButton onClick={() => handlePlay()}>
-            <PauseRoundedIcon />
-          </IconButton>
-        )}
-      </div>
-      <SequenceEditor timer={value} />
+          rows={4}
+          defaultValue="Default Value"
+        />
+        </div>
+        <Storyboard />
+      </Subscribe>
     </div>
   );
 };

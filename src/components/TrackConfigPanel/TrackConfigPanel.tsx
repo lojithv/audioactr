@@ -7,43 +7,42 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { forwardRef } from "react";
+import { handleStepDataChange } from "../../handlers/storyboard";
+import { EditorStore } from "../../store/EditorStore";
+import { setEditorVisibility, useEditorVisibility, useSelectedTrackId } from "../../store/TrackConfigStore";
 
 interface Props{
     handleValueChange?:any
 }
 
-const FormDialog = forwardRef((props:Props, ref) => {
-  const [open, setOpen] = React.useState(false);
+const TrackConfigPanel = () => {
+  const open = useEditorVisibility()
   const [text,setText]=React.useState("")
-  const [stepId,setStepId]=React.useState("")
+  const stepId = useSelectedTrackId()
 
-  React.useImperativeHandle(ref, () => ({
-    getAlert(id:any) {
-      //   alert("getAlert from Child");
-      setStepId(id)
-      setOpen(true);
-    },
-  }));
+  const editorState = EditorStore.useEditorState()
+
+  const layerData = editorState.layers;
 
   const handleClose = () => {
-    setOpen(false);
+    setEditorVisibility(false)
   };
 
   const handleSubmit = () =>{
-    props.handleValueChange(stepId,text)
-    setOpen(false);
+    handleStepDataChange(layerData,editorState,stepId,text)
+    setEditorVisibility(false)
   }
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose} sx={{ color: "white" }}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
+            label="Name"
             type="text"
             value={text}
             onChange={(e)=>setText(e.target.value)}
@@ -56,12 +55,12 @@ const FormDialog = forwardRef((props:Props, ref) => {
             Cancel
           </Button>
           <Button sx={{ color: "white" }} onClick={handleSubmit}>
-            Subscribe
+            Save
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
-});
+};
 
-export default FormDialog;
+export default TrackConfigPanel;

@@ -9,20 +9,11 @@ import Home from "./views/Home";
 import Demo from "./views/Test";
 
 function App() {
-  const [resp, setRes] = React.useState({});
-
   useEffect(() => {
     axiosInstance.get("/example").then((res) => {
-      setRes(res.data);
       console.log(res.data);
     });
   },[]);
-
-  const handlePlay = () => {
-    axiosInstance.get("/audio").then((res) => {
-      console.log(res.data);
-    });
-  };
 
   return (
     <div className="App">
