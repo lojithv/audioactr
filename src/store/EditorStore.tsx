@@ -1,9 +1,13 @@
 import { bind } from "@react-rxjs/core";
 import { createSignal } from "@react-rxjs/utils";
-import { initialEditorState } from "../dump/editor";
+import { EditorState } from "../interfaces/EditorState";
 
-export namespace EditorStore {
-  export const [editorChange$, setEditorState] = createSignal();
+export const [editorChange$, setEditorState] = createSignal<EditorState>();
 
-  export const [useEditorState, editorState$] = bind<any>(editorChange$, initialEditorState);
-}
+export const [useEditorState, editorState$] = bind<any>(editorChange$, {});
+
+export const EditorStore = {
+  editorChange$,
+  setEditorState,
+  useEditorState,
+};

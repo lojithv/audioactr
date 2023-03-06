@@ -42,6 +42,8 @@ def audio():
   app.logger.info(data)
   engine = pyttsx3.init()
   textLayers = data['textLayers']
+  # engine.say("Hello world! Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
+  # engine.runAndWait()
   for layer in textLayers:
     engine.say(layer['phrase'])
   engine.runAndWait()

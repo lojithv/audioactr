@@ -13,51 +13,27 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
 import { IconButton } from "@mui/material";
+import { EditorStore } from "../store/EditorStore";
+import { initialEditorState } from "../dump/editor";
+import Storyboard from "../components/SequeneEditor/Storyboard";
+import { Subscribe } from "@react-rxjs/core";
+import { PlayerStore } from "../store/PlayerStore";
 
 type Props = {};
 
 const Editor = () => {
-  const [value, setValue] = React.useState<number>(0);
-  const [play, setPlay] = React.useState(false);
+  const playerState = PlayerStore.usePlayerState();
 
-  const [currentTextLayer, setCurrentTextLayer] = useState(0);
-
-  const [layerData, setLayerData] = useState<any[]>([
-    {
-      id: 1,
-      text: "Step 1",
-      width: 100,
-      layerIndex: 1,
-    },
-    {
-      id: 2,
-      text: "Step 2",
-      width: 100,
-      layerIndex: 2,
-    },
-    {
-      id: 3,
-      text: "Step 3",
-      width: 100,
-      layerIndex: 3,
-    },
-    {
-      id: 4,
-      text: "Step 4",
-      width: 100,
-      layerIndex: 4,
-    },
-    {
-      id: 5,
-      text: "Step 5",
-      width: 100,
-      layerIndex: 5,
-    },
-  ]);
+  const timer = PlayerStore.useTimer();
 
   const [textLayers, setTextLayers] = useState([
-    { layerId: 1, phrase: "hello", startTime: 0 },
-    { layerId: 2, phrase: "world", startTime: 100 },
+    { layerId: 1, phrase: "Hello world!", startTime: 0 },
+    {
+      layerId: 2,
+      phrase:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      startTime: 100,
+    },
     { layerId: 1, phrase: "JUMPS", startTime: 200 },
     { layerId: 2, phrase: "OVER", startTime: 300 },
     { layerId: 3, phrase: "THE", startTime: 400 },
@@ -66,13 +42,18 @@ const Editor = () => {
   ]);
 
   useEffect(() => {
-    if (play) {
-      const interval = setInterval(() => setValue((v) => v + 1), 1);
+    EditorStore.setEditorState(initialEditorState);
+    PlayerStore.setPlayerState({ isPlaying: false });
+  }, []);
+
+  useEffect(() => {
+    if (playerState.isPlaying) {
+      const interval = setInterval(() => PlayerStore.setTimerValue(1), 100);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [play]);
+  }, [playerState.isPlaying]);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     console.log(event.code);
@@ -84,14 +65,14 @@ const Editor = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [play]);
+  }, [playerState.isPlaying]);
 
   const handlePlay = () => {
-    if (!play) {
-      setPlay(true);
+    if (!playerState.isPlaying) {
+      PlayerStore.setPlayerState({ isPlaying: true });
       autoPlay();
     } else {
-      setPlay(!play);
+      PlayerStore.setPlayerState({ isPlaying: !playerState.isPlaying });
     }
   };
 
@@ -112,36 +93,39 @@ const Editor = () => {
         flexDirection: "column",
       }}
     >
-      <div>
-        <div style={{ color: "white" }}>{value}</div>
-        <IconButton
-          onClick={() => {
-            setValue(0);
-            setPlay(false);
-          }}
-        >
-          <StopRoundedIcon />
-        </IconButton>
-
-        {!play && (
-          <IconButton onClick={() => handlePlay()}>
-            <PlayArrowRoundedIcon />
+      <Subscribe>
+        <div>
+          <div style={{ color: "white" }}>{timer}</div>
+          <IconButton
+            onClick={() => {
+              PlayerStore.setTimerValue(0);
+              PlayerStore.setPlayerState({ isPlaying: false });
+            }}
+          >
+            <StopRoundedIcon />
           </IconButton>
-        )}
 
-        {play && (
-          <IconButton onClick={() => handlePlay()}>
-            <PauseRoundedIcon />
-          </IconButton>
-        )}
-      </div>
-      {/* <SequenceEditor
+          {!playerState.isPlaying && (
+            <IconButton onClick={() => handlePlay()}>
+              <PlayArrowRoundedIcon />
+            </IconButton>
+          )}
+
+          {playerState.isPlaying && (
+            <IconButton onClick={() => handlePlay()}>
+              <PauseRoundedIcon />
+            </IconButton>
+          )}
+        </div>
+        {/* <SequenceEditor
         timer={value}
         layerData={layerData}
         setLayerData={setLayerData}
         textLayers={textLayers}
         setTextLayers={setTextLayers}
       /> */}
+        <Storyboard />
+      </Subscribe>
     </div>
   );
 };
