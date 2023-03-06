@@ -1,13 +1,12 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import SequenceEditor from "../components/SequeneEditor";
+import Storyboard from "../core/Storyboard";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
 import { IconButton } from "@mui/material";
 import { EditorStore } from "../store/EditorStore";
 import { initialEditorState } from "../dump/editor";
-import Storyboard from "../components/SequeneEditor/Storyboard";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
@@ -76,7 +75,6 @@ const Editor = () => {
             </IconButton>
           )}
         </div>
-        <SequenceEditor />
         <Storyboard />
       </Subscribe>
     </div>

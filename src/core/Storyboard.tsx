@@ -2,10 +2,10 @@ import { KonvaEventObject } from "konva/lib/Node";
 import { Vector2d } from "konva/lib/types";
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
-import FormDialog from "./dialogForm/DialogForm";
+import FormDialog from "../components/dialogForm/DialogForm";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { Html } from "react-konva-utils";
-import SubLayerForm from "./subLayerForm/SubLayerForm";
+import SubLayerForm from "../components/subLayerForm/SubLayerForm";
 import { PlayerStore } from "../store/PlayerStore";
 import { EditorStore, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
@@ -15,7 +15,7 @@ interface CanShowAlert {
   getAlert(id: any): void;
 }
 
-const SequenceEditor = () => {
+const Storyboard = () => {
   const stageRef = useRef(null);
   const childRef = useRef<CanShowAlert>();
   const subLayerEditorRef = useRef<CanShowAlert>();
@@ -376,4 +376,4 @@ const SubLayer = ({
   );
 };
 
-export default SequenceEditor;
+export default Storyboard;
