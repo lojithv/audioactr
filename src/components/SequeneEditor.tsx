@@ -8,30 +8,11 @@ import { Html } from "react-konva-utils";
 import SubLayerForm from "./subLayerForm/SubLayerForm";
 import { PlayerStore } from "../store/PlayerStore";
 import { EditorStore } from "../store/EditorStore";
+import { EditorHelper } from "../helpers/editor";
 
-// interface Step {
-//   id: number;
-//   text: string;
-// }
 
 interface CanShowAlert {
   getAlert(id: any): void;
-}
-
-function getWindowDimensions() {
-  const { innerWidth: width, innerHeight: height } = window;
-  return {
-    width,
-    height,
-  };
-}
-
-interface Props {
-  timer: number;
-  textLayers: any;
-  setTextLayers: any;
-  layerData: any;
-  setLayerData: any;
 }
 
 const SequenceEditor = () => {
@@ -47,12 +28,12 @@ const SequenceEditor = () => {
 
 
   const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
+   EditorHelper.getWindowDimensions()
   );
 
   useEffect(() => {
     function handleResize() {
-      setWindowDimensions(getWindowDimensions());
+      setWindowDimensions(EditorHelper.getWindowDimensions());
     }
 
     window.addEventListener("resize", handleResize);
@@ -112,7 +93,6 @@ const SequenceEditor = () => {
               selectShape={selectShape}
               layerData={layerData}
               handleStepClick={handleStepClick}
-              handleSequnceLayerDrag={handleSequnceLayerDrag}
               openSublayerEditor={openSublayerEditor}
               textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
@@ -154,7 +134,6 @@ const SequenceLayer = ({
   layerData,
   setLayerData,
   handleStepClick,
-  handleSequnceLayerDrag,
   openSublayerEditor,
   textLayers,
 }: any) => {
