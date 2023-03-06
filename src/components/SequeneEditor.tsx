@@ -7,7 +7,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { Html } from "react-konva-utils";
 import SubLayerForm from "./subLayerForm/SubLayerForm";
 import { PlayerStore } from "../store/PlayerStore";
-import { EditorStore } from "../store/EditorStore";
+import { EditorStore, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 
 
@@ -26,14 +26,11 @@ const SequenceEditor = () => {
 
   const layerData = editorState.layers;
 
-
-  const [windowDimensions, setWindowDimensions] = useState(
-   EditorHelper.getWindowDimensions()
-  );
+  const windowDimensions = useWindowDimensions()
 
   useEffect(() => {
     function handleResize() {
-      setWindowDimensions(EditorHelper.getWindowDimensions());
+      setWindowDimensions(EditorHelper.getWindowDimensions())
     }
 
     window.addEventListener("resize", handleResize);
@@ -88,7 +85,6 @@ const SequenceEditor = () => {
               key={i}
               step={step}
               i={i + 1}
-              windowDimensions={windowDimensions}
               selectedId={selectedId}
               selectShape={selectShape}
               layerData={layerData}
@@ -127,7 +123,6 @@ const roundnum = (num: number) => {
 
 const SequenceLayer = ({
   step,
-  windowDimensions,
   selectedId,
   selectShape,
   i,
@@ -143,6 +138,8 @@ const SequenceLayer = ({
   const [draggingSubLayer, setDraggingSubLayer] = useState<any>();
 
   const [oldIndex, setOldIndex] = useState(i);
+
+  const windowDimensions = useWindowDimensions()
 
   const onDragStart = (event: KonvaEventObject<DragEvent>, index: number) => {
     event.target.setAttr("opacity", 0.5);
