@@ -29,7 +29,6 @@ const Track = ({
 
   return (
     <Group
-      draggable
       key={"step_" + step?.id?.toString()}
       ref={layerRef}
     >
