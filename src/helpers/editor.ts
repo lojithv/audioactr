@@ -9,3 +9,7 @@ export namespace EditorHelper{
       }
 }
 
+export const roundnum = (num: number) => {
+  const index = Math.round(num / 50);
+  return index * 50;
+};
