@@ -12,7 +12,7 @@ interface Props{
     handleValueChange?:any
 }
 
-const SubLayerForm = forwardRef((props:Props, ref) => {
+const TrackConfigEditor = forwardRef((props:Props, ref) => {
   const [open, setOpen] = React.useState(false);
   const [text,setText]=React.useState("")
   const [stepId,setStepId]=React.useState("")
@@ -64,4 +64,4 @@ const SubLayerForm = forwardRef((props:Props, ref) => {
   );
 });
 
-export default SubLayerForm;
+export default TrackConfigEditor;

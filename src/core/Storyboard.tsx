@@ -5,7 +5,7 @@ import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
 import FormDialog from "../components/dialogForm/DialogForm";
 
 import { Html } from "react-konva-utils";
-import SubLayerForm from "../components/subLayerForm/SubLayerForm";
+import SubLayerForm from "../components/TrackConfigEditor/TrackConfigEditor";
 import { PlayerStore } from "../store/PlayerStore";
 import { EditorStore, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
@@ -57,22 +57,11 @@ const Storyboard = () => {
 
   const [selectedId, selectShape] = React.useState("");
 
-  const handleSequnceLayerDrag = (id: any, newIndex: any) => {
-    const newSequenceData = [...layerData];
-    const index = newSequenceData.findIndex((step) => step.id === id);
-    newSequenceData[index].layerIndex = newIndex;
-    // setLayerData(newSequenceData);
-    EditorStore.setEditorState({...editorState,layers:newSequenceData})
-  };
-
-  const handleSublayerPropsChange = () => {};
-
   return (
     <>
       <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
       <SubLayerForm
         ref={subLayerEditorRef}
-        handleValueChange={handleSublayerPropsChange}
       />
 
       <Stage
