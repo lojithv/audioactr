@@ -1,10 +1,4 @@
 import * as React from "react";
-import Stack from "@mui/material/Stack";
-import Slider from "@mui/material/Slider";
-import VolumeDown from "@mui/icons-material/VolumeDown";
-import VolumeUp from "@mui/icons-material/VolumeUp";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import { useEffect, useState } from "react";
 import SequenceEditor from "../components/SequeneEditor";
 import { axiosInstance } from "../config/axiosInstance";
@@ -26,21 +20,6 @@ const Editor = () => {
   const editorState = EditorStore.useEditorState();
 
   const timer = PlayerStore.useTimer();
-
-  const [textLayers, setTextLayers] = useState([
-    { layerId: 1, phrase: "Hello world!", startTime: 0 },
-    {
-      layerId: 2,
-      phrase:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      startTime: 100,
-    },
-    { layerId: 1, phrase: "JUMPS", startTime: 200 },
-    { layerId: 2, phrase: "OVER", startTime: 300 },
-    { layerId: 3, phrase: "THE", startTime: 400 },
-    { layerId: 4, phrase: "LAZY", startTime: 500 },
-    { layerId: 5, phrase: "DOG", startTime: 600 },
-  ]);
 
   useEffect(() => {
     EditorStore.setEditorState(initialEditorState);
@@ -82,7 +61,7 @@ const Editor = () => {
       .post("/audio", { textLayers: editorState.phrases })
       .then((res: any) => {
         console.log("completed");
-        if(res){
+        if (res) {
           PlayerStore.setPlayerState({ isPlaying: false });
         }
       });
@@ -121,13 +100,7 @@ const Editor = () => {
             </IconButton>
           )}
         </div>
-        <SequenceEditor
-        // timer={value}
-        // layerData={layerData}
-        // setLayerData={setLayerData}
-        // textLayers={textLayers}
-        // setTextLayers={setTextLayers}
-      />
+        <SequenceEditor />
         <Storyboard />
       </Subscribe>
     </div>
