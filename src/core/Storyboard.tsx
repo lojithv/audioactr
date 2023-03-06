@@ -50,7 +50,6 @@ const Storyboard = () => {
               i={i + 1}
               selectedId={selectedId}
               selectShape={selectShape}
-              layerData={layerData}
               textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
           ))}
