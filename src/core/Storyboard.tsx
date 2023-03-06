@@ -13,7 +13,6 @@ interface CanShowAlert {
 
 const Storyboard = () => {
   const stageRef = useRef(null);
-  const subLayerEditorRef = useRef<CanShowAlert>();
 
   const timer = PlayerStore.useTimer()
 
@@ -52,7 +51,6 @@ const Storyboard = () => {
               selectedId={selectedId}
               selectShape={selectShape}
               layerData={layerData}
-              // openSublayerEditor={openSublayerEditor}
               textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
           ))}

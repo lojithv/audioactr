@@ -15,6 +15,5 @@ export const handleStepClick = ( id: number) => {
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
     newSequenceData[index].text = newData ? newData : "";
-    // setLayerData(newSequenceData);
     EditorStore.setEditorState({...editorState,layers:newSequenceData})
   };
