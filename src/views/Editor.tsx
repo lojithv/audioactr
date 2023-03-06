@@ -81,6 +81,9 @@ const Editor = () => {
       .post("/audio", { textLayers: textLayers })
       .then((res: any) => {
         console.log("completed");
+        if(res){
+          PlayerStore.setPlayerState({ isPlaying: false });
+        }
       });
   };
 
