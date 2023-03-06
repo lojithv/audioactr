@@ -1,8 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import SequenceEditor from "../components/SequeneEditor";
-import { axiosInstance } from "../config/axiosInstance";
-
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
@@ -12,8 +10,7 @@ import { initialEditorState } from "../dump/editor";
 import Storyboard from "../components/SequeneEditor/Storyboard";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
-
-type Props = {};
+import { handleKeyDown, handlePlay } from "../handlers/editor";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -35,37 +32,16 @@ const Editor = () => {
     }
   }, [playerState.isPlaying]);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    console.log(event.code);
-    if (event.code === "Space") handlePlay();
-  };
-
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", (e) =>
+      handleKeyDown(e, playerState, editorState)
+    );
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", (e) =>
+        handleKeyDown(e, playerState, editorState)
+      );
     };
   }, [playerState.isPlaying]);
-
-  const handlePlay = () => {
-    if (!playerState.isPlaying) {
-      PlayerStore.setPlayerState({ isPlaying: true });
-      autoPlay();
-    } else {
-      PlayerStore.setPlayerState({ isPlaying: !playerState.isPlaying });
-    }
-  };
-
-  const autoPlay = () => {
-    axiosInstance
-      .post("/audio", { textLayers: editorState.phrases })
-      .then((res: any) => {
-        console.log("completed");
-        if (res) {
-          PlayerStore.setPlayerState({ isPlaying: false });
-        }
-      });
-  };
 
   return (
     <div
@@ -89,13 +65,13 @@ const Editor = () => {
           </IconButton>
 
           {!playerState.isPlaying && (
-            <IconButton onClick={() => handlePlay()}>
+            <IconButton onClick={() => handlePlay(playerState, editorState)}>
               <PlayArrowRoundedIcon />
             </IconButton>
           )}
 
           {playerState.isPlaying && (
-            <IconButton onClick={() => handlePlay()}>
+            <IconButton onClick={() => handlePlay(playerState, editorState)}>
               <PauseRoundedIcon />
             </IconButton>
           )}
