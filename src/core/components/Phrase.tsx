@@ -2,6 +2,7 @@ import React from "react";
 import { Group, Rect, Text, Transformer } from "react-konva";
 import { Html } from "react-konva-utils";
 import { roundnum } from "../../helpers/editor";
+import { setSelectedPhrase, useSelectedPhrase } from "../../store/EditorStore";
 
 type Props = {};
 
@@ -11,6 +12,8 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
 
   const grpRef: any = React.useRef();
 
+  const selectedPhrase = useSelectedPhrase()
+
   return (
     <Group
       x={10 + 101 + layerData.startTime}
@@ -19,8 +22,8 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
       width={120}
       height={40}
       ref={grpRef}
+      onClick={()=>setSelectedPhrase(layerData)}
       dragBoundFunc={(pos) => {
-        console.log("dragging");
         return {
           x: pos.x >= 111 ? pos.x : 111,
           y: i * 50,
@@ -31,7 +34,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
         id={"sub_layer_" + id}
         width={120}
         height={40}
-        fill="#BDBDBD"
+        fill={layerData.id === selectedPhrase?.id ? "#4287f5" : "#BDBDBD"} 
         ref={shapeRef}
       />
       {layerData.phrase.toString().length > 30 ? (

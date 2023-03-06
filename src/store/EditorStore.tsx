@@ -22,3 +22,9 @@ export const EditorStore = {
   setEditorState,
   useEditorState,
 };
+
+export const [selectedPhraseChange$, setSelectedPhrase] = createSignal<any>();
+export const [useSelectedPhrase, selectedPhrase$] = bind<any>(
+  selectedPhraseChange$,
+  null
+);
