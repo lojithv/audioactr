@@ -1,16 +1,11 @@
-import { KonvaEventObject } from "konva/lib/Node";
-import { Vector2d } from "konva/lib/types";
 import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
-import FormDialog from "../components/dialogForm/DialogForm";
+import TrackConfigPanel from "../components/TrackConfigPanel/TrackConfigPanel";
 
-import { Html } from "react-konva-utils";
-import SubLayerForm from "../components/TrackConfigEditor/TrackConfigEditor";
 import { PlayerStore } from "../store/PlayerStore";
 import { EditorStore, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 import Track from "./components/Track";
-
 
 interface CanShowAlert {
   getAlert(id: any): void;
@@ -18,7 +13,6 @@ interface CanShowAlert {
 
 const Storyboard = () => {
   const stageRef = useRef(null);
-  const childRef = useRef<CanShowAlert>();
   const subLayerEditorRef = useRef<CanShowAlert>();
 
   const timer = PlayerStore.useTimer()
@@ -38,31 +32,11 @@ const Storyboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleStepClick = (id: number) => {
-    childRef?.current?.getAlert(id);
-    // const newData = prompt("Enter new text:", newSequenceData[index].text);
-  };
-
-  const openSublayerEditor = (id: any) => {
-    subLayerEditorRef?.current?.getAlert(id);
-  };
-
-  const handleStepDataChange = (id: any, newData: any) => {
-    const newSequenceData = [...layerData];
-    const index = newSequenceData.findIndex((step) => step.id === id);
-    newSequenceData[index].text = newData ? newData : "";
-    // setLayerData(newSequenceData);
-    EditorStore.setEditorState({...editorState,layers:newSequenceData})
-  };
-
   const [selectedId, selectShape] = React.useState("");
 
   return (
     <>
-      <FormDialog ref={childRef} handleValueChange={handleStepDataChange} />
-      <SubLayerForm
-        ref={subLayerEditorRef}
-      />
+      <TrackConfigPanel />
 
       <Stage
         ref={stageRef}
@@ -78,8 +52,7 @@ const Storyboard = () => {
               selectedId={selectedId}
               selectShape={selectShape}
               layerData={layerData}
-              handleStepClick={handleStepClick}
-              openSublayerEditor={openSublayerEditor}
+              // openSublayerEditor={openSublayerEditor}
               textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
           ))}

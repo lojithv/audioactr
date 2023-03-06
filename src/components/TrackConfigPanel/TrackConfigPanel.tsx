@@ -7,43 +7,42 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { forwardRef } from "react";
+import { handleStepDataChange } from "../../handlers/storyboard";
+import { EditorStore } from "../../store/EditorStore";
+import { setEditorVisibility, useEditorVisibility, useSelectedTrackId } from "../../store/TrackConfigStore";
 
 interface Props{
     handleValueChange?:any
 }
 
-const TrackConfigEditor = forwardRef((props:Props, ref) => {
-  const [open, setOpen] = React.useState(false);
+const TrackConfigPanel = () => {
+  const open = useEditorVisibility()
   const [text,setText]=React.useState("")
-  const [stepId,setStepId]=React.useState("")
+  const stepId = useSelectedTrackId()
 
-  React.useImperativeHandle(ref, () => ({
-    getAlert(id:any) {
-      //   alert("getAlert from Child");
-      setStepId(id)
-      setOpen(true);
-    },
-  }));
+  const editorState = EditorStore.useEditorState()
+
+  const layerData = editorState.layers;
 
   const handleClose = () => {
-    setOpen(false);
+    setEditorVisibility(false)
   };
 
   const handleSubmit = () =>{
-    props.handleValueChange(stepId,text)
-    setOpen(false);
+    handleStepDataChange(layerData,editorState,stepId,text)
+    setEditorVisibility(false)
   }
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose} sx={{ color: "white" }}>
-        <DialogTitle>Sublayer Editor</DialogTitle>
+        <DialogTitle>Edit</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Phrase"
+            label="Name"
             type="text"
             value={text}
             onChange={(e)=>setText(e.target.value)}
@@ -62,6 +61,6 @@ const TrackConfigEditor = forwardRef((props:Props, ref) => {
       </Dialog>
     </div>
   );
-});
+};
 
-export default TrackConfigEditor;
+export default TrackConfigPanel;

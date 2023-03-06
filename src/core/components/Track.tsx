@@ -7,6 +7,7 @@ import { roundnum } from '../../helpers/editor';
 import { useWindowDimensions } from '../../store/EditorStore';
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import Phrase from './Phrase';
+import { handleStepClick } from '../../handlers/storyboard';
 
 type Props = {}
 
@@ -17,7 +18,6 @@ const Track = ({
   i,
   layerData,
   setLayerData,
-  handleStepClick,
   openSublayerEditor,
   textLayers,
 }: any) => {
