@@ -54,23 +54,6 @@ const Storyboard = () => {
             />
           ))}
         </Layer>
-        <Layer>
-          <Rect
-            x={111 + timer}
-            y={50}
-            height={windowDimensions.height - 50}
-            width={2}
-            fill="#00D1B2"
-            draggable
-            hitStrokeWidth={5}
-            dragBoundFunc={(pos) => {
-              return {
-                x: pos.x,
-                y: 50,
-              };
-            }}
-          />
-        </Layer>
       </Stage>
     </>
   );
