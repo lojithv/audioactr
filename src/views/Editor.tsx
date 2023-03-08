@@ -15,7 +15,6 @@ import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
-import { defaultTheme, Provider, TextArea } from "@adobe/react-spectrum";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -60,7 +59,7 @@ const Editor = () => {
       }}
     >
       <Subscribe>
-        <div style={{display:'flex'}}>
+        <div style={{ display: "flex" }}>
           <div style={{ color: "white" }}>{timer}</div>
           <IconButton
             onClick={() => {
@@ -82,14 +81,17 @@ const Editor = () => {
               <PauseRoundedIcon />
             </IconButton>
           )}
-          <TextField
+        </div>
+        <TextField
           id="outlined-multiline-static"
-          // label="Multiline"
           multiline
           fullWidth
           value={selectedPhrase?.phrase}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setSelectedPhrase({ ...selectedPhrase, phrase: event.target.value });
+            setSelectedPhrase({
+              ...selectedPhrase,
+              phrase: event.target.value,
+            });
             setEditorState({
               ...editorState,
               phrases: editorState.phrases.map((p) => {
@@ -102,9 +104,7 @@ const Editor = () => {
             });
           }}
           rows={4}
-          defaultValue="Default Value"
         />
-        </div>
         <Storyboard />
       </Subscribe>
     </div>

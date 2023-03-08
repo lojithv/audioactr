@@ -3,7 +3,7 @@ import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
 import TrackConfigPanel from "../components/TrackConfigPanel/TrackConfigPanel";
 
 import { PlayerStore } from "../store/PlayerStore";
-import { EditorStore, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
+import { EditorStore, setSelectedPhrase, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 import Track from "./components/Track";
 
@@ -23,6 +23,9 @@ const Storyboard = () => {
   const windowDimensions = useWindowDimensions()
 
   useEffect(() => {
+    console.log(editorState.phrases[0])
+    setSelectedPhrase(editorState.phrases[0])
+    
     function handleResize() {
       setWindowDimensions(EditorHelper.getWindowDimensions())
     }
