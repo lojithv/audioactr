@@ -13,7 +13,7 @@ export const [useEditorState, editorState$] = bind<EditorState>(
 export const [windowDimensionChange$, setWindowDimensions] =
   createSignal<any>();
 export const [useWindowDimensions, windowDimensions$] = bind<any>(
-  editorChange$,
+  windowDimensionChange$,
   EditorHelper.getWindowDimensions()
 );
 
