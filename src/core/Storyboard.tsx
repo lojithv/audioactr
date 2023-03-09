@@ -6,6 +6,7 @@ import { PlayerStore } from "../store/PlayerStore";
 import { EditorStore, setSelectedPhrase, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 import Track from "./components/Track";
+import ConetxtMenu from "../components/ContextMenu/ContextMenu";
 
 interface CanShowAlert {
   getAlert(id: any): void;
@@ -39,7 +40,7 @@ const Storyboard = () => {
   return (
     <>
       <TrackConfigPanel />
-
+      <ConetxtMenu/>
       <Stage
         ref={stageRef}
         width={window.innerWidth}
