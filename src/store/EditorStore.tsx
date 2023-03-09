@@ -1,5 +1,6 @@
 import { bind } from "@react-rxjs/core";
 import { createSignal } from "@react-rxjs/utils";
+import { KonvaEventObject } from "konva/lib/Node";
 import { initialEditorState } from "../dump/editor";
 import { EditorHelper } from "../helpers/editor";
 import { EditorState } from "../interfaces/EditorState";
@@ -28,3 +29,6 @@ export const [useSelectedPhrase, selectedPhrase$] = bind<any>(
   selectedPhraseChange$,
   null
 );
+
+export const [contextMenuChange$, setContextMenuState] = createSignal<{open:boolean,event?:KonvaEventObject<MouseEvent>}>();
+export const [useContextMenuState, contextMenuState$] =  bind<{open:boolean,event?:KonvaEventObject<MouseEvent>}>(contextMenuChange$,{open:false})

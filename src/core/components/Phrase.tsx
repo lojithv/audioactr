@@ -1,8 +1,9 @@
+import { KonvaEventObject } from "konva/lib/Node";
 import React from "react";
 import { Group, Rect, Text, Transformer } from "react-konva";
 import { Html } from "react-konva-utils";
 import { roundnum } from "../../helpers/editor";
-import { setSelectedPhrase, useSelectedPhrase } from "../../store/EditorStore";
+import { setContextMenuState, setSelectedPhrase, useSelectedPhrase } from "../../store/EditorStore";
 
 type Props = {};
 
@@ -14,6 +15,13 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
 
   const selectedPhrase = useSelectedPhrase()
 
+  const handleClick = (e:KonvaEventObject<MouseEvent>) => {
+    if(e.evt.button == 2){
+      setContextMenuState({open:true,event:e})
+    }
+    setSelectedPhrase(layerData)
+  }
+
   return (
     <Group
       x={10 + 101 + layerData.startTime}
@@ -22,7 +30,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
       width={120}
       height={40}
       ref={grpRef}
-      onClick={()=>setSelectedPhrase(layerData)}
+      onClick={(e)=>handleClick(e)}
       dragBoundFunc={(pos) => {
         return {
           x: pos.x >= 111 ? pos.x : 111,

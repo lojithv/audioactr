@@ -16,13 +16,12 @@ import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
-import { Item } from "@adobe/react-spectrum";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
   const editorState = EditorStore.useEditorState();
 
-  const timer = PlayerStore.useTimer();
+  const time = PlayerStore.useTimer();
 
   useEffect(() => {
     EditorStore.setEditorState(initialEditorState);
@@ -31,10 +30,11 @@ const Editor = () => {
 
   useEffect(() => {
     if (playerState.isPlaying) {
-      const interval = setInterval(() => PlayerStore.setTimerValue(1), 100);
+      const interval = setInterval(() => PlayerStore.setTimerValue(1), 10);
       return () => {
         clearInterval(interval);
       };
+      // start()
     }
   }, [playerState.isPlaying]);
 
@@ -52,6 +52,18 @@ const Editor = () => {
   const selectedPhrase = useSelectedPhrase();
 
   const windowDimensions = useWindowDimensions();
+
+  // Hours calculation
+  const hours = Math.floor(time / 360000);
+
+  // Minutes calculation
+  const minutes = Math.floor((time % 360000) / 6000);
+
+  // Seconds calculation
+  const seconds = Math.floor((time % 6000) / 100);
+
+  // Milliseconds calculation
+  const milliseconds = time % 100;
 
   return (
     <div
@@ -86,7 +98,10 @@ const Editor = () => {
                   height: "100%",
                 }}
               >
-                {timer}
+                {/* {timer} */}
+                {hours}:{minutes.toString().padStart(2, "0")}:
+                {seconds.toString().padStart(2, "0")}:
+                {milliseconds.toString().padStart(2, "0")}
               </div>
             </Grid>
             <Grid item xs={4}>
