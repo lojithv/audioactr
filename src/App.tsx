@@ -10,7 +10,7 @@ import Demo from "./views/Test";
 
 function App() {
   useEffect(() => {
-    axiosInstance.get("/example").then((res) => {
+    axiosInstance.get("/voices").then((res) => {
       console.log(res.data);
     });
   },[]);

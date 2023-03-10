@@ -35,6 +35,19 @@ def example():
   # See /src/components/App.js for frontend call
   return jsonify("Example response from Flask! Learn more in /app.py & /src/components/App.js")
 
+@app.route("/voices")
+def voices():
+  engine = pyttsx3.init()
+  voices = engine.getProperty('voices')
+  voiceList = []
+  for voice in voices:
+    dict_obj = {
+        'name':voice.name,
+        'id':voice.id
+    }
+    voiceList.append(dict_obj)
+  return jsonify(voiceList)
+
 # Convert text to audio
 @app.route("/audio",methods = ['POST'])
 def audio():
