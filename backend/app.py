@@ -54,6 +54,8 @@ def audio():
   data = request.get_json()
   app.logger.info(data)
   engine = pyttsx3.init()
+  voice = data['voice']
+  engine.setProperty('voice', voice)
   textLayers = data['textLayers']
   # engine.say("Hello world! Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
   # engine.runAndWait()
