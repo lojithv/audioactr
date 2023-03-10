@@ -2,7 +2,7 @@ import React from "react";
 import { EditorState } from "../interfaces/EditorState";
 
 export const initialEditorState:EditorState = {
-    layers: [
+    tracks: [
         {
           id: 1,
           text: "Step 1",

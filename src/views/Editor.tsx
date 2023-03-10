@@ -136,9 +136,6 @@ const Editor = () => {
                 )}
               </Box>
             </Grid>
-            <Grid item xs={4}>
-              <SelectVoice/>
-            </Grid>
           </Grid>
         </div>
         <Box
