@@ -16,7 +16,7 @@ const Storyboard = () => {
 
   const editorState = EditorStore.useEditorState()
 
-  const layerData = editorState.layers;
+  const layerData = editorState.tracks;
 
   const windowDimensions = useWindowDimensions()
 

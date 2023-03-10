@@ -3,15 +3,30 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { setSelectedVoice, useSelectedVoice, useVoices } from '../store/EditorStore';
+import { EditorStore, setEditorState, setSelectedVoice, useSelectedVoice, useVoices } from '../store/EditorStore';
+import { useSelectedTrackId } from '../store/TrackConfigStore';
 
 export default function SelectVoice() {
     const voices = useVoices()
 
   const selectedVoice = useSelectedVoice()
 
+  const editorState = EditorStore.useEditorState();
+
+  const selectedLayer = useSelectedTrackId()
+
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedVoice(event.target.value);
+    setEditorState({
+      ...editorState,
+      tracks: editorState.tracks.map((t) => {
+        if (t.id === selectedLayer) {
+          return { ...t, voice: event.target.value};
+        } else {
+          return t;
+        }
+      }),
+    });
   };
 
   return (

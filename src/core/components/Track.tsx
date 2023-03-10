@@ -23,7 +23,7 @@ const Track = ({
   const subLayerGroup: any = React.useRef();
 
   const editorState = EditorStore.useEditorState()
-  const layerData = editorState.layers;
+  const layerData = editorState.tracks;
 
   const windowDimensions = useWindowDimensions()
 

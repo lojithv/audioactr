@@ -10,6 +10,7 @@ import { forwardRef } from "react";
 import { handleStepDataChange } from "../../handlers/storyboard";
 import { EditorStore } from "../../store/EditorStore";
 import { setEditorVisibility, useEditorVisibility, useSelectedTrackId } from "../../store/TrackConfigStore";
+import SelectVoice from "../SelectVoice";
 
 interface Props{
     handleValueChange?:any
@@ -22,7 +23,7 @@ const TrackConfigPanel = () => {
 
   const editorState = EditorStore.useEditorState()
 
-  const layerData = editorState.layers;
+  const layerData = editorState.tracks;
 
   const handleClose = () => {
     setEditorVisibility(false)
@@ -49,6 +50,7 @@ const TrackConfigPanel = () => {
             fullWidth
             variant="standard"
           />
+          <SelectVoice/>
         </DialogContent>
         <DialogActions>
           <Button sx={{ color: "white" }} onClick={handleClose}>

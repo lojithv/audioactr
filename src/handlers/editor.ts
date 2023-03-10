@@ -14,7 +14,7 @@ export const handlePlay = (playerState:PlayerState,editorState:EditorState,voice
 
 export const autoPlay = (editorState:EditorState,voice:string) => {
   axiosInstance
-    .post("/audio", { textLayers: editorState.phrases, voice:voice })
+    .post("/audio", { phrases: editorState.phrases, tracks:editorState.tracks })
     .then((res: any) => {
       console.log("completed");
       if (res) {

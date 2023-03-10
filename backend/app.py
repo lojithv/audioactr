@@ -1,3 +1,4 @@
+import json
 import sys
 import pyttsx3
 from flask import Flask, jsonify, request
@@ -51,18 +52,16 @@ def voices():
 # Convert text to audio
 @app.route("/audio",methods = ['POST'])
 def audio():
-  data = request.get_json()
+  data = json.loads(request.data)
   app.logger.info(data)
   engine = pyttsx3.init()
-  voice = data['voice']
-  engine.setProperty('voice', voice)
-  textLayers = data['textLayers']
-  # engine.say("Hello world! Lorem Ipsum is simply dummy text of the printing and typesetting industry.")
-  # engine.runAndWait()
-  for layer in textLayers:
-    engine.say(layer['phrase'])
+  phrases = data['phrases']
+  tracks = data['tracks']
+  for phrase in phrases:
+    voice=next((track for track in tracks if track['id'] == phrase['layerId']), None)['voice']
+    engine.setProperty('voice',voice)
+    engine.say(phrase['phrase'])
   engine.runAndWait()
-  # See /src/components/App.js for frontend call
   return jsonify("Completed")
 
 
