@@ -32,3 +32,9 @@ export const [useSelectedPhrase, selectedPhrase$] = bind<any>(
 
 export const [contextMenuChange$, setContextMenuState] = createSignal<{open:boolean,event?:KonvaEventObject<MouseEvent>}>();
 export const [useContextMenuState, contextMenuState$] =  bind<{open:boolean,event?:KonvaEventObject<MouseEvent>}>(contextMenuChange$,{open:false})
+
+export const [voicesChange$, setVoices] = createSignal<any[]>();
+export const [useVoices, voices$] = bind<any[]>(voicesChange$,[]);
+
+export const [selectedVoiceChange$,setSelectedVoice] = createSignal<any>()
+export const [useSelectedVoice, selectedVoice$] = bind<any>(selectedVoiceChange$,'')

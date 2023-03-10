@@ -10,12 +10,14 @@ import {
   setEditorState,
   setSelectedPhrase,
   useSelectedPhrase,
+  useSelectedVoice,
   useWindowDimensions,
 } from "../store/EditorStore";
 import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
+import SelectVoice from "../components/SelectVoice";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -38,13 +40,15 @@ const Editor = () => {
     }
   }, [playerState.isPlaying]);
 
+  const selectedVoice = useSelectedVoice()
+
   useEffect(() => {
     window.addEventListener("keydown", (e) =>
-      handleKeyDown(e, playerState, editorState)
+      handleKeyDown(e, playerState, editorState,selectedVoice)
     );
     return () => {
       window.removeEventListener("keydown", (e) =>
-        handleKeyDown(e, playerState, editorState)
+        handleKeyDown(e, playerState, editorState,selectedVoice)
       );
     };
   }, [playerState.isPlaying]);
@@ -117,7 +121,7 @@ const Editor = () => {
 
                 {!playerState.isPlaying && (
                   <IconButton
-                    onClick={() => handlePlay(playerState, editorState)}
+                    onClick={() => handlePlay(playerState, editorState,selectedVoice)}
                   >
                     <PlayArrowRoundedIcon />
                   </IconButton>
@@ -125,12 +129,15 @@ const Editor = () => {
 
                 {playerState.isPlaying && (
                   <IconButton
-                    onClick={() => handlePlay(playerState, editorState)}
+                    onClick={() => handlePlay(playerState, editorState,selectedVoice)}
                   >
                     <PauseRoundedIcon />
                   </IconButton>
                 )}
               </Box>
+            </Grid>
+            <Grid item xs={4}>
+              <SelectVoice/>
             </Grid>
           </Grid>
         </div>

@@ -1,16 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Rect, Text, Group, Transformer } from "react-konva";
+import { Stage, Layer } from "react-konva";
 import TrackConfigPanel from "../components/TrackConfigPanel/TrackConfigPanel";
 
 import { PlayerStore } from "../store/PlayerStore";
-import { EditorStore, setSelectedPhrase, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
+import { EditorStore, setSelectedPhrase, setVoices, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 import Track from "./components/Track";
 import ConetxtMenu from "../components/ContextMenu/ContextMenu";
-
-interface CanShowAlert {
-  getAlert(id: any): void;
-}
+import { axiosInstance } from "../config/axiosInstance";
 
 const Storyboard = () => {
   const stageRef = useRef(null);
@@ -36,6 +33,13 @@ const Storyboard = () => {
   }, []);
 
   const [selectedId, selectShape] = React.useState("");
+
+  useEffect(() => {
+    axiosInstance.get("/voices").then((res) => {
+      console.log(res.data);
+      setVoices(res.data)
+    });
+  },[]);
 
   return (
     <>
