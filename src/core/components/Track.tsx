@@ -9,8 +9,6 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import Phrase from './Phrase';
 import { handleStepClick } from '../../handlers/storyboard';
 
-type Props = {}
-
 const Track = ({
   step,
   i,
@@ -19,7 +17,6 @@ const Track = ({
   const subLayerGroup: any = React.useRef();
 
   const editorState = EditorStore.useEditorState()
-  const layerData = editorState.tracks;
 
   const windowDimensions = useWindowDimensions()
 
@@ -49,7 +46,7 @@ const Track = ({
           x={35}
           y={10}
           fill="white"
-          onClick={() => handleStepClick(step.id)}
+          onClick={() => handleStepClick(step)}
         />
       </Group>
 

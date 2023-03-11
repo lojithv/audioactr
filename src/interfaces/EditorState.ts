@@ -1,4 +1,4 @@
-interface Phrase{
+export interface Phrase{
   trackIndex: any;
   phraseIndex: any;
   id:any;
@@ -6,7 +6,7 @@ interface Phrase{
   phrase:string;
 }
 
-interface Track{
+export interface Track{
   id:any;
   voice?:string|boolean;
   text: string,

@@ -11,7 +11,7 @@ import {
   useSelectedVoice,
   useVoices,
 } from "../store/EditorStore";
-import { useSelectedTrackId } from "../store/TrackConfigStore";
+import { useSelectedTrack } from "../store/TrackConfigStore";
 import { axiosInstance } from "../config/axiosInstance";
 
 export default function SelectVoice() {
@@ -21,7 +21,7 @@ export default function SelectVoice() {
 
   const editorState = EditorStore.useEditorState();
 
-  const selectedLayer = useSelectedTrackId();
+  const selectedLayer = useSelectedTrack();
 
   React.useEffect(() => {
     if(!voices.length)
