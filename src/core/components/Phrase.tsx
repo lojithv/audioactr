@@ -27,7 +27,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
       x={10 + 101 + layerData.startTime}
       y={i * 50}
       draggable
-      width={120}
+      width={100}
       height={40}
       ref={grpRef}
       onClick={(e)=>handleClick(e)}
@@ -40,7 +40,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
     >
       <Rect
         id={"sub_layer_" + id}
-        width={120}
+        width={100}
         height={40}
         fill={layerData.id === selectedPhrase?.id ? "#4287f5" : "#BDBDBD"} 
         ref={shapeRef}
@@ -48,7 +48,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
       {layerData.phrase.toString().length > 30 ? (
         <Text
           text={`${layerData.phrase.substring(0, 50)}...`}
-          width={120}
+          width={100}
           // wrap={"char"}
           fontSize={13}
           fill="black"
@@ -56,7 +56,7 @@ const Phrase = ({ id, i, shapeProps, layerData }: any) => {
       ) : (
         <Text
           text={`${layerData.phrase}`}
-          width={120}
+          width={100}
           wrap={"char"}
           fontSize={13}
           fill="black"
