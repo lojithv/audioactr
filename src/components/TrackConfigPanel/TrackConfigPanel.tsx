@@ -7,22 +7,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { handleStepDataChange } from "../../handlers/storyboard";
 import { EditorStore } from "../../store/EditorStore";
-import { setEditorVisibility, useEditorVisibility, useSelectedTrackId } from "../../store/TrackConfigStore";
+import { setEditorVisibility, useEditorVisibility, useSelectedTrack } from "../../store/TrackConfigStore";
 import SelectVoice from "../SelectVoice";
-import { Subscribe } from "@react-rxjs/core";
+import { useEffect } from "react";
 
 interface Props{
     handleValueChange?:any
 }
 
 const TrackConfigPanel = () => {
+  const selectedTrack = useSelectedTrack()
   const open = useEditorVisibility()
-  const [text,setText]=React.useState("")
-  const stepId = useSelectedTrackId()
+  const [text,setText]=React.useState('')
+  const stepId = useSelectedTrack()
 
   const editorState = EditorStore.useEditorState()
 
   const layerData = editorState.tracks;
+
+  useEffect(() => {
+    setText(selectedTrack?.text || "")
+  }, [selectedTrack])
 
   const handleClose = () => {
     setEditorVisibility(false)

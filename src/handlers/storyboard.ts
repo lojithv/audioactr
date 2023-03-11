@@ -1,9 +1,9 @@
-import { EditorState } from "../interfaces/EditorState";
+import { EditorState, Track } from "../interfaces/EditorState";
 import { EditorStore } from "../store/EditorStore";
-import { setEditorVisibility, setSelectedTrackId } from "../store/TrackConfigStore";
+import { setEditorVisibility, setSelectedTrack } from "../store/TrackConfigStore";
 
-export const handleStepClick = ( id: number) => {
-    setSelectedTrackId(id)
+export const handleStepClick = ( track:Track) => {
+    setSelectedTrack(track)
     setEditorVisibility(true)
   };
 
