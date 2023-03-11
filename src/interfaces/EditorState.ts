@@ -8,7 +8,7 @@ interface Phrase{
 
 interface Track{
   id:any;
-  voice?:string;
+  voice?:string|boolean;
   text: string,
   width: number,
   layerIndex: number,

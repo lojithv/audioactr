@@ -8,34 +8,39 @@ export const initialEditorState:EditorState = {
           text: "Step 1",
           width: 100,
           layerIndex: 1,
+          voice:false 
         },
         {
           id: 2,
           text: "Step 2",
           width: 100,
           layerIndex: 2,
+          voice:false 
         },
         {
           id: 3,
           text: "Step 3",
           width: 100,
           layerIndex: 3,
+          voice:false 
         },
         {
           id: 4,
           text: "Step 4",
           width: 100,
           layerIndex: 4,
+          voice:false 
         },
         {
           id: 5,
           text: "Step 5",
           width: 100,
           layerIndex: 5,
+          voice:false 
         },
       ],
     phrases:[
-        { id:1, layerId: 1, phrase: "hello", trackIndex:1,phraseIndex:0 },
+        { id:1, layerId: 1, phrase: "hello", trackIndex:1,phraseIndex:0},
         {id:2, layerId: 2, phrase: "world", trackIndex:2,phraseIndex:1},
         {id:3, layerId: 1, phrase:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",trackIndex:1,phraseIndex:3 },
         {id:4, layerId: 2, phrase: "Hello world!", trackIndex:2,phraseIndex:4},

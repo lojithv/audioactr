@@ -60,7 +60,10 @@ def audio():
   for phrase in phrases:
     track=next((track for track in tracks if track['id'] == phrase['layerId']), None)
     voice=track['voice']
-    engine.setProperty('voice',voice)
+    if(voice):
+     engine.setProperty('voice',voice)
+    else:
+     engine.setProperty('voice','') 
     engine.say(phrase['phrase'])
   engine.runAndWait()
   return jsonify("Completed")
