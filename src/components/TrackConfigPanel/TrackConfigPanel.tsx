@@ -4,13 +4,12 @@ import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { forwardRef } from "react";
 import { handleStepDataChange } from "../../handlers/storyboard";
 import { EditorStore } from "../../store/EditorStore";
 import { setEditorVisibility, useEditorVisibility, useSelectedTrackId } from "../../store/TrackConfigStore";
 import SelectVoice from "../SelectVoice";
+import { Subscribe } from "@react-rxjs/core";
 
 interface Props{
     handleValueChange?:any

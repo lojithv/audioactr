@@ -1,8 +1,9 @@
 interface Phrase{
+  trackIndex: any;
+  phraseIndex: any;
   id:any;
   layerId:any;
   phrase:string;
-  startTime:number;
 }
 
 interface Track{

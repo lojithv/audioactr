@@ -35,13 +35,13 @@ export const initialEditorState:EditorState = {
         },
       ],
     phrases:[
-        { id:1, layerId: 1, phrase: "hello", startTime: 0 },
-        {id:2, layerId: 2, phrase: "world", startTime: 100 },
-        {id:3, layerId: 1, phrase:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.", startTime: 200 },
-        {id:4, layerId: 2, phrase: "Hello world!", startTime: 300 },
-        {id:5, layerId: 3, phrase: "THE", startTime: 400 },
-        {id:6, layerId: 4, phrase: "LAZY", startTime: 500 },
-        {id:7, layerId: 5, phrase: "DOG", startTime: 600 },
+        { id:1, layerId: 1, phrase: "hello", trackIndex:1,phraseIndex:0 },
+        {id:2, layerId: 2, phrase: "world", trackIndex:2,phraseIndex:1},
+        {id:3, layerId: 1, phrase:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",trackIndex:1,phraseIndex:3 },
+        {id:4, layerId: 2, phrase: "Hello world!", trackIndex:2,phraseIndex:4},
+        {id:5, layerId: 3, phrase: "THE", trackIndex:3,phraseIndex:2},
+        {id:6, layerId: 4, phrase: "LAZY", trackIndex:4,phraseIndex:5},
+        {id:7, layerId: 5, phrase: "DOG", trackIndex:5,phraseIndex:3},
     
       ],
   };
