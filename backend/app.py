@@ -58,7 +58,7 @@ def audio():
   phrases = data['phrases']
   tracks = data['tracks']
   for phrase in phrases:
-    track=next((track for track in tracks if track['id'] == phrase['layerId']), None)
+    track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
     if(track):
      voice=track['voice']
     if(voice):

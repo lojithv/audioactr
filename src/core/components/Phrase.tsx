@@ -30,7 +30,7 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
 
   const handleDbClick = (e:KonvaEventObject<MouseEvent>) =>{
     if(e.evt.button == 0){
-      setEditorState({...editorState, phrases: [...editorState.phrases,{layerId:0,trackIndex:trackIndex,phraseIndex:phraseIndex,phrase:'test',id:123}]})
+      setEditorState({...editorState, phrases: [...editorState.phrases,{trackId:trackIndex,trackIndex:trackIndex,phraseIndex:phraseIndex,phrase:'test',id:editorState.phrases.length+1}]})
     }
   }
 

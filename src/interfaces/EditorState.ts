@@ -2,7 +2,7 @@ interface Phrase{
   trackIndex: any;
   phraseIndex: any;
   id:any;
-  layerId:any;
+  trackId:any;
   phrase:string;
 }
 
@@ -10,8 +10,7 @@ interface Track{
   id:any;
   voice?:string|boolean;
   text: string,
-  width: number,
-  layerIndex: number,
+  trackIndex: number,
 }
 
 export interface EditorState {

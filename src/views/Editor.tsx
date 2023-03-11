@@ -4,7 +4,7 @@ import Storyboard from "../core/Storyboard";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
-import { Box, Grid, IconButton, TextField } from "@mui/material";
+import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import {
   EditorStore,
   setEditorState,
@@ -17,6 +17,7 @@ import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
+import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -39,15 +40,15 @@ const Editor = () => {
     }
   }, [playerState.isPlaying]);
 
-  const selectedVoice = useSelectedVoice()
+  const selectedVoice = useSelectedVoice();
 
   useEffect(() => {
     window.addEventListener("keydown", (e) =>
-      handleKeyDown(e, playerState, editorState,selectedVoice)
+      handleKeyDown(e, playerState, editorState, selectedVoice)
     );
     return () => {
       window.removeEventListener("keydown", (e) =>
-        handleKeyDown(e, playerState, editorState,selectedVoice)
+        handleKeyDown(e, playerState, editorState, selectedVoice)
       );
     };
   }, [playerState.isPlaying]);
@@ -67,6 +68,10 @@ const Editor = () => {
 
   // Milliseconds calculation
   const milliseconds = time % 100;
+
+  const addNewActor = () => {
+    setEditorState({...editorState, tracks:[...editorState.tracks,{text:'test',id:editorState.tracks.length+1,trackIndex:editorState.tracks.length+1,voice:false}]})
+  }
 
   return (
     <div
@@ -120,7 +125,9 @@ const Editor = () => {
 
                 {!playerState.isPlaying && (
                   <IconButton
-                    onClick={() => handlePlay(playerState, editorState,selectedVoice)}
+                    onClick={() =>
+                      handlePlay(playerState, editorState, selectedVoice)
+                    }
                   >
                     <PlayArrowRoundedIcon />
                   </IconButton>
@@ -128,7 +135,9 @@ const Editor = () => {
 
                 {playerState.isPlaying && (
                   <IconButton
-                    onClick={() => handlePlay(playerState, editorState,selectedVoice)}
+                    onClick={() =>
+                      handlePlay(playerState, editorState, selectedVoice)
+                    }
                   >
                     <PauseRoundedIcon />
                   </IconButton>
@@ -166,7 +175,11 @@ const Editor = () => {
             }}
             rows={4}
           />
+          <Button variant="outlined" startIcon={<AddRoundedIcon />} sx={{marginTop:'10px'}} onClick={()=>addNewActor()}>
+            ADD NEW ACTOR
+          </Button>
         </Box>
+
         <Storyboard />
       </Subscribe>
     </div>
