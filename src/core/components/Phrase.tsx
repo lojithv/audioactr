@@ -1,9 +1,7 @@
 import { KonvaEventObject } from "konva/lib/Node";
 import React from "react";
-import { Group, Rect, Text, Transformer } from "react-konva";
-import { Html } from "react-konva-utils";
-import { roundnum } from "../../helpers/editor";
-import { setContextMenuState, setSelectedPhrase, useEditorState, useSelectedPhrase } from "../../store/EditorStore";
+import { Group, Rect, Text } from "react-konva";
+import { setContextMenuState, setEditorState, setSelectedPhrase, useEditorState, useSelectedPhrase } from "../../store/EditorStore";
 
 type Props = {};
 
@@ -30,6 +28,12 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
 
   const phraseData = getPhrase()
 
+  const handleDbClick = (e:KonvaEventObject<MouseEvent>) =>{
+    if(e.evt.button == 0){
+      setEditorState({...editorState, phrases: [...editorState.phrases,{layerId:0,trackIndex:trackIndex,phraseIndex:phraseIndex,phrase:'test',id:123}]})
+    }
+  }
+
   return (
     <Group
       x={10 + 101 + 100*phraseIndex}
@@ -39,6 +43,7 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
       height={40}
       ref={grpRef}
       onClick={(e)=>handleClick(e)}
+      onDblClick={(e)=>handleDbClick(e)}
       dragBoundFunc={(pos) => {
         return {
           x: pos.x >= 111 ? pos.x : 111,

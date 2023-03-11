@@ -59,7 +59,8 @@ def audio():
   tracks = data['tracks']
   for phrase in phrases:
     track=next((track for track in tracks if track['id'] == phrase['layerId']), None)
-    voice=track['voice']
+    if(track):
+     voice=track['voice']
     if(voice):
      engine.setProperty('voice',voice)
     else:
