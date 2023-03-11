@@ -13,11 +13,7 @@ type Props = {}
 
 const Track = ({
   step,
-  selectedId,
-  selectShape,
   i,
-  openSublayerEditor,
-  textLayers,
 }: any) => {
   const layerRef: React.LegacyRef<any> = React.useRef();
   const subLayerGroup: any = React.useRef();
@@ -65,13 +61,13 @@ const Track = ({
           height={40}
           fill="#4B4B4B"
         />
-        {textLayers.map((l: any,j:number) => (
-          <Phrase
-            id={step.id}
-            i={i}
+        {Array(Math.round((parseInt(windowDimensions.width) - 120)/100)+1).fill(0).map((l: any,j:number) => (
+         <Phrase
+            id={j}
+            trackIndex={i}
+            phraseIndex={j}
             key={j}
-            layerData={l}
-            shapeProps={step}
+            layerData={{phrase:'',id:j}}
           />
         ))}
       </Group>

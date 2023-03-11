@@ -17,7 +17,6 @@ import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import { handleKeyDown, handlePlay } from "../handlers/editor";
-import SelectVoice from "../components/SelectVoice";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();

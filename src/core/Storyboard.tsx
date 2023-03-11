@@ -3,7 +3,7 @@ import { Stage, Layer } from "react-konva";
 import TrackConfigPanel from "../components/TrackConfigPanel/TrackConfigPanel";
 
 import { PlayerStore } from "../store/PlayerStore";
-import { EditorStore, setSelectedPhrase, setVoices, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
+import { EditorStore, setSelectedPhrase, setWindowDimensions, useWindowDimensions } from "../store/EditorStore";
 import { EditorHelper } from "../helpers/editor";
 import Track from "./components/Track";
 import ConetxtMenu from "../components/ContextMenu/ContextMenu";
@@ -34,13 +34,6 @@ const Storyboard = () => {
 
   const [selectedId, selectShape] = React.useState("");
 
-  useEffect(() => {
-    axiosInstance.get("/voices").then((res) => {
-      console.log(res.data);
-      setVoices(res.data)
-    });
-  },[]);
-
   return (
     <>
       <TrackConfigPanel />
@@ -56,9 +49,6 @@ const Storyboard = () => {
               key={i}
               step={step}
               i={i + 1}
-              selectedId={selectedId}
-              selectShape={selectShape}
-              textLayers={editorState.phrases.filter((l: any) => l.layerId === step.id)}
             />
           ))}
         </Layer>

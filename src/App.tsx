@@ -9,11 +9,6 @@ import Home from "./views/Home";
 import Demo from "./views/Test";
 
 function App() {
-  useEffect(() => {
-    axiosInstance.get("/voices").then((res) => {
-      console.log(res.data);
-    });
-  },[]);
 
   return (
     <div className="App">
