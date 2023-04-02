@@ -61,7 +61,13 @@ const Phrase = ({ id, trackIndex, layerData, phraseIndex }: any) => {
             },
           ],
         });
-      } else {
+        setSelectedPhrase({
+          trackId: trackIndex,
+          trackIndex: trackIndex,
+          phraseIndex: phraseIndex,
+          phrase: "add phrase",
+          id: editorState.phrases.length + 1,
+        });
       }
     }
   };
