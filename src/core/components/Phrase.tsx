@@ -17,7 +17,7 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
     if(e.evt.button == 2){
       setContextMenuState({open:true,event:e})
     } else {
-      setContextMenuState({open:false,event:e})
+      setContextMenuState({open:false,event:null})
     }
     setSelectedPhrase(phraseData)
   }
