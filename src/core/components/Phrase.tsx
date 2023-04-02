@@ -19,7 +19,11 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
     } else {
       setContextMenuState({open:false,event:null})
     }
-    setSelectedPhrase(phraseData)
+    if(phraseData){
+      setSelectedPhrase(phraseData)
+    } else {
+      setSelectedPhrase(null)
+    }
   }
   
   const editorState = useEditorState()
@@ -32,7 +36,7 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
 
   const handleDbClick = (e:KonvaEventObject<MouseEvent>) =>{
     if(e.evt.button == 0){
-      setEditorState({...editorState, phrases: [...editorState.phrases,{trackId:trackIndex,trackIndex:trackIndex,phraseIndex:phraseIndex,phrase:'test',id:editorState.phrases.length+1}]})
+      setEditorState({...editorState, phrases: [...editorState.phrases,{trackId:trackIndex,trackIndex:trackIndex,phraseIndex:phraseIndex,phrase:'add phrase',id:editorState.phrases.length+1}]})
     }
   }
 
