@@ -16,6 +16,8 @@ const Phrase = ({ id, trackIndex, layerData,phraseIndex }: any) => {
   const handleClick = (e:KonvaEventObject<MouseEvent>) => {
     if(e.evt.button == 2){
       setContextMenuState({open:true,event:e})
+    } else {
+      setContextMenuState({open:false,event:e})
     }
     setSelectedPhrase(phraseData)
   }
