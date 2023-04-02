@@ -30,8 +30,8 @@ export const [useSelectedPhrase, selectedPhrase$] = bind<any>(
   null
 );
 
-export const [contextMenuChange$, setContextMenuState] = createSignal<{open:boolean,event?:KonvaEventObject<MouseEvent>}>();
-export const [useContextMenuState, contextMenuState$] =  bind<{open:boolean,event?:KonvaEventObject<MouseEvent>}>(contextMenuChange$,{open:false})
+export const [contextMenuChange$, setContextMenuState] = createSignal<{open:boolean,event?:KonvaEventObject<MouseEvent>|null}>();
+export const [useContextMenuState, contextMenuState$] =  bind<{open:boolean,event?:KonvaEventObject<MouseEvent>|null}>(contextMenuChange$,{open:false})
 
 export const [voicesChange$, setVoices] = createSignal<any[]>();
 export const [useVoices, voices$] = bind<any[]>(voicesChange$,[]);
