@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { handleStepDataChange } from "../../handlers/storyboard";
-import { EditorStore } from "../../store/EditorStore";
+import { EditorStore, setSelectedVoice } from "../../store/EditorStore";
 import { setEditorVisibility, useEditorVisibility, useSelectedTrack } from "../../store/TrackConfigStore";
 import SelectVoice from "../SelectVoice";
 import { useEffect } from "react";
@@ -35,7 +35,9 @@ const TrackConfigPanel = () => {
 
   const handleSubmit = () =>{
     handleStepDataChange(layerData,editorState,stepId,text)
+    console.log("handle submit")
     setEditorVisibility(false)
+    setSelectedVoice(null)
   }
 
   return (

@@ -16,7 +16,7 @@ import {
 import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
-import { handleKeyDown, handlePlay } from "../handlers/editor";
+import { handleKeyDown, handlePlay, stopPlayer } from "../handlers/editor";
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 const Editor = () => {
@@ -118,6 +118,7 @@ const Editor = () => {
                   onClick={() => {
                     PlayerStore.setTimerValue(0);
                     PlayerStore.setPlayerState({ isPlaying: false });
+                    stopPlayer()
                   }}
                 >
                   <StopRoundedIcon />

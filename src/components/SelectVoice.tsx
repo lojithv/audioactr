@@ -24,12 +24,19 @@ export default function SelectVoice() {
   const selectedLayer = useSelectedTrack();
 
   React.useEffect(() => {
-    if(!voices.length)
-    axiosInstance.get("/voices").then((res) => {
-      if(res.data?.length){
-        setVoices(res.data)
+    if(!voices.length){
+      axiosInstance.get("/voices").then((res) => {
+        if(res.data?.length){
+          setVoices(res.data)
+          console.log(res.data)
+        }
+      });
+      if(selectedLayer?.voice){
+        setSelectedVoice(selectedLayer.voice)
+      } else {
+        setSelectedVoice(null)
       }
-    });
+    }
   },[]);
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -37,7 +44,7 @@ export default function SelectVoice() {
     setEditorState({
       ...editorState,
       tracks: editorState.tracks.map((t) => {
-        if (t.id === selectedLayer) {
+        if (t.id === selectedLayer?.id) {
           return { ...t, voice: event.target.value };
         } else {
           return t;

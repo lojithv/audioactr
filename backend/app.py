@@ -57,6 +57,7 @@ def audio():
   engine = pyttsx3.init()
   phrases = data['phrases']
   tracks = data['tracks']
+  app.logger.info(tracks)
   for phrase in phrases:
     track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
     if(track):
@@ -64,11 +65,17 @@ def audio():
     if(voice):
      engine.setProperty('voice',voice)
     else:
-     engine.setProperty('voice','') 
+     engine.setProperty('voice','HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0') 
     engine.say(phrase['phrase'])
   engine.runAndWait()
   return jsonify("Completed")
 
+
+@app.route("/stop-player")
+def stopPlayer():
+  engine = pyttsx3.init()
+  engine.stop()
+  return jsonify("Stopped")
 
 """
 -------------------------- APP SERVICES ----------------------------
