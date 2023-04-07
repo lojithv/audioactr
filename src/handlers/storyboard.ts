@@ -14,6 +14,8 @@ export const handleStepClick = ( track:Track) => {
  export const handleStepDataChange = (layerData:any[],editorState:EditorState,id: any, newData: any) => {
     const newSequenceData = [...layerData];
     const index = newSequenceData.findIndex((step) => step.id === id);
-    newSequenceData[index].text = newData ? newData : "";
-    EditorStore.setEditorState({...editorState,tracks:newSequenceData})
+    if(newSequenceData[index]){
+      newSequenceData[index].text = newData ? newData : "";
+      EditorStore.setEditorState({...editorState,tracks:newSequenceData})
+    }
   };

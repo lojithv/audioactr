@@ -28,6 +28,7 @@ export default function SelectVoice() {
     axiosInstance.get("/voices").then((res) => {
       if(res.data?.length){
         setVoices(res.data)
+        console.log(res.data)
       }
     });
   },[]);
@@ -37,7 +38,7 @@ export default function SelectVoice() {
     setEditorState({
       ...editorState,
       tracks: editorState.tracks.map((t) => {
-        if (t.id === selectedLayer) {
+        if (t.id === selectedLayer?.id) {
           return { ...t, voice: event.target.value };
         } else {
           return t;
