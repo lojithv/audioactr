@@ -71,6 +71,12 @@ def audio():
   return jsonify("Completed")
 
 
+@app.route("/stop-player")
+def stopPlayer():
+  engine = pyttsx3.init()
+  engine.stop()
+  return jsonify("Stopped")
+
 """
 -------------------------- APP SERVICES ----------------------------
 """
