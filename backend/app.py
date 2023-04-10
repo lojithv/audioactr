@@ -130,14 +130,10 @@ def convertAudioToMp3(data):
     engine.save_to_file(phrase["phrase"], f"backend\\audioFiles\\{phrase['phraseIndex']}.wav")
   engine.runAndWait()
 
-  relative_path = "E:\Dev Workspace\personal\\audioactr\\audioFiles"
-  # pydub.AudioSegment.converter = "D:\\dev\\FFmpeg\\bin\\ffmpeg.exe"                    
-  # pydub.AudioSegment.ffprobe   = "D:\\dev\\FFmpeg\\bin\\ffprobe.exe"
   for phrase in phrases:
     # Load the audio file into an AudioSegment object and append it to the list
     audio_file = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\{phrase['phraseIndex']}.wav", format="mp3")
     audio_segments.append(audio_file)
-  # audio_segments=audio_file
   
   # Concatenate the audio segments into a single audio file
   output_file = AudioSegment.empty()
@@ -146,7 +142,6 @@ def convertAudioToMp3(data):
 
   # # Export the concatenated audio file as an MP3
   output_file.export("backend\\convertedFiles\\output.mp3", format="mp3")
-  # return jsonify("Completed")
 
 # Convert text to audio
 @app.route("/convert-text-to-audio",methods = ['POST'])
@@ -158,9 +153,9 @@ def convertTextToAudio():
 
 @app.route('/get-audio-file')
 def getAudioFile():
-    # Replace this with the path to your MP3 file
-    audio_file = 'E:\\Dev Workspace\\personal\\audioactr\\backend\\convertedFiles\\output.mp3'
-    return send_file(audio_file, as_attachment=True)
+  # Replace this with the path to your MP3 file
+  audio_file = 'E:\\Dev Workspace\\personal\\audioactr\\backend\\convertedFiles\\output.mp3'
+  return send_file(audio_file, as_attachment=True)
 
 """
 -------------------------- APP SERVICES ----------------------------
