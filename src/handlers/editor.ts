@@ -42,6 +42,14 @@ export const stopPlayer = () => {
   });
 };
 
+export const pausePlayer = () => {
+  axiosInstance.get("/pause-player").then((res) => {
+    if(res.data?.length){
+      console.log(res.data)
+    }
+  });
+};
+
 export const handleKeyDown = (event: KeyboardEvent,playerState:PlayerState,editorState:EditorState,voice:string) => {
   console.log(event.code);
   if (event.code === "Space") handlePlay(playerState,editorState,voice);

@@ -16,8 +16,13 @@ import {
 import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
-import { handleKeyDown, handlePlay, stopPlayer } from "../handlers/editor";
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import {
+  handleKeyDown,
+  handlePlay,
+  pausePlayer,
+  stopPlayer,
+} from "../handlers/editor";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -70,8 +75,19 @@ const Editor = () => {
   const milliseconds = time % 100;
 
   const addNewActor = () => {
-    setEditorState({...editorState, tracks:[...editorState.tracks,{text:'test',id:editorState.tracks.length+1,trackIndex:editorState.tracks.length+1,voice:false}]})
-  }
+    setEditorState({
+      ...editorState,
+      tracks: [
+        ...editorState.tracks,
+        {
+          text: "test",
+          id: editorState.tracks.length + 1,
+          trackIndex: editorState.tracks.length + 1,
+          voice: false,
+        },
+      ],
+    });
+  };
 
   return (
     <div
@@ -118,7 +134,7 @@ const Editor = () => {
                   onClick={() => {
                     PlayerStore.setTimerValue(0);
                     PlayerStore.setPlayerState({ isPlaying: false });
-                    stopPlayer()
+                    stopPlayer();
                   }}
                 >
                   <StopRoundedIcon />
@@ -126,9 +142,9 @@ const Editor = () => {
 
                 {!playerState.isPlaying && (
                   <IconButton
-                    onClick={() =>
-                      handlePlay(playerState, editorState, selectedVoice)
-                    }
+                    onClick={() => {
+                      handlePlay(playerState, editorState, selectedVoice);
+                    }}
                   >
                     <PlayArrowRoundedIcon />
                   </IconButton>
@@ -136,9 +152,10 @@ const Editor = () => {
 
                 {playerState.isPlaying && (
                   <IconButton
-                    onClick={() =>
-                      handlePlay(playerState, editorState, selectedVoice)
-                    }
+                    onClick={() => {
+                      handlePlay(playerState, editorState, selectedVoice);
+                      pausePlayer();
+                    }}
                   >
                     <PauseRoundedIcon />
                   </IconButton>
@@ -176,7 +193,12 @@ const Editor = () => {
             }}
             rows={4}
           />
-          <Button variant="outlined" startIcon={<AddRoundedIcon />} sx={{marginTop:'10px'}} onClick={()=>addNewActor()}>
+          <Button
+            variant="outlined"
+            startIcon={<AddRoundedIcon />}
+            sx={{ marginTop: "10px" }}
+            onClick={() => addNewActor()}
+          >
             ADD NEW ACTOR
           </Button>
         </Box>

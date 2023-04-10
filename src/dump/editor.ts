@@ -35,13 +35,11 @@ export const initialEditorState:EditorState = {
         },
       ],
     phrases:[
-        { id:1, trackId: 1, phrase: "hello", trackIndex:1,phraseIndex:0},
-        {id:2, trackId: 2, phrase: "world", trackIndex:2,phraseIndex:1},
-        {id:3, trackId: 1, phrase:  "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",trackIndex:1,phraseIndex:3 },
-        {id:4, trackId: 2, phrase: "Hello world!", trackIndex:2,phraseIndex:4},
-        {id:5, trackId: 3, phrase: "THE", trackIndex:3,phraseIndex:2},
-        {id:6, trackId: 4, phrase: "LAZY", trackIndex:4,phraseIndex:5},
-        {id:7, trackId: 5, phrase: "DOG", trackIndex:5,phraseIndex:3},
-    
+        { id:1, trackId: 1, phrase: "Good morning, Doctor Rudra, how are you doing?", trackIndex:1,phraseIndex:0},
+        {id:2, trackId: 2, phrase: "Good morning, Jane. I am doing well. And you?", trackIndex:2,phraseIndex:1},
+        {id:3, trackId: 1, phrase: "Hello, Leila! It’s a pleasure to meet you. I’m more than happy to speak with you. Please stop by my chamber tomorrow.",trackIndex:1,phraseIndex:3 },
+        {id:4, trackId: 2, phrase: "It’s a pleasure to meet you, Doctor. Thank you so much for helping us.", trackIndex:2,phraseIndex:4},
+        {id:5, trackId: 3, phrase: "I’m great, thank you. This is my friend Leila. She is thinking about joining the hospital but she has a few questions about the administration there. Would you mind telling her about the administration, please?", trackIndex:3,phraseIndex:2},
+        {id:6, trackId: 4, phrase: "Don’t mention it. Hopefully, I will be able to help you out in this matter.", trackIndex:4,phraseIndex:5},
       ],
   };
