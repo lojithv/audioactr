@@ -149,6 +149,7 @@ def convertTextToAudio():
   # Initialize the pyttsx3 engine
   data = json.loads(request.data)
   convertAudioToMp3(data)
+  clean_folder("E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles")
   return jsonify("Completed")
 
 @app.route('/get-audio-file')
@@ -156,6 +157,19 @@ def getAudioFile():
   # Replace this with the path to your MP3 file
   audio_file = 'E:\\Dev Workspace\\personal\\audioactr\\backend\\convertedFiles\\output.mp3'
   return send_file(audio_file, as_attachment=True)
+
+def clean_folder(folder_path):
+    # Get a list of all files in the folder
+    files = os.listdir(folder_path)
+    app.logger.info(files)
+    # Loop through each file and delete it
+    for file in files:
+        file_path = os.path.join(folder_path, file)
+        try:
+            os.remove(file_path)
+            print(f"File '{file}' has been removed.")
+        except Exception as e:
+            print(f"Failed to remove file '{file}': {str(e)}")
 
 """
 -------------------------- APP SERVICES ----------------------------
