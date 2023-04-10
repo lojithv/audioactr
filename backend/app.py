@@ -113,39 +113,39 @@ def downloadAudioAsMp3(data):
   engine = pyttsx3.init()
   phrases = data['phrases']
   tracks = data['tracks']
-  audio_segments = None
+  audio_segments = []
   app.logger.info(paused_phrase)
   # Define a list to store the audio segments
-  # for phrase in phrases:
-  #   track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
-  #   if(track):
-  #     voice=track['voice']
-  #   if(voice):
-  #     engine.setProperty('voice',voice)
-  #   else:
-  #     engine.setProperty('voice','HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0') 
-  #   # engine.say(phrase['phrase'])
+  for phrase in phrases:
+    track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
+    if(track):
+      voice=track['voice']
+    if(voice):
+      engine.setProperty('voice',voice)
+    else:
+      engine.setProperty('voice','HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0') 
+    # engine.say(phrase['phrase'])
 
-  #   # Speak the current phrase and save the output to a file
-  #   engine.save_to_file(phrase["phrase"], f"audioFiles\{phrase['phraseIndex']}.mp3")
-  # engine.runAndWait()
+    # Speak the current phrase and save the output to a file
+    engine.save_to_file(phrase["phrase"], f"backend\\audioFiles\\{phrase['phraseIndex']}.wav")
+  engine.runAndWait()
 
   relative_path = "E:\Dev Workspace\personal\\audioactr\\audioFiles"
   # pydub.AudioSegment.converter = "D:\\dev\\FFmpeg\\bin\\ffmpeg.exe"                    
   # pydub.AudioSegment.ffprobe   = "D:\\dev\\FFmpeg\\bin\\ffprobe.exe"
-  # for phrase in phrases:
+  for phrase in phrases:
     # Load the audio file into an AudioSegment object and append it to the list
-  audio_file = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\1.mp3", format="mp3")
-  # audio_file1 = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\0.mp3", format="mp3")
-  audio_segments=audio_file
+    audio_file = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\{phrase['phraseIndex']}.wav", format="mp3")
+    audio_segments.append(audio_file)
+  # audio_segments=audio_file
   
   # Concatenate the audio segments into a single audio file
-  # output_file = AudioSegment.empty()
-  # for audio_segment in audio_segments:
-  #     output_file += audio_segment
+  output_file = AudioSegment.empty()
+  for audio_segment in audio_segments:
+      output_file += audio_segment
 
   # # Export the concatenated audio file as an MP3
-  audio_segments.export("output.mp3", format="mp3")
+  output_file.export("backend\\convertedFiles\\output.mp3", format="mp3")
   # return jsonify("Completed")
 
 # Convert text to audio
