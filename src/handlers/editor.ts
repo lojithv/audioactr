@@ -37,9 +37,18 @@ export const autoPlay = (editorState:EditorState) => {
 export const downloadAudio = (editorState:EditorState) => {
   const sortedPhrases = editorState.phrases.sort(compare)
   axiosInstance
-    .post("/download-audio", { phrases: sortedPhrases, tracks:editorState.tracks })
+    .post("/convert-text-to-audio", { phrases: sortedPhrases, tracks:editorState.tracks })
     .then((res: any) => {
-      console.log("completed");
+      fetch('/get-audio-file')
+      .then(response => response.blob())
+      .then(blob => {
+        // Create a download link and click on it
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'audio.mp3';
+        link.click();
+      });
     });
 };
 

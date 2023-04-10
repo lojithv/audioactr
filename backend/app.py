@@ -109,7 +109,7 @@ def pausePlayer():
   paused_phrase=last_phrase
   return jsonify("Paused", last_phrase)
 
-def downloadAudioAsMp3(data):
+def convertAudioToMp3(data):
   engine = pyttsx3.init()
   phrases = data['phrases']
   tracks = data['tracks']
@@ -149,14 +149,18 @@ def downloadAudioAsMp3(data):
   # return jsonify("Completed")
 
 # Convert text to audio
-@app.route("/download-audio",methods = ['POST'])
-def downloadAudio():
+@app.route("/convert-text-to-audio",methods = ['POST'])
+def convertTextToAudio():
   # Initialize the pyttsx3 engine
   data = json.loads(request.data)
-  downloadAudioAsMp3(data)
-  # audio_file = 'output.mp3'
-  # return send_file(audio_file, as_attachment=True)
+  convertAudioToMp3(data)
   return jsonify("Completed")
+
+@app.route('/get-audio-file')
+def getAudioFile():
+    # Replace this with the path to your MP3 file
+    audio_file = 'E:\\Dev Workspace\\personal\\audioactr\\backend\\convertedFiles\\output.mp3'
+    return send_file(audio_file, as_attachment=True)
 
 """
 -------------------------- APP SERVICES ----------------------------
