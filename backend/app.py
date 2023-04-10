@@ -1,11 +1,14 @@
 import json
+import os
 import sys
 import pyttsx3
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from tkinter import *
 import threading
 import pygame
+import pydub
+from pydub import AudioSegment
 
 root = Tk()
 
@@ -68,21 +71,6 @@ def play(data):
   phrases = data['phrases']
   tracks = data['tracks']
   app.logger.info(paused_phrase)
-  # if(paused_phrase):
-  #   if(paused_phrase.phraseIndex < phrase.phraseIndex):
-  #     for phrase in phrases:
-  #       track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
-  #       if(track):
-  #         voice=track['voice']
-  #       if(voice):
-  #         engine.setProperty('voice',voice)
-  #       else:
-  #         engine.setProperty('voice','HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0') 
-  #       engine.say(phrase['phrase'])
-  #       global last_phrase
-  #       last_phrase = phrase
-  #     engine.runAndWait()
-  # else:
   for phrase in phrases:
     track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
     if(track):
@@ -120,6 +108,55 @@ def pausePlayer():
   global last_phrase
   paused_phrase=last_phrase
   return jsonify("Paused", last_phrase)
+
+def downloadAudioAsMp3(data):
+  engine = pyttsx3.init()
+  phrases = data['phrases']
+  tracks = data['tracks']
+  audio_segments = None
+  app.logger.info(paused_phrase)
+  # Define a list to store the audio segments
+  # for phrase in phrases:
+  #   track=next((track for track in tracks if track['id'] == phrase['trackId']), None)
+  #   if(track):
+  #     voice=track['voice']
+  #   if(voice):
+  #     engine.setProperty('voice',voice)
+  #   else:
+  #     engine.setProperty('voice','HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0') 
+  #   # engine.say(phrase['phrase'])
+
+  #   # Speak the current phrase and save the output to a file
+  #   engine.save_to_file(phrase["phrase"], f"audioFiles\{phrase['phraseIndex']}.mp3")
+  # engine.runAndWait()
+
+  relative_path = "E:\Dev Workspace\personal\\audioactr\\audioFiles"
+  # pydub.AudioSegment.converter = "D:\\dev\\FFmpeg\\bin\\ffmpeg.exe"                    
+  # pydub.AudioSegment.ffprobe   = "D:\\dev\\FFmpeg\\bin\\ffprobe.exe"
+  # for phrase in phrases:
+    # Load the audio file into an AudioSegment object and append it to the list
+  audio_file = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\1.mp3", format="mp3")
+  # audio_file1 = AudioSegment.from_file(f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\0.mp3", format="mp3")
+  audio_segments=audio_file
+  
+  # Concatenate the audio segments into a single audio file
+  # output_file = AudioSegment.empty()
+  # for audio_segment in audio_segments:
+  #     output_file += audio_segment
+
+  # # Export the concatenated audio file as an MP3
+  audio_segments.export("output.mp3", format="mp3")
+  # return jsonify("Completed")
+
+# Convert text to audio
+@app.route("/download-audio",methods = ['POST'])
+def downloadAudio():
+  # Initialize the pyttsx3 engine
+  data = json.loads(request.data)
+  downloadAudioAsMp3(data)
+  # audio_file = 'output.mp3'
+  # return send_file(audio_file, as_attachment=True)
+  return jsonify("Completed")
 
 """
 -------------------------- APP SERVICES ----------------------------

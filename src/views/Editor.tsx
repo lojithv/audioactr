@@ -17,12 +17,14 @@ import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import {
+  downloadAudio,
   handleKeyDown,
   handlePlay,
   pausePlayer,
   stopPlayer,
 } from "../handlers/editor";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -89,6 +91,10 @@ const Editor = () => {
     });
   };
 
+  const saveAsAudio = () => {
+    downloadAudio(editorState)
+  };
+
   return (
     <div
       style={{
@@ -112,6 +118,7 @@ const Editor = () => {
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            marginBottom={2}
           >
             <Grid item xs={4}>
               <div
@@ -161,6 +168,16 @@ const Editor = () => {
                   </IconButton>
                 )}
               </Box>
+            </Grid>
+            <Grid item xs={4} display={"flex"} justifyContent={"right"}>
+              <Button
+                variant="outlined"
+                startIcon={<CloudDownloadRoundedIcon />}
+                sx={{ marginTop: "10px" }}
+                onClick={() => saveAsAudio()}
+              >
+                SAVE AS MP3
+              </Button>
             </Grid>
           </Grid>
         </div>

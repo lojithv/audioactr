@@ -6,7 +6,7 @@ import { PlayerStore } from "../store/PlayerStore";
 export const handlePlay = (playerState:PlayerState,editorState:EditorState,voice:string) => {
   if (!playerState.isPlaying) {
     PlayerStore.setPlayerState({ isPlaying: true });
-    autoPlay(editorState,voice);
+    autoPlay(editorState);
   } else {
     PlayerStore.setPlayerState({ isPlaying: !playerState.isPlaying });
   }
@@ -22,7 +22,7 @@ function compare( a:Phrase, b:Phrase ) {
   return 0;
 }
 
-export const autoPlay = (editorState:EditorState,voice:string) => {
+export const autoPlay = (editorState:EditorState) => {
   const sortedPhrases = editorState.phrases.sort(compare)
   axiosInstance
     .post("/audio", { phrases: sortedPhrases, tracks:editorState.tracks })
@@ -31,6 +31,15 @@ export const autoPlay = (editorState:EditorState,voice:string) => {
       if (res) {
         PlayerStore.setPlayerState({ isPlaying: false });
       }
+    });
+};
+
+export const downloadAudio = (editorState:EditorState) => {
+  const sortedPhrases = editorState.phrases.sort(compare)
+  axiosInstance
+    .post("/download-audio", { phrases: sortedPhrases, tracks:editorState.tracks })
+    .then((res: any) => {
+      console.log("completed");
     });
 };
 

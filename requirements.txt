@@ -4,3 +4,4 @@ pyinstaller
 pyttsx3
 python-dotenv
 pygame
+pydub
