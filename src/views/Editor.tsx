@@ -16,8 +16,15 @@ import {
 import { initialEditorState } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
-import { handleKeyDown, handlePlay, stopPlayer } from "../handlers/editor";
-import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import {
+  downloadAudio,
+  handleKeyDown,
+  handlePlay,
+  pausePlayer,
+  stopPlayer,
+} from "../handlers/editor";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -70,8 +77,23 @@ const Editor = () => {
   const milliseconds = time % 100;
 
   const addNewActor = () => {
-    setEditorState({...editorState, tracks:[...editorState.tracks,{text:'test',id:editorState.tracks.length+1,trackIndex:editorState.tracks.length+1,voice:false}]})
-  }
+    setEditorState({
+      ...editorState,
+      tracks: [
+        ...editorState.tracks,
+        {
+          text: "test",
+          id: editorState.tracks.length + 1,
+          trackIndex: editorState.tracks.length + 1,
+          voice: false,
+        },
+      ],
+    });
+  };
+
+  const saveAsAudio = () => {
+    downloadAudio(editorState)
+  };
 
   return (
     <div
@@ -96,6 +118,7 @@ const Editor = () => {
             container
             rowSpacing={1}
             columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            marginBottom={2}
           >
             <Grid item xs={4}>
               <div
@@ -118,7 +141,7 @@ const Editor = () => {
                   onClick={() => {
                     PlayerStore.setTimerValue(0);
                     PlayerStore.setPlayerState({ isPlaying: false });
-                    stopPlayer()
+                    stopPlayer();
                   }}
                 >
                   <StopRoundedIcon />
@@ -126,9 +149,9 @@ const Editor = () => {
 
                 {!playerState.isPlaying && (
                   <IconButton
-                    onClick={() =>
-                      handlePlay(playerState, editorState, selectedVoice)
-                    }
+                    onClick={() => {
+                      handlePlay(playerState, editorState, selectedVoice);
+                    }}
                   >
                     <PlayArrowRoundedIcon />
                   </IconButton>
@@ -136,14 +159,25 @@ const Editor = () => {
 
                 {playerState.isPlaying && (
                   <IconButton
-                    onClick={() =>
-                      handlePlay(playerState, editorState, selectedVoice)
-                    }
+                    onClick={() => {
+                      handlePlay(playerState, editorState, selectedVoice);
+                      pausePlayer();
+                    }}
                   >
                     <PauseRoundedIcon />
                   </IconButton>
                 )}
               </Box>
+            </Grid>
+            <Grid item xs={4} display={"flex"} justifyContent={"right"}>
+              <Button
+                variant="outlined"
+                startIcon={<CloudDownloadRoundedIcon />}
+                sx={{ marginTop: "10px" }}
+                onClick={() => saveAsAudio()}
+              >
+                SAVE AS MP3
+              </Button>
             </Grid>
           </Grid>
         </div>
@@ -176,7 +210,12 @@ const Editor = () => {
             }}
             rows={4}
           />
-          <Button variant="outlined" startIcon={<AddRoundedIcon />} sx={{marginTop:'10px'}} onClick={()=>addNewActor()}>
+          <Button
+            variant="outlined"
+            startIcon={<AddRoundedIcon />}
+            sx={{ marginTop: "10px" }}
+            onClick={() => addNewActor()}
+          >
             ADD NEW ACTOR
           </Button>
         </Box>
