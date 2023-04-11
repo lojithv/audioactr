@@ -25,6 +25,7 @@ import {
 } from "../handlers/editor";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
+import { testServerConn } from "../services/connection";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
@@ -35,6 +36,9 @@ const Editor = () => {
   useEffect(() => {
     EditorStore.setEditorState(initialEditorState);
     PlayerStore.setPlayerState({ isPlaying: false });
+    console.log(process.env.SERVER_API_URL, "API URL")
+    console.log(process.env.REACT_APP_API_URL)
+    testServerConn()
   }, []);
 
   useEffect(() => {
