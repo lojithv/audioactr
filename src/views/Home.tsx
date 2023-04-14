@@ -1,29 +1,31 @@
-import { Button } from '@mui/material';
-import ProjectsTable from '../components/ProjectsTable';
-import Spacing from '../components/Spacing';
-import React from 'react';
+import { Box, Button } from "@mui/material";
+import ProjectsTable from "../components/ProjectsTable";
+import Spacing from "../components/Spacing";
+import React from "react";
 import {
   // existing code
   useNavigate,
-} from 'react-router-dom';
+} from "react-router-dom";
+import { useWindowDimensions } from "../store/EditorStore";
 
 type Props = {};
 
 const Home = (props: Props) => {
   const navigate = useNavigate();
+  const windowDimensions = useWindowDimensions();
   return (
-    <div
-      style={{
-        width: '100vw',
-        height: '100vh',
+    <Box
+      sx={{
+        width: windowDimensions.width - 20,
+        maxWidth: "100%",
       }}
     >
-      <div style={{ padding: '50' }}>
-        <div style={{ display: 'flex', gap: 10 }}>
+      <div style={{ padding: "50" }}>
+        <div style={{ display: "flex", gap: 10 }}>
           <Button
             variant="contained"
             onClick={() => {
-              navigate('/editor');
+              navigate("/editor");
             }}
           >
             New Project
@@ -31,7 +33,7 @@ const Home = (props: Props) => {
           <Button
             variant="contained"
             onClick={() => {
-              navigate('/editor');
+              navigate("/editor");
             }}
           >
             Open Project
@@ -40,7 +42,7 @@ const Home = (props: Props) => {
         <Spacing space={40} />
         <ProjectsTable />
       </div>
-    </div>
+    </Box>
   );
 };
 

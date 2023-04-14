@@ -36,9 +36,9 @@ const Editor = () => {
   useEffect(() => {
     EditorStore.setEditorState(initialEditorState);
     PlayerStore.setPlayerState({ isPlaying: false });
-    console.log(process.env.SERVER_API_URL, "API URL")
-    console.log(process.env.REACT_APP_API_URL)
-    testServerConn()
+    console.log(process.env.SERVER_API_URL, "API URL");
+    console.log(process.env.REACT_APP_API_URL);
+    testServerConn();
   }, []);
 
   useEffect(() => {
@@ -96,7 +96,7 @@ const Editor = () => {
   };
 
   const saveAsAudio = () => {
-    downloadAudio(editorState)
+    downloadAudio(editorState);
   };
 
   return (
@@ -223,8 +223,15 @@ const Editor = () => {
             ADD NEW ACTOR
           </Button>
         </Box>
-
-        <Storyboard />
+        <Box
+          sx={{
+            width: windowDimensions.width - 20,
+            maxWidth: "100%",
+            overflow:'scroll'
+          }}
+        >
+          <Storyboard />
+        </Box>
       </Subscribe>
     </div>
   );
