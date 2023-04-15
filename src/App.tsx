@@ -12,6 +12,7 @@ import SignUp from "./views/SignUp";
 import Pricing from "./views/Pricing";
 import AllPages from "./views/AllPages";
 import Settings from "./views/Settings";
+import Payment from "./views/Payment";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/payment" element={<Payment />} />
             <Route path="/home" element={<Home />} />
             <Route path="/editor" element={<Editor />} />
             <Route path="/all" element={<AllPages />} />
