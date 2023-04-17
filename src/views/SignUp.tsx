@@ -13,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services/auth";
 
 const theme = createTheme();
 
@@ -22,10 +23,26 @@ export default function SignUp() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const authData = {
+      email: data.get("email"),
+      password: data.get("password"),
+      firstname: data.get("firstName"),
+      lastname: data.get("lastName"),
+    };
     console.log({
       email: data.get("email"),
       password: data.get("password"),
+      firstname: data.get("firstName"),
+      lastname: data.get("lastName"),
     });
+    AuthService.signup(authData)
+      .then((res: any) => {
+        console.log(res);
+        navigate("/signin");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

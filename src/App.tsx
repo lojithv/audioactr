@@ -16,26 +16,23 @@ import Payment from "./views/Payment";
 import { Subscribe } from "@react-rxjs/core";
 
 function App() {
-
   return (
     <div className="App">
-      <Subscribe>
-        <ThemeProvider theme={theme}>
-          <Router>
-            <Routes>
-              <Route path="/" element={<AllPages />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/payment" element={<Payment />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/editor" element={<Editor />} />
-              <Route path="/all" element={<AllPages />} />
-              <Route path="/settings" element={<Settings />} />
-            </Routes>
-          </Router>
-        </ThemeProvider>
-      </Subscribe>
+      <ThemeProvider theme={theme}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<AllPages />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/editor" element={<Editor />} />
+            <Route path="/all" element={<AllPages />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </div>
   );
 }

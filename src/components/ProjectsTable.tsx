@@ -6,16 +6,14 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
 import { useNavigate } from "react-router-dom";
 import { setActiveProject, useProjects } from "../store/ProjectsStore";
 import { ProjectState } from "../interfaces/ProjectState";
 import ProjectDropdownMenu from "./ProjectDropdownMenu";
-import { initialEditorStateCopy } from "../dump/editor";
-import { setEditorState } from "../store/EditorStore";
-
-
+import BackupIcon from "@mui/icons-material/Backup";
+import { useNetworkMode } from "../store/GlobalStore";
 
 // const rows = [
 //   createData("Project1", getNewDate(date + 1*oneDay), 6.0),
@@ -28,12 +26,14 @@ import { setEditorState } from "../store/EditorStore";
 export default function ProjectsTable() {
   const navigate = useNavigate();
 
-  const projects = useProjects()
+  const projects = useProjects();
 
-  const handleProjectOpen = (project:ProjectState) => {
-    console.log(project)
-    navigate('/editor', { state: {projectState:project} })
-  }
+  const networkMode = useNetworkMode();
+
+  const handleProjectOpen = (project: ProjectState) => {
+    console.log(project);
+    navigate("/editor", { state: { projectState: project } });
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -42,21 +42,43 @@ export default function ProjectsTable() {
           <TableRow>
             <TableCell>NAME</TableCell>
             <TableCell align="center">DATE</TableCell>
+            <TableCell align="center"></TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {projects.map((project,i) => (
+          {projects.map((project, i) => (
             <TableRow
               key={i}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row" onClick={()=>handleProjectOpen(project)}>
+              <TableCell
+                component="th"
+                scope="row"
+                onClick={() => handleProjectOpen(project)}
+              >
                 {project.name}
               </TableCell>
-              <TableCell align="center" onClick={()=>handleProjectOpen(project)}>{project.createdAt.toString()}</TableCell>
+              <TableCell
+                align="center"
+                onClick={() => handleProjectOpen(project)}
+              >
+                {project.createdAt.toString()}
+              </TableCell>
+              <TableCell align="right">
+                <Tooltip title={networkMode ? "Cloud Backup" : "Cannot Backup"}>
+                  <IconButton
+                    color="primary"
+                    aria-label="Cloud backup"
+                    component="label"
+                    disabled={!networkMode}
+                  >
+                    <BackupIcon />
+                  </IconButton>
+                </Tooltip>
+              </TableCell>
               <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <ProjectDropdownMenu project={project}/>
+                <ProjectDropdownMenu project={project} />
               </TableCell>
             </TableRow>
           ))}
