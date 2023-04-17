@@ -42,7 +42,7 @@ const Track = ({
         </Html>
         <Text
           text={step.text}
-          fontSize={20}
+          fontSize={12}
           x={35}
           y={10}
           fill="white"

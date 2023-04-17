@@ -56,7 +56,7 @@ export default function ProjectsTable() {
               </TableCell>
               <TableCell align="center" onClick={()=>handleProjectOpen(project)}>{project.createdAt.toString()}</TableCell>
               <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <ProjectDropdownMenu/>
+              <ProjectDropdownMenu project={project}/>
               </TableCell>
             </TableRow>
           ))}

@@ -2,7 +2,7 @@ body {
   position: relative;
   color: white;
   height: 100vh;
-  background: black;
+  background: rgb(27, 27, 27);
   font-family: sans-serif;
   overflow-y: hidden;
   display: flex;

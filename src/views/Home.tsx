@@ -10,6 +10,8 @@ import { useWindowDimensions } from "../store/EditorStore";
 import { date, getNewDate, oneDay } from "../helpers/projects.helper";
 import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
+import CreateProjectFormDialog from "../components/CreateProjectForm";
+import localforage from "localforage";
 
 type Props = {};
 
@@ -22,30 +24,35 @@ const Home = (props: Props) => {
   const projects = useProjects();
 
   const rows = [
-    {
-      name: "Project1",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project2",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project3",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project4",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
+    // {
+    //   name: "Project1",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project2",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project3",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project4",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
   ];
 
   useEffect(() => {
-    setProjects(rows);
+    localforage.getItem("projects").then((cachedProjects: any) => {
+      console.log(cachedProjects);
+      if (cachedProjects) {
+        setProjects(cachedProjects);
+      }
+    });
   }, []);
 
   const handleNewProjectCreate = () => {};
@@ -69,6 +76,7 @@ const Home = (props: Props) => {
       const importedProjectData = JSON.parse(data);
       const updatedProjectsList = [...projects, importedProjectData];
       setProjects(updatedProjectsList);
+      localforage.setItem("projects", updatedProjectsList);
     });
   };
 
@@ -80,31 +88,46 @@ const Home = (props: Props) => {
       }}
     >
       <div style={{ padding: "50" }}>
-        <div style={{ display: "flex", gap: 10 }}>
-          <input
-            type="file"
-            id="file"
-            ref={inputFile}
-            style={{ display: "none" }}
-            onChange={onChangeFile}
-          />
-          <Button
-            variant="contained"
-            onClick={() => {
-              // navigate("/editor");
-            }}
-          >
-            New Project
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              // navigate("/editor");
-              handleImportProject();
-            }}
-          >
-            Import Project
-          </Button>
+        <div
+          style={{ display: "flex", gap: 10, justifyContent: "space-between" }}
+        >
+          <div style={{ display: "flex", gap: 10 }}>
+            <input
+              type="file"
+              id="file"
+              ref={inputFile}
+              style={{ display: "none" }}
+              onChange={onChangeFile}
+            />
+            <CreateProjectFormDialog />
+            <Button
+              variant="contained"
+              onClick={() => {
+                // navigate("/editor");
+                handleImportProject();
+              }}
+            >
+              Import Project
+            </Button>
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                navigate("/pricing");
+              }}
+            >
+              Pricing
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                navigate("/signin");
+              }}
+            >
+              Sign In
+            </Button>
+          </div>
         </div>
         <Spacing space={40} />
         <ProjectsTable />

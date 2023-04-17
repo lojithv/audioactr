@@ -28,11 +28,13 @@ import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import { testServerConn } from "../services/connection";
 import CustomizedMenus from "../components/EditorDropdownMenu";
 import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
   const editorState = EditorStore.useEditorState();
+
+
 
   const {state} = useLocation();
 
@@ -113,6 +115,8 @@ const Editor = () => {
   const saveAsAudio = () => {
     downloadAudio(editorState);
   };
+
+
 
   return (
     <div
