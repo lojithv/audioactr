@@ -10,6 +10,7 @@ import { useWindowDimensions } from "../store/EditorStore";
 import { date, getNewDate, oneDay } from "../helpers/projects.helper";
 import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
+import CreateProjectFormDialog from "../components/CreateProjectForm";
 
 type Props = {};
 
@@ -88,14 +89,7 @@ const Home = (props: Props) => {
             style={{ display: "none" }}
             onChange={onChangeFile}
           />
-          <Button
-            variant="contained"
-            onClick={() => {
-              // navigate("/editor");
-            }}
-          >
-            New Project
-          </Button>
+          <CreateProjectFormDialog/>
           <Button
             variant="contained"
             onClick={() => {

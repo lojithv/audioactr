@@ -5,7 +5,7 @@ export const initialEditorState:EditorState = {
     tracks: [
         {
           id: 1,
-          text: "Step 1",
+          text: "New Actor",
           trackIndex: 1,
           voice:false,
           volume:100,
