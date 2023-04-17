@@ -8,6 +8,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
+import localforage from "localforage";
 
 export default function CreateProjectFormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -30,6 +31,7 @@ export default function CreateProjectFormDialog() {
       { name: projectName, state: initialEditorState, createdAt: Date.now() },
     ];
     setProjects(updatedProjectsList);
+    localforage.setItem("projects",updatedProjectsList)
     handleClose();
   };
 

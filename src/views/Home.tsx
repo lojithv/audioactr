@@ -11,6 +11,7 @@ import { date, getNewDate, oneDay } from "../helpers/projects.helper";
 import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
 import CreateProjectFormDialog from "../components/CreateProjectForm";
+import localforage from "localforage";
 
 type Props = {};
 
@@ -23,30 +24,35 @@ const Home = (props: Props) => {
   const projects = useProjects();
 
   const rows = [
-    {
-      name: "Project1",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project2",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project3",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
-    {
-      name: "Project4",
-      createdAt: getNewDate(date + 1 * oneDay),
-      state: initialEditorState,
-    },
+    // {
+    //   name: "Project1",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project2",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project3",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
+    // {
+    //   name: "Project4",
+    //   createdAt: getNewDate(date + 1 * oneDay),
+    //   state: initialEditorState,
+    // },
   ];
 
   useEffect(() => {
-    setProjects(rows);
+    localforage.getItem("projects").then((cachedProjects: any) => {
+      console.log(cachedProjects);
+      if (cachedProjects) {
+        setProjects(cachedProjects);
+      }
+    });
   }, []);
 
   const handleNewProjectCreate = () => {};
@@ -89,7 +95,7 @@ const Home = (props: Props) => {
             style={{ display: "none" }}
             onChange={onChangeFile}
           />
-          <CreateProjectFormDialog/>
+          <CreateProjectFormDialog />
           <Button
             variant="contained"
             onClick={() => {

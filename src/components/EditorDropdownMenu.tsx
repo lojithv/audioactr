@@ -14,6 +14,8 @@ import GetAppIcon from "@mui/icons-material/GetApp";
 import { downloadAudio } from "../handlers/editor";
 import { EditorStore } from "../store/EditorStore";
 import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
+import HomeIcon from "@mui/icons-material/Home";
+import { useNavigate } from "react-router-dom";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -93,6 +95,13 @@ export default function CustomizedMenus() {
     handleClose();
   };
 
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/home");
+    handleClose();
+  };
+
   return (
     <div>
       <Button
@@ -130,12 +139,12 @@ export default function CustomizedMenus() {
           <CloudDownloadRoundedIcon />
           Save as mp3
         </MenuItem>
-        {/* <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
-          <ArchiveIcon />
-          Archive
+        <Divider sx={{ my: 0.5 }} />
+        <MenuItem onClick={handleNavigate} disableRipple>
+          <HomeIcon />
+          Go to Home
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        {/* <MenuItem onClick={handleClose} disableRipple>
           <MoreHorizIcon />
           More
         </MenuItem> */}
