@@ -16,6 +16,7 @@ import Payment from "./views/Payment";
 import { Subscribe } from "@react-rxjs/core";
 
 function App() {
+
   return (
     <div className="App">
       <Subscribe>

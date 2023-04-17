@@ -15,11 +15,12 @@ import Link from "@mui/material/Link";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
+import { PaymentService } from "../services/payment";
 
 const tiers = [
   {
     title: "Free",
-    price: "0",
+    price: 0,
     description: [
       "One project",
       "100 phrases per project",
@@ -33,7 +34,7 @@ const tiers = [
   {
     title: "Pro",
     subheader: "Most popular",
-    price: "15",
+    price: 15,
     description: [
       "10 projects",
       "500 phrases per project",
@@ -48,6 +49,16 @@ const tiers = [
 
 function PricingContent() {
   const navigate = useNavigate();
+  const [clientSecret, setClientSecret] = React.useState("");
+
+  React.useEffect(() => {
+    PaymentService.getClientSecret().then((res) => {
+      if (res.status === 200) {
+        console.log(res.data);
+        setClientSecret(res.data.clientSecret);
+      }
+    });
+  }, []);
 
   return (
     <React.Fragment>
@@ -56,14 +67,13 @@ function PricingContent() {
       />
       <CssBaseline />
       {/* Hero unit */}
-     
+
       <Container
         disableGutters
         maxWidth="sm"
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
-        
         <Typography
           component="h1"
           variant="h2"
@@ -143,7 +153,13 @@ function PricingContent() {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as "outlined" | "contained"}
-                    onClick={() => navigate(tier.redirectUrl)}
+                    onClick={() =>
+                      tier.price
+                        ? navigate(tier.redirectUrl, {
+                            state: { clientSecret },
+                          })
+                        : navigate(tier.redirectUrl)
+                    }
                   >
                     {tier.buttonText}
                   </Button>
@@ -153,14 +169,14 @@ function PricingContent() {
           ))}
         </Grid>
         <Button
-            type="submit"
-            fullWidth
-            variant="outlined"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => navigate("/home")}
-          >
-            Go To Home
-          </Button>
+          type="submit"
+          fullWidth
+          variant="outlined"
+          sx={{ mt: 3, mb: 2 }}
+          onClick={() => navigate("/home")}
+        >
+          Go To Home
+        </Button>
       </Container>
     </React.Fragment>
   );
