@@ -9,7 +9,9 @@ import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
 import { useNavigate } from "react-router-dom";
-import { useProjects } from "../store/ProjectsStore";
+import { setActiveProject, useProjects } from "../store/ProjectsStore";
+import { ProjectState } from "../interfaces/ProjectState";
+import ProjectDropdownMenu from "./ProjectDropdownMenu";
 
 
 
@@ -26,7 +28,9 @@ export default function ProjectsTable() {
 
   const projects = useProjects()
 
-  const handleProjectOpen = () => {
+  const handleProjectOpen = (project:ProjectState) => {
+    console.log(project)
+    setActiveProject(project)
     navigate('/editor')
   }
 
@@ -41,20 +45,17 @@ export default function ProjectsTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {projects.map((row,i) => (
+          {projects.map((project,i) => (
             <TableRow
               key={i}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              onClick={()=>handleProjectOpen()}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
+              <TableCell component="th" scope="row" onClick={()=>handleProjectOpen(project)}>
+                {project.name}
               </TableCell>
-              <TableCell align="center">{row.createdAt.toString()}</TableCell>
+              <TableCell align="center" onClick={()=>handleProjectOpen(project)}>{project.createdAt.toString()}</TableCell>
               <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <IconButton aria-label="delete" disabled color="primary">
-                  <MoreVertSharpIcon />
-                </IconButton>
+              <ProjectDropdownMenu/>
               </TableCell>
             </TableRow>
           ))}

@@ -9,6 +9,20 @@ export const initialEditorState:EditorState = {
           trackIndex: 1,
           voice:false 
         },
+      ],
+    phrases:[
+        { id:1, trackId: 1, phrase: "Add Phrase", trackIndex:1,phraseIndex:0},
+      ],
+  };
+
+  export const initialEditorStateCopy:EditorState = {
+    tracks: [
+        {
+          id: 1,
+          text: "Step 1",
+          trackIndex: 1,
+          voice:false 
+        },
         {
           id: 2,
           text: "Step 2",

@@ -26,20 +26,28 @@ import {
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import { testServerConn } from "../services/connection";
+import CustomizedMenus from "../components/EditorDropdownMenu";
+import { useActiveProject } from "../store/ProjectsStore";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
   const editorState = EditorStore.useEditorState();
 
+  const project = useActiveProject();
+
   const time = PlayerStore.useTimer();
 
   useEffect(() => {
-    EditorStore.setEditorState(initialEditorState);
-    PlayerStore.setPlayerState({ isPlaying: false });
-    console.log(process.env.SERVER_API_URL, "API URL");
-    console.log(process.env.REACT_APP_API_URL);
-    testServerConn();
-  }, []);
+    console.log(project)
+    if (project) {
+      console.log(project.state)
+      EditorStore.setEditorState(project.state);
+      PlayerStore.setPlayerState({ isPlaying: false });
+      console.log(process.env.SERVER_API_URL, "API URL");
+      console.log(process.env.REACT_APP_API_URL);
+      testServerConn();
+    }
+  }, [project]);
 
   useEffect(() => {
     if (playerState.isPlaying) {
@@ -81,18 +89,20 @@ const Editor = () => {
   const milliseconds = time % 100;
 
   const addNewActor = () => {
-    setEditorState({
-      ...editorState,
-      tracks: [
-        ...editorState.tracks,
-        {
-          text: "test",
-          id: editorState.tracks.length + 1,
-          trackIndex: editorState.tracks.length + 1,
-          voice: false,
-        },
-      ],
-    });
+    if(editorState){
+      setEditorState({
+        ...editorState,
+        tracks: [
+          ...editorState.tracks,
+          {
+            text: "test",
+            id: editorState.tracks.length + 1,
+            trackIndex: editorState.tracks.length + 1,
+            voice: false,
+          },
+        ],
+      });
+    }
   };
 
   const saveAsAudio = () => {
@@ -109,7 +119,7 @@ const Editor = () => {
         alignItems: "center",
       }}
     >
-      <Subscribe>
+   
         <div
           style={{
             display: "flex",
@@ -174,14 +184,15 @@ const Editor = () => {
               </Box>
             </Grid>
             <Grid item xs={4} display={"flex"} justifyContent={"right"}>
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<CloudDownloadRoundedIcon />}
                 sx={{ marginTop: "10px" }}
                 onClick={() => saveAsAudio()}
               >
                 SAVE AS MP3
-              </Button>
+              </Button> */}
+              <CustomizedMenus />
             </Grid>
           </Grid>
         </div>
@@ -197,20 +208,22 @@ const Editor = () => {
             fullWidth
             value={selectedPhrase?.phrase}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setSelectedPhrase({
-                ...selectedPhrase,
-                phrase: event.target.value,
-              });
-              setEditorState({
-                ...editorState,
-                phrases: editorState.phrases.map((p) => {
-                  if (p.id === selectedPhrase?.id) {
-                    return { ...p, phrase: event.target.value };
-                  } else {
-                    return p;
-                  }
-                }),
-              });
+              if(editorState){
+                setSelectedPhrase({
+                  ...selectedPhrase,
+                  phrase: event.target.value,
+                });
+                setEditorState({
+                  ...editorState,
+                  phrases: editorState.phrases.map((p) => {
+                    if (p.id === selectedPhrase?.id) {
+                      return { ...p, phrase: event.target.value };
+                    } else {
+                      return p;
+                    }
+                  }),
+                });
+              }
             }}
             rows={4}
           />
@@ -227,12 +240,11 @@ const Editor = () => {
           sx={{
             width: windowDimensions.width - 20,
             maxWidth: "100%",
-            overflow:'scroll'
+            overflow: "scroll",
           }}
         >
           <Storyboard />
         </Box>
-      </Subscribe>
     </div>
   );
 };
