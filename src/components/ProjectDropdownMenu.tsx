@@ -13,8 +13,10 @@ import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { IconButton } from "@mui/material";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
-import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
+import { setActiveProject, setProjects, useActiveProject, useProjects } from "../store/ProjectsStore";
 import { useEditorState } from "../store/EditorStore";
+import DeleteIcon from '@mui/icons-material/Delete';
+import localforage from "localforage";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -59,12 +61,14 @@ const StyledMenu = styled((props: MenuProps) => (
   },
 }));
 
-export default function ProjectDropdownMenu() {
+export default function ProjectDropdownMenu({project}:any) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const activeProject = useActiveProject();
   const editorState = useEditorState();
+
+  const projects = useProjects()
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     console.log("click");
@@ -89,6 +93,13 @@ export default function ProjectDropdownMenu() {
     }
     handleClose()
   };
+
+  const handleProjectDelete = () =>{
+    const updatedProjectsList = projects.filter((p)=>p!==project)
+    setProjects(updatedProjectsList)
+    localforage.setItem("projects",updatedProjectsList)
+    handleClose()
+  }
 
   return (
     <div>
@@ -130,6 +141,10 @@ export default function ProjectDropdownMenu() {
         <MenuItem onClick={handleClose} disableRipple>
           <EditIcon />
           Edit Project
+        </MenuItem>
+        <MenuItem onClick={handleProjectDelete} disableRipple>
+          <DeleteIcon />
+          Delete Project
         </MenuItem>
         {/* <Divider sx={{ my: 0.5 }} />
         <MenuItem onClick={handleClose} disableRipple>
