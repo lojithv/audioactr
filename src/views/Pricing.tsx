@@ -56,12 +56,14 @@ function PricingContent() {
       />
       <CssBaseline />
       {/* Hero unit */}
+     
       <Container
         disableGutters
         maxWidth="sm"
         component="main"
         sx={{ pt: 8, pb: 6 }}
       >
+        
         <Typography
           component="h1"
           variant="h2"
@@ -150,6 +152,15 @@ function PricingContent() {
             </Grid>
           ))}
         </Grid>
+        <Button
+            type="submit"
+            fullWidth
+            variant="outlined"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={() => navigate("/home")}
+          >
+            Go To Home
+          </Button>
       </Container>
     </React.Fragment>
   );
