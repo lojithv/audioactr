@@ -4,7 +4,14 @@ import Storyboard from "../core/Storyboard";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import StopRoundedIcon from "@mui/icons-material/StopRounded";
-import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import {
   EditorStore,
   setEditorState,
@@ -29,29 +36,35 @@ import { testServerConn } from "../services/connection";
 import CustomizedMenus from "../components/EditorDropdownMenu";
 import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
 import { useLocation, useNavigate } from "react-router-dom";
+import NetworkSwitch from "../components/NetworkSwitch";
+import { setNetworkMode, useNetworkMode } from "../store/GlobalStore";
+import localforage from "localforage";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
   const editorState = EditorStore.useEditorState();
 
-
-
-  const {state} = useLocation();
+  const { state } = useLocation();
 
   const project = useActiveProject();
 
   const time = PlayerStore.useTimer();
 
+  const networkMode = useNetworkMode();
+
   useEffect(() => {
-    console.log(state)
+    console.log(state);
     if (state && state.projectState && !project) {
       EditorStore.setEditorState(state.projectState.state);
-      setActiveProject(state.projectState)
+      setActiveProject(state.projectState);
       PlayerStore.setPlayerState({ isPlaying: false });
       console.log(process.env.SERVER_API_URL, "API URL");
       console.log(process.env.REACT_APP_API_URL);
       testServerConn();
     }
+    localforage.getItem("networkMode").then((nm:any)=>{
+      setNetworkMode(nm)
+    })
   }, []);
 
   useEffect(() => {
@@ -94,7 +107,7 @@ const Editor = () => {
   const milliseconds = time % 100;
 
   const addNewActor = () => {
-    if(editorState){
+    if (editorState) {
       setEditorState({
         ...editorState,
         tracks: [
@@ -104,8 +117,8 @@ const Editor = () => {
             id: editorState.tracks.length + 1,
             trackIndex: editorState.tracks.length + 1,
             voice: false,
-            volume:100,
-            speechRate:200
+            volume: 100,
+            speechRate: 200,
           },
         ],
       });
@@ -115,8 +128,6 @@ const Editor = () => {
   const saveAsAudio = () => {
     downloadAudio(editorState);
   };
-
-
 
   return (
     <div
@@ -128,72 +139,72 @@ const Editor = () => {
         alignItems: "center",
       }}
     >
-   
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: windowDimensions.width - 20,
-          }}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: windowDimensions.width - 20,
+        }}
+      >
+        <Grid
+          container
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          marginBottom={2}
         >
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            marginBottom={2}
-          >
-            <Grid item xs={4}>
-              <div
-                style={{
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  height: "100%",
+          <Grid item xs={4}>
+            <div
+              style={{
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              {/* {timer} */}
+              {hours}:{minutes.toString().padStart(2, "0")}:
+              {seconds.toString().padStart(2, "0")}:
+              {milliseconds.toString().padStart(2, "0")}
+            </div>
+          </Grid>
+          <Grid item xs={4}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <IconButton
+                onClick={() => {
+                  PlayerStore.setTimerValue(0);
+                  PlayerStore.setPlayerState({ isPlaying: false });
+                  stopPlayer();
                 }}
               >
-                {/* {timer} */}
-                {hours}:{minutes.toString().padStart(2, "0")}:
-                {seconds.toString().padStart(2, "0")}:
-                {milliseconds.toString().padStart(2, "0")}
-              </div>
-            </Grid>
-            <Grid item xs={4}>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <StopRoundedIcon />
+              </IconButton>
+
+              {!playerState.isPlaying && (
                 <IconButton
                   onClick={() => {
-                    PlayerStore.setTimerValue(0);
-                    PlayerStore.setPlayerState({ isPlaying: false });
-                    stopPlayer();
+                    handlePlay(playerState, editorState, selectedVoice);
                   }}
                 >
-                  <StopRoundedIcon />
+                  <PlayArrowRoundedIcon />
                 </IconButton>
+              )}
 
-                {!playerState.isPlaying && (
-                  <IconButton
-                    onClick={() => {
-                      handlePlay(playerState, editorState, selectedVoice);
-                    }}
-                  >
-                    <PlayArrowRoundedIcon />
-                  </IconButton>
-                )}
-
-                {playerState.isPlaying && (
-                  <IconButton
-                    onClick={() => {
-                      handlePlay(playerState, editorState, selectedVoice);
-                      pausePlayer();
-                    }}
-                  >
-                    <PauseRoundedIcon />
-                  </IconButton>
-                )}
-              </Box>
-            </Grid>
-            <Grid item xs={4} display={"flex"} justifyContent={"right"}>
-              {/* <Button
+              {playerState.isPlaying && (
+                <IconButton
+                  onClick={() => {
+                    handlePlay(playerState, editorState, selectedVoice);
+                    pausePlayer();
+                  }}
+                >
+                  <PauseRoundedIcon />
+                </IconButton>
+              )}
+            </Box>
+          </Grid>
+          <Grid item xs={4} display={"flex"} justifyContent={"right"} alignItems={"center"} gap={10}>
+            <Typography>{networkMode ? "Online" : "Offline"}</Typography>
+            {/* <Button
                 variant="outlined"
                 startIcon={<CloudDownloadRoundedIcon />}
                 sx={{ marginTop: "10px" }}
@@ -201,59 +212,59 @@ const Editor = () => {
               >
                 SAVE AS MP3
               </Button> */}
-              <CustomizedMenus />
-            </Grid>
+            <CustomizedMenus />
           </Grid>
-        </div>
-        <Box
-          sx={{
-            width: windowDimensions.width - 20,
-            maxWidth: "100%",
+        </Grid>
+      </div>
+      <Box
+        sx={{
+          width: windowDimensions.width - 20,
+          maxWidth: "100%",
+        }}
+      >
+        <TextField
+          id="outlined-multiline-static"
+          multiline
+          fullWidth
+          value={selectedPhrase?.phrase}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            if (editorState) {
+              setSelectedPhrase({
+                ...selectedPhrase,
+                phrase: event.target.value,
+              });
+              setEditorState({
+                ...editorState,
+                phrases: editorState.phrases.map((p) => {
+                  if (p.id === selectedPhrase?.id) {
+                    return { ...p, phrase: event.target.value };
+                  } else {
+                    return p;
+                  }
+                }),
+              });
+            }
           }}
+          rows={4}
+        />
+        <Button
+          variant="outlined"
+          startIcon={<AddRoundedIcon />}
+          sx={{ marginTop: "10px" }}
+          onClick={() => addNewActor()}
         >
-          <TextField
-            id="outlined-multiline-static"
-            multiline
-            fullWidth
-            value={selectedPhrase?.phrase}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              if(editorState){
-                setSelectedPhrase({
-                  ...selectedPhrase,
-                  phrase: event.target.value,
-                });
-                setEditorState({
-                  ...editorState,
-                  phrases: editorState.phrases.map((p) => {
-                    if (p.id === selectedPhrase?.id) {
-                      return { ...p, phrase: event.target.value };
-                    } else {
-                      return p;
-                    }
-                  }),
-                });
-              }
-            }}
-            rows={4}
-          />
-          <Button
-            variant="outlined"
-            startIcon={<AddRoundedIcon />}
-            sx={{ marginTop: "10px" }}
-            onClick={() => addNewActor()}
-          >
-            ADD NEW ACTOR
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            width: windowDimensions.width - 20,
-            maxWidth: "100%",
-            overflow: "scroll",
-          }}
-        >
-          <Storyboard />
-        </Box>
+          ADD NEW ACTOR
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          width: windowDimensions.width - 20,
+          maxWidth: "100%",
+          overflow: "scroll",
+        }}
+      >
+        <Storyboard />
+      </Box>
     </div>
   );
 };

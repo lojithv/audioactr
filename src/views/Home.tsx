@@ -13,7 +13,7 @@ import { initialEditorState } from "../dump/editor";
 import CreateProjectFormDialog from "../components/CreateProjectForm";
 import localforage from "localforage";
 import NetworkSwitch from "../components/NetworkSwitch";
-import { useNetworkMode } from "../store/GlobalStore";
+import { setNetworkMode, useNetworkMode } from "../store/GlobalStore";
 
 type Props = {};
 
@@ -56,6 +56,9 @@ const Home = (props: Props) => {
         setProjects(cachedProjects);
       }
     });
+    localforage.getItem("networkMode").then((nm:any)=>{
+      setNetworkMode(nm)
+    })
   }, []);
 
   const handleNewProjectCreate = () => {};
