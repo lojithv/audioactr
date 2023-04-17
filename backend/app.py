@@ -90,9 +90,29 @@ def play(data):
         engine.say(phrase['phrase'])
         last_phrase = phrase
     engine.runAndWait()
+    engine.stop()
     return jsonify("Completed")
 
 # Convert text to audio
+
+
+def handlePlaySinglePhrase(data):
+    engine = pyttsx3.init()
+    phrase = data['phrase']
+    track = data['track']
+    app.logger.info(paused_phrase)
+
+    if (track):
+        voice = track['voice']
+    if (voice):
+        engine.setProperty('voice', voice)
+    else:
+        engine.setProperty(
+            'voice', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0')
+    engine.say(phrase['phrase'])
+    engine.runAndWait()
+    engine.stop()
+    return jsonify("Completed")
 
 
 @app.route("/audio", methods=['POST'])
@@ -101,6 +121,15 @@ def audio():
     app.logger.info(data)
     app.logger.info(paused_phrase)
     play(data)
+    return jsonify("Completed")
+
+
+@app.route("/play-single-phrase", methods=['POST'])
+def playSinglePhrase():
+    data = json.loads(request.data)
+    app.logger.info(data)
+    app.logger.info(paused_phrase)
+    handlePlaySinglePhrase(data)
     return jsonify("Completed")
 
 
@@ -144,6 +173,7 @@ def convertAudioToMp3(data):
         engine.save_to_file(
             phrase["phrase"], f"backend\\audioFiles\\{phrase['phraseIndex']}.wav")
     engine.runAndWait()
+    engine.stop()
 
     for phrase in phrases:
         # Load the audio file into an AudioSegment object and append it to the list
@@ -162,11 +192,47 @@ def convertAudioToMp3(data):
 # Convert text to audio
 
 
+def handleConvertSinglePhraseToMp3(data):
+    engine = pyttsx3.init()
+    phrase = data['phrase']
+    track = data['track']
+    voice = track['voice']
+    audio_segments = []
+    if (voice):
+        engine.setProperty('voice', voice)
+    else:
+        engine.setProperty(
+            'voice', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0')
+    engine.save_to_file(
+        phrase["phrase"], f"backend\\audioFiles\\{phrase['phraseIndex']}.wav")
+    engine.runAndWait()
+    engine.stop()
+
+    audio_file = AudioSegment.from_file(
+        f"E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles\\{phrase['phraseIndex']}.wav", format="mp3")
+    audio_segments.append(audio_file)
+    output_file = AudioSegment.empty()
+    for audio_segment in audio_segments:
+        output_file += audio_segment
+
+    # # Export the concatenated audio file as an MP3
+    output_file.export("backend\\convertedFiles\\output.mp3", format="mp3")
+
+
 @app.route("/convert-text-to-audio", methods=['POST'])
 def convertTextToAudio():
     # Initialize the pyttsx3 engine
     data = json.loads(request.data)
     convertAudioToMp3(data)
+    clean_folder("E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles")
+    return jsonify("Completed")
+
+
+@app.route("/convert-single-phrase-to-audio", methods=['POST'])
+def convertSinglePhraseToAudio():
+    # Initialize the pyttsx3 engine
+    data = json.loads(request.data)
+    handleConvertSinglePhraseToMp3(data)
     clean_folder("E:\\Dev Workspace\\personal\\audioactr\\backend\\audioFiles")
     return jsonify("Completed")
 

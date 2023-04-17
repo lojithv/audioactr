@@ -38,6 +38,15 @@ export const autoPlay = (editorState: EditorState) => {
     });
 };
 
+export const playSinglePhrase = (editorState: EditorState,phrase:any) => {
+  const track = editorState.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+  axiosInstance
+    .post("/play-single-phrase", { phrase: phrase, track: track })
+    .then((res: any) => {
+      console.log("completed");
+    });
+};
+
 export const downloadAudio = (editorState: EditorState) => {
   const sortedPhrases = editorState.phrases.sort(compare);
   axiosInstance
@@ -54,6 +63,28 @@ export const downloadAudio = (editorState: EditorState) => {
           const link = document.createElement("a");
           link.href = url;
           link.download = "audio.MP3";
+          link.click();
+        });
+    });
+};
+
+export const downloadSinglePhraseAsAudio = (editorState: EditorState, phrase:any) => {
+  
+  const track = editorState.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+  axiosInstance
+    .post("/convert-single-phrase-to-audio", {
+      phrase: phrase,
+      track: track,
+    })
+    .then((res: any) => {
+      fetch("http://localhost:5000/get-audio-file")
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Create a download link and click on it
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${track?.trackIndex}_${phrase.phraseIndex}`+".MP3";
           link.click();
         });
     });
