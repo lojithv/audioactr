@@ -46,14 +46,14 @@ export const downloadAudio = (editorState: EditorState) => {
       tracks: editorState.tracks,
     })
     .then((res: any) => {
-      fetch("/get-audio-file")
+      fetch("http://localhost:5000/get-audio-file")
         .then((response) => response.blob())
         .then((blob) => {
           // Create a download link and click on it
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = "audio.mp3";
+          link.download = "audio.MP3";
           link.click();
         });
     });
