@@ -102,7 +102,8 @@ const Editor = () => {
             id: editorState.tracks.length + 1,
             trackIndex: editorState.tracks.length + 1,
             voice: false,
-            volume:100 
+            volume:100,
+            speechRate:200
           },
         ],
       });

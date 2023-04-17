@@ -83,6 +83,7 @@ def play(data):
         if (track):
             voice = track['voice']
             volume = track['volume']
+            speechRate = track['speechRate']
         if (voice):
             engine.setProperty('voice', voice)
         else:
@@ -92,6 +93,10 @@ def play(data):
             engine.setProperty('volume', volume/100)
         else:
             engine.setProperty('volume', 1.0)
+        if (speechRate):
+            engine.setProperty('rate', speechRate)
+        else:
+            engine.setProperty('rate', 200)
         engine.say(phrase['phrase'])
         last_phrase = phrase
     engine.runAndWait()

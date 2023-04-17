@@ -12,7 +12,7 @@ export interface Track{
   text: string,
   trackIndex: number,
   volume:number,
-  speechRate?:number,
+  speechRate:number,
  
 }
 

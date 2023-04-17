@@ -32,6 +32,7 @@ export const handleStepDataChange = (
           ...newSequenceData[index],
           volume: newData.volume,
           text: newData.text,
+          speechRate:newData.speechRate
         }
       : newSequenceData[index];
       console.log(newSequenceData[index])

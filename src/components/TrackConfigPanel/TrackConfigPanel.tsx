@@ -18,9 +18,14 @@ import Stack from "@mui/material/Stack";
 import Slider from "@mui/material/Slider";
 import VolumeDown from "@mui/icons-material/VolumeDown";
 import VolumeUp from "@mui/icons-material/VolumeUp";
+import { Typography } from "@mui/material";
 
 interface Props {
   handleValueChange?: any;
+}
+
+function valuetext(value: number) {
+  return `${value} words per minute`;
 }
 
 const TrackConfigPanel = () => {
@@ -35,7 +40,8 @@ const TrackConfigPanel = () => {
 
   useEffect(() => {
     setText(selectedTrack?.text || "");
-    setVolume(selectedTrack?.volume || 100)
+    setVolume(selectedTrack?.volume || 100);
+    setSpeechRate(selectedTrack?.speechRate || 200);
   }, [selectedTrack]);
 
   const handleClose = () => {
@@ -43,16 +49,29 @@ const TrackConfigPanel = () => {
   };
 
   const handleSubmit = () => {
-    if (layerData) handleStepDataChange(layerData, editorState, selectedTrack?.id, {text,volume:volume});
+    if (layerData)
+      handleStepDataChange(layerData, editorState, selectedTrack?.id, {
+        text,
+        volume: volume,
+        speechRate: speechRate,
+      });
     console.log("handle submit");
     setEditorVisibility(false);
     setSelectedVoice(null);
   };
 
   const [volume, setVolume] = React.useState<number>(100);
+  const [speechRate, setSpeechRate] = React.useState<number>(200);
 
   const handleVolumeChange = (event: Event, newValue: number | number[]) => {
     setVolume(newValue as number);
+  };
+
+  const handleSpeechRateChange = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
+    setSpeechRate(newValue as number);
   };
 
   return (
@@ -72,7 +91,7 @@ const TrackConfigPanel = () => {
             variant="standard"
           />
           <SelectVoice />
-          <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+          <Stack spacing={2} direction="row" sx={{ mb: 2 }} alignItems="center">
             <VolumeDown />
             <Slider
               aria-label="Volume"
@@ -80,6 +99,22 @@ const TrackConfigPanel = () => {
               onChange={handleVolumeChange}
             />
             <VolumeUp />
+          </Stack>
+          <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+            <Typography variant="body2" component="h2">
+              Speech Rate
+            </Typography>
+            <Slider
+              aria-label="Change Speech Rate"
+              value={speechRate}
+              getAriaValueText={valuetext}
+              valueLabelDisplay="auto"
+              onChange={handleSpeechRateChange}
+              step={20}
+              marks
+              min={40}
+              max={400}
+            />
           </Stack>
         </DialogContent>
         <DialogActions>

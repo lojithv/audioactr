@@ -8,7 +8,8 @@ export const initialEditorState:EditorState = {
           text: "Step 1",
           trackIndex: 1,
           voice:false,
-          volume:100 
+          volume:100,
+          speechRate:200
         },
       ],
     phrases:[
@@ -23,35 +24,40 @@ export const initialEditorState:EditorState = {
           text: "Step 1",
           trackIndex: 1,
           voice:false,
-          volume:100 
+          volume:100,
+          speechRate:200
         },
         {
           id: 2,
           text: "Step 2",
           trackIndex: 2,
           voice:false,
-          volume:100 
+          volume:100,
+          speechRate:200
         },
         {
           id: 3,
           text: "Step 3",
           trackIndex: 3,
           voice:false,
-          volume:100  
+          volume:100,
+          speechRate:200  
         },
         {
           id: 4,
           text: "Step 4",
           trackIndex: 4,
           voice:false,
-          volume:100  
+          volume:100,
+          speechRate:200 
         },
         {
           id: 5,
           text: "Step 5",
           trackIndex: 5,
           voice:false,
-          volume:100 
+          volume:100,
+          speechRate:200 
         },
       ],
     phrases:[

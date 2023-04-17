@@ -24,44 +24,48 @@ export default function SelectVoice() {
   const selectedLayer = useSelectedTrack();
 
   React.useEffect(() => {
-    if(!voices.length){
+    if (!voices.length) {
       axiosInstance.get("/voices").then((res) => {
-        if(res.data?.length){
-          setVoices(res.data)
-          console.log(res.data)
+        if (res.data?.length) {
+          setVoices(res.data);
+          console.log(res.data);
         }
       });
-      if(selectedLayer?.voice){
-        setSelectedVoice(selectedLayer.voice)
+      if (selectedLayer?.voice) {
+        setSelectedVoice(selectedLayer.voice);
       } else {
-        setSelectedVoice(null)
+        setSelectedVoice(null);
       }
     }
-  },[]);
+  }, []);
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedVoice(event.target.value);
-    if(editorState)
-    setEditorState({
-      ...editorState,
-      tracks: editorState.tracks.map((t) => {
-        if (t.id === selectedLayer?.id) {
-          return { ...t, voice: event.target.value };
-        } else {
-          return t;
-        }
-      }),
-    });
+    if (editorState)
+      setEditorState({
+        ...editorState,
+        tracks: editorState.tracks.map((t) => {
+          if (t.id === selectedLayer?.id) {
+            return { ...t, voice: event.target.value };
+          } else {
+            return t;
+          }
+        }),
+      });
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-      <InputLabel id="demo-select-small">Voice</InputLabel>
+    <FormControl
+      sx={{ marginBottom: "15px", marginTop: "15px", minWidth: 120 }}
+      size="small"
+      fullWidth
+    >
+      <InputLabel id="demo-select-small">Select Voice</InputLabel>
       <Select
         labelId="demo-select-small"
         id="demo-select-small"
         value={selectedVoice}
-        label="Voice"
+        label="Select Voice"
         onChange={handleChange}
       >
         <MenuItem value="">
