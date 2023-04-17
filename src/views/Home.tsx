@@ -76,6 +76,7 @@ const Home = (props: Props) => {
       const importedProjectData = JSON.parse(data);
       const updatedProjectsList = [...projects, importedProjectData];
       setProjects(updatedProjectsList);
+      localforage.setItem("projects",updatedProjectsList)
     });
   };
 
