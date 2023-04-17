@@ -9,6 +9,7 @@ import {
 import { useWindowDimensions } from "../store/EditorStore";
 import { date, getNewDate, oneDay } from "../helpers/projects.helper";
 import { setProjects, useProjects } from "../store/ProjectsStore";
+import { initialEditorState } from "../dump/editor";
 
 type Props = {};
 
@@ -21,10 +22,26 @@ const Home = (props: Props) => {
   const projects = useProjects();
 
   const rows = [
-    { name: "Project1", createdAt: getNewDate(date + 1 * oneDay), state: {} },
-    { name: "Project1", createdAt: getNewDate(date + 1 * oneDay), state: {} },
-    { name: "Project1", createdAt: getNewDate(date + 1 * oneDay), state: {} },
-    { name: "Project1", createdAt: getNewDate(date + 1 * oneDay), state: {} },
+    {
+      name: "Project1",
+      createdAt: getNewDate(date + 1 * oneDay),
+      state: initialEditorState,
+    },
+    {
+      name: "Project2",
+      createdAt: getNewDate(date + 1 * oneDay),
+      state: initialEditorState,
+    },
+    {
+      name: "Project3",
+      createdAt: getNewDate(date + 1 * oneDay),
+      state: initialEditorState,
+    },
+    {
+      name: "Project4",
+      createdAt: getNewDate(date + 1 * oneDay),
+      state: initialEditorState,
+    },
   ];
 
   useEffect(() => {

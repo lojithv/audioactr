@@ -17,8 +17,8 @@ export default function ConetxtMenu() {
   const selectedPhrase = useSelectedPhrase();
 
   const deleteSelectedPhrase = () => {
-    if (selectedPhrase) {
-      const updatedPhrases = editorState.phrases.filter(
+    if (selectedPhrase && editorState) {
+      const updatedPhrases = editorState?.phrases.filter(
         (p) => p !== selectedPhrase
       );
       console.log(updatedPhrases);

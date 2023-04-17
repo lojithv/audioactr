@@ -41,6 +41,7 @@ export default function SelectVoice() {
 
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedVoice(event.target.value);
+    if(editorState)
     setEditorState({
       ...editorState,
       tracks: editorState.tracks.map((t) => {

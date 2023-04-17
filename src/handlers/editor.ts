@@ -5,10 +5,10 @@ import { PlayerStore } from "../store/PlayerStore";
 
 export const handlePlay = (
   playerState: PlayerState,
-  editorState: EditorState,
+  editorState: EditorState|null,
   voice: string
 ) => {
-  if (!playerState.isPlaying) {
+  if (!playerState.isPlaying && editorState) {
     PlayerStore.setPlayerState({ isPlaying: true });
     autoPlay(editorState);
   } else {
@@ -38,8 +38,8 @@ export const autoPlay = (editorState: EditorState) => {
     });
 };
 
-export const playSinglePhrase = (editorState: EditorState,phrase:any) => {
-  const track = editorState.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+export const playSinglePhrase = (editorState: EditorState|null,phrase:any) => {
+  const track = editorState?.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
   axiosInstance
     .post("/play-single-phrase", { phrase: phrase, track: track })
     .then((res: any) => {
@@ -47,12 +47,12 @@ export const playSinglePhrase = (editorState: EditorState,phrase:any) => {
     });
 };
 
-export const downloadAudio = (editorState: EditorState) => {
-  const sortedPhrases = editorState.phrases.sort(compare);
+export const downloadAudio = (editorState: EditorState|null) => {
+  const sortedPhrases = editorState?.phrases.sort(compare);
   axiosInstance
     .post("/convert-text-to-audio", {
       phrases: sortedPhrases,
-      tracks: editorState.tracks,
+      tracks: editorState?.tracks,
     })
     .then((res: any) => {
       fetch("http://localhost:5000/get-audio-file")
@@ -68,9 +68,9 @@ export const downloadAudio = (editorState: EditorState) => {
     });
 };
 
-export const downloadSinglePhraseAsAudio = (editorState: EditorState, phrase:any) => {
+export const downloadSinglePhraseAsAudio = (editorState: EditorState|null, phrase:any) => {
   
-  const track = editorState.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+  const track = editorState?.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
   axiosInstance
     .post("/convert-single-phrase-to-audio", {
       phrase: phrase,
@@ -109,7 +109,7 @@ export const pausePlayer = () => {
 export const handleKeyDown = (
   event: KeyboardEvent,
   playerState: PlayerState,
-  editorState: EditorState,
+  editorState: EditorState|null,
   voice: string
 ) => {
   console.log(event.code);

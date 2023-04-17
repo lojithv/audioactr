@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { setActiveProject, useProjects } from "../store/ProjectsStore";
 import { ProjectState } from "../interfaces/ProjectState";
 import ProjectDropdownMenu from "./ProjectDropdownMenu";
+import { initialEditorStateCopy } from "../dump/editor";
+import { setEditorState } from "../store/EditorStore";
 
 
 
@@ -30,8 +32,7 @@ export default function ProjectsTable() {
 
   const handleProjectOpen = (project:ProjectState) => {
     console.log(project)
-    setActiveProject(project)
-    navigate('/editor')
+    navigate('/editor', { state: {projectState:project} })
   }
 
   return (

@@ -35,7 +35,7 @@ const Phrase = ({ id, trackIndex, layerData, phraseIndex }: any) => {
   const editorState = useEditorState();
 
   const getPhrase = () => {
-    return editorState.phrases.find(
+    return editorState?.phrases.find(
       (p) => p.trackIndex === trackIndex && p.phraseIndex === phraseIndex
     );
   };
@@ -44,10 +44,10 @@ const Phrase = ({ id, trackIndex, layerData, phraseIndex }: any) => {
 
   const handleDbClick = (e: KonvaEventObject<MouseEvent>) => {
     if (e.evt.button == 0) {
-      const existingphrase = editorState.phrases.find(
+      const existingphrase = editorState?.phrases.find(
         (p) => p.phraseIndex === phraseIndex
       );
-      if (!existingphrase) {
+      if (!existingphrase && editorState) {
         setEditorState({
           ...editorState,
           phrases: [
@@ -73,7 +73,7 @@ const Phrase = ({ id, trackIndex, layerData, phraseIndex }: any) => {
   };
 
   const addRestriction = () => {
-    const existingphrase = editorState.phrases.find(
+    const existingphrase = editorState?.phrases.find(
       (p) => p.phraseIndex === phraseIndex
     );
     return existingphrase ? true : false;

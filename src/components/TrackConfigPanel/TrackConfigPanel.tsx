@@ -23,7 +23,7 @@ const TrackConfigPanel = () => {
 
   const editorState = EditorStore.useEditorState()
 
-  const layerData = editorState.tracks;
+  const layerData = editorState?.tracks;
 
   useEffect(() => {
     setText(selectedTrack?.text || "")
@@ -34,6 +34,7 @@ const TrackConfigPanel = () => {
   };
 
   const handleSubmit = () =>{
+    if(layerData)
     handleStepDataChange(layerData,editorState,stepId,text)
     console.log("handle submit")
     setEditorVisibility(false)

@@ -13,7 +13,7 @@ import {
   useSelectedVoice,
   useWindowDimensions,
 } from "../store/EditorStore";
-import { initialEditorState } from "../dump/editor";
+import { initialEditorState, initialEditorStateCopy } from "../dump/editor";
 import { Subscribe } from "@react-rxjs/core";
 import { PlayerStore } from "../store/PlayerStore";
 import {
@@ -27,21 +27,24 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import { testServerConn } from "../services/connection";
 import CustomizedMenus from "../components/EditorDropdownMenu";
-import { useActiveProject } from "../store/ProjectsStore";
+import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
+import { useLocation } from "react-router-dom";
 
 const Editor = () => {
   const playerState = PlayerStore.usePlayerState();
   const editorState = EditorStore.useEditorState();
+
+  const {state} = useLocation();
 
   const project = useActiveProject();
 
   const time = PlayerStore.useTimer();
 
   useEffect(() => {
-    console.log(project)
-    if (project) {
-      console.log(project.state)
-      EditorStore.setEditorState(project.state);
+    console.log(state)
+    if (state && state.projectState) {
+      EditorStore.setEditorState(state.projectState.state);
+      setActiveProject(state.projectState)
       PlayerStore.setPlayerState({ isPlaying: false });
       console.log(process.env.SERVER_API_URL, "API URL");
       console.log(process.env.REACT_APP_API_URL);
