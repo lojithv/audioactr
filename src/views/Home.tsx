@@ -69,6 +69,15 @@ const Home = (props: Props) => {
     });
   };
 
+  const handleLogout = () => {
+    localforage.removeItem("user");
+    navigate("/signin");
+  };
+
+  const handleClearCache = () => {
+    localforage.removeItem("projects");
+  };
+
   return (
     <Box
       sx={{
@@ -98,6 +107,15 @@ const Home = (props: Props) => {
             >
               Import Project
             </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                // navigate("/editor");
+                handleClearCache();
+              }}
+            >
+              Clear Cache
+            </Button>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
             <NetworkSwitch />
@@ -119,6 +137,16 @@ const Home = (props: Props) => {
                     }}
                   >
                     Sign In
+                  </Button>
+                )}
+                {user && (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      handleLogout();
+                    }}
+                  >
+                    Log Out
                   </Button>
                 )}
               </>
