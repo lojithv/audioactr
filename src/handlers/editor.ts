@@ -5,10 +5,10 @@ import { PlayerStore } from "../store/PlayerStore";
 
 export const handlePlay = (
   playerState: PlayerState,
-  editorState: EditorState,
+  editorState: EditorState|null,
   voice: string
 ) => {
-  if (!playerState.isPlaying) {
+  if (!playerState.isPlaying && editorState) {
     PlayerStore.setPlayerState({ isPlaying: true });
     autoPlay(editorState);
   } else {
@@ -38,22 +38,53 @@ export const autoPlay = (editorState: EditorState) => {
     });
 };
 
-export const downloadAudio = (editorState: EditorState) => {
-  const sortedPhrases = editorState.phrases.sort(compare);
+export const playSinglePhrase = (editorState: EditorState|null,phrase:any) => {
+  const track = editorState?.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+  axiosInstance
+    .post("/play-single-phrase", { phrase: phrase, track: track })
+    .then((res: any) => {
+      console.log("completed");
+    });
+};
+
+export const downloadAudio = (editorState: EditorState|null) => {
+  const sortedPhrases = editorState?.phrases.sort(compare);
   axiosInstance
     .post("/convert-text-to-audio", {
       phrases: sortedPhrases,
-      tracks: editorState.tracks,
+      tracks: editorState?.tracks,
     })
     .then((res: any) => {
-      fetch("/get-audio-file")
+      fetch("http://localhost:5000/get-audio-file")
         .then((response) => response.blob())
         .then((blob) => {
           // Create a download link and click on it
           const url = URL.createObjectURL(blob);
           const link = document.createElement("a");
           link.href = url;
-          link.download = "audio.mp3";
+          link.download = "audio.MP3";
+          link.click();
+        });
+    });
+};
+
+export const downloadSinglePhraseAsAudio = (editorState: EditorState|null, phrase:any) => {
+  
+  const track = editorState?.tracks.find((t)=>t.trackIndex === phrase.trackIndex)
+  axiosInstance
+    .post("/convert-single-phrase-to-audio", {
+      phrase: phrase,
+      track: track,
+    })
+    .then((res: any) => {
+      fetch("http://localhost:5000/get-audio-file")
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Create a download link and click on it
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `${track?.trackIndex}_${phrase.phraseIndex}`+".MP3";
           link.click();
         });
     });
@@ -78,7 +109,7 @@ export const pausePlayer = () => {
 export const handleKeyDown = (
   event: KeyboardEvent,
   playerState: PlayerState,
-  editorState: EditorState,
+  editorState: EditorState|null,
   voice: string
 ) => {
   console.log(event.code);

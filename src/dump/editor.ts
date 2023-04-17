@@ -7,31 +7,57 @@ export const initialEditorState:EditorState = {
           id: 1,
           text: "Step 1",
           trackIndex: 1,
-          voice:false 
+          voice:false,
+          volume:100,
+          speechRate:200
+        },
+      ],
+    phrases:[
+        { id:1, trackId: 1, phrase: "Add Phrase", trackIndex:1,phraseIndex:0},
+      ],
+  };
+
+  export const initialEditorStateCopy:EditorState = {
+    tracks: [
+        {
+          id: 1,
+          text: "Step 1",
+          trackIndex: 1,
+          voice:false,
+          volume:100,
+          speechRate:200
         },
         {
           id: 2,
           text: "Step 2",
           trackIndex: 2,
-          voice:false 
+          voice:false,
+          volume:100,
+          speechRate:200
         },
         {
           id: 3,
           text: "Step 3",
           trackIndex: 3,
-          voice:false 
+          voice:false,
+          volume:100,
+          speechRate:200  
         },
         {
           id: 4,
           text: "Step 4",
           trackIndex: 4,
-          voice:false 
+          voice:false,
+          volume:100,
+          speechRate:200 
         },
         {
           id: 5,
           text: "Step 5",
           trackIndex: 5,
-          voice:false 
+          voice:false,
+          volume:100,
+          speechRate:200 
         },
       ],
     phrases:[

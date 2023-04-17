@@ -6,9 +6,9 @@ import { EditorHelper } from "../helpers/editor";
 import { EditorState } from "../interfaces/EditorState";
 
 export const [editorChange$, setEditorState] = createSignal<EditorState>();
-export const [useEditorState, editorState$] = bind<EditorState>(
+export const [useEditorState, editorState$] = bind<EditorState|null>(
   editorChange$,
-  initialEditorState
+  null
 );
 
 export const [windowDimensionChange$, setWindowDimensions] =

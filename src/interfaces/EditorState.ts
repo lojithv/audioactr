@@ -11,6 +11,9 @@ export interface Track{
   voice?:string|boolean;
   text: string,
   trackIndex: number,
+  volume:number,
+  speechRate:number,
+ 
 }
 
 export interface EditorState {

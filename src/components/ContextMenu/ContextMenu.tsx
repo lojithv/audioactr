@@ -7,6 +7,7 @@ import {
   useSelectedPhrase,
 } from "../../store/EditorStore";
 import { ContextMenu } from "./styles";
+import { downloadSinglePhraseAsAudio, playSinglePhrase } from "../../handlers/editor";
 
 export default function ConetxtMenu() {
   const contextMenu = useContextMenuState();
@@ -16,8 +17,8 @@ export default function ConetxtMenu() {
   const selectedPhrase = useSelectedPhrase();
 
   const deleteSelectedPhrase = () => {
-    if (selectedPhrase) {
-      const updatedPhrases = editorState.phrases.filter(
+    if (selectedPhrase && editorState) {
+      const updatedPhrases = editorState?.phrases.filter(
         (p) => p !== selectedPhrase
       );
       console.log(updatedPhrases);
@@ -34,12 +35,25 @@ export default function ConetxtMenu() {
       case "copy":
         console.log("copy");
         break;
-      case "edit":
+      case "download":
         console.log("edit");
+        downloadSinglePhraseAsMp3();
+        break;
+      case "play":
+        console.log("play");
+        startPlaySinglePhrase();
         break;
     }
     setContextMenuState({ open: false, event: null });
   };
+
+  const downloadSinglePhraseAsMp3 = () => {
+    downloadSinglePhraseAsAudio(editorState, selectedPhrase);
+  };
+
+  const startPlaySinglePhrase = () => {
+    playSinglePhrase(editorState,selectedPhrase)
+  }
 
   return (
     <div>
@@ -49,7 +63,8 @@ export default function ConetxtMenu() {
           left={contextMenu.event?.evt.pageX}
         >
           <ul>
-            <li onClick={() => handleOptionClick("edit")}>Edit</li>
+            <li onClick={() => handleOptionClick("play")}>Play</li>
+            <li onClick={() => handleOptionClick("download")}>Download</li>
             <li onClick={() => handleOptionClick("copy")}>Copy</li>
             <li onClick={() => handleOptionClick("delete")}>Delete</li>
           </ul>

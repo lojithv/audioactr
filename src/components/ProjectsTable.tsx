@@ -8,27 +8,33 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { IconButton } from "@mui/material";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
+import { useNavigate } from "react-router-dom";
+import { setActiveProject, useProjects } from "../store/ProjectsStore";
+import { ProjectState } from "../interfaces/ProjectState";
+import ProjectDropdownMenu from "./ProjectDropdownMenu";
+import { initialEditorStateCopy } from "../dump/editor";
+import { setEditorState } from "../store/EditorStore";
 
-function createData(name: string, date: Date, size: number) {
-  return { name, date, size };
-}
 
-const date = Date.now();
-const oneDay = ( 3600 * 1000 * 24)
 
-const getNewDate = (date: number) => {
-  return new Date(date);
-};
-
-const rows = [
-  createData("Project1", getNewDate(date + 1*oneDay), 6.0),
-  createData("Project2", getNewDate(date - 5*oneDay), 9.0),
-  createData("Project3", getNewDate(date - 8*oneDay), 16.0),
-  createData("Project4", getNewDate(date - 6*oneDay), 3.7),
-  createData("Project5", getNewDate(date - 10*oneDay), 16.0),
-];
+// const rows = [
+//   createData("Project1", getNewDate(date + 1*oneDay), 6.0),
+//   createData("Project2", getNewDate(date - 5*oneDay), 9.0),
+//   createData("Project3", getNewDate(date - 8*oneDay), 16.0),
+//   createData("Project4", getNewDate(date - 6*oneDay), 3.7),
+//   createData("Project5", getNewDate(date - 10*oneDay), 16.0),
+// ];
 
 export default function ProjectsTable() {
+  const navigate = useNavigate();
+
+  const projects = useProjects()
+
+  const handleProjectOpen = (project:ProjectState) => {
+    console.log(project)
+    navigate('/editor', { state: {projectState:project} })
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -36,25 +42,21 @@ export default function ProjectsTable() {
           <TableRow>
             <TableCell>NAME</TableCell>
             <TableCell align="center">DATE</TableCell>
-            <TableCell align="right">SIZE</TableCell>
             <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {projects.map((project,i) => (
             <TableRow
-              key={row.name}
+              key={i}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
+              <TableCell component="th" scope="row" onClick={()=>handleProjectOpen(project)}>
+                {project.name}
               </TableCell>
-              <TableCell align="center">{row.date.toDateString()}</TableCell>
-              <TableCell align="right">{row.size + " MB"}</TableCell>
+              <TableCell align="center" onClick={()=>handleProjectOpen(project)}>{project.createdAt.toString()}</TableCell>
               <TableCell sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <IconButton aria-label="delete" disabled color="primary">
-                  <MoreVertSharpIcon />
-                </IconButton>
+              <ProjectDropdownMenu/>
               </TableCell>
             </TableRow>
           ))}

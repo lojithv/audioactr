@@ -21,13 +21,13 @@ const Storyboard = () => {
 
   const editorState = EditorStore.useEditorState();
 
-  const layerData = editorState.tracks;
+  const layerData = editorState?.tracks;
 
   const windowDimensions = useWindowDimensions();
 
   useEffect(() => {
-    console.log(editorState.phrases[0]);
-    setSelectedPhrase(editorState.phrases[0]);
+    console.log(editorState?.phrases[0]);
+    setSelectedPhrase(editorState?.phrases[0]);
 
     function handleResize() {
       setWindowDimensions(EditorHelper.getWindowDimensions());
@@ -50,7 +50,7 @@ const Storyboard = () => {
         height={window.innerHeight}
       >
         <Layer>
-          {layerData.map((step: any, i: any) => (
+          {layerData?.map((step: any, i: any) => (
             <Track key={i} step={step} i={i + 1} />
           ))}
         </Layer>
