@@ -12,6 +12,8 @@ import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
 import CreateProjectFormDialog from "../components/CreateProjectForm";
 import localforage from "localforage";
+import NetworkSwitch from "../components/NetworkSwitch";
+import { useNetworkMode } from "../store/GlobalStore";
 
 type Props = {};
 
@@ -22,6 +24,7 @@ const Home = (props: Props) => {
   const inputFile = useRef(null as any);
 
   const projects = useProjects();
+  const networkMode = useNetworkMode();
 
   const rows = [
     // {
@@ -111,22 +114,27 @@ const Home = (props: Props) => {
             </Button>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                navigate("/pricing");
-              }}
-            >
-              Pricing
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                navigate("/signin");
-              }}
-            >
-              Sign In
-            </Button>
+            <NetworkSwitch />
+            {networkMode && (
+              <>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    navigate("/pricing");
+                  }}
+                >
+                  Pricing
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    navigate("/signin");
+                  }}
+                >
+                  Sign In
+                </Button>
+              </>
+            )}
           </div>
         </div>
         <Spacing space={40} />
