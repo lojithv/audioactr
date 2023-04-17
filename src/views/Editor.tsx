@@ -42,7 +42,7 @@ const Editor = () => {
 
   useEffect(() => {
     console.log(state)
-    if (state && state.projectState) {
+    if (state && state.projectState && !project) {
       EditorStore.setEditorState(state.projectState.state);
       setActiveProject(state.projectState)
       PlayerStore.setPlayerState({ isPlaying: false });
@@ -50,7 +50,7 @@ const Editor = () => {
       console.log(process.env.REACT_APP_API_URL);
       testServerConn();
     }
-  }, [project]);
+  }, []);
 
   useEffect(() => {
     if (playerState.isPlaying) {

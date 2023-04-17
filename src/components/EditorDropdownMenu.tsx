@@ -13,6 +13,7 @@ import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { downloadAudio } from "../handlers/editor";
 import { EditorStore } from "../store/EditorStore";
+import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -68,9 +69,28 @@ export default function CustomizedMenus() {
   };
 
   const editorState = EditorStore.useEditorState();
+  const activeProject = useActiveProject();
 
   const saveAsAudio = () => {
     downloadAudio(editorState);
+  };
+
+  const handleExportProject = () => {
+    console.log(activeProject);
+    if (activeProject) {
+      const updatedProjectState = { ...activeProject, state: editorState };
+      setActiveProject(updatedProjectState);
+      console.log(updatedProjectState);
+      const element = document.createElement("a");
+      const textFile = new Blob([JSON.stringify(updatedProjectState)], {
+        type: "application/json",
+      }); //pass data from localStorage API to blob
+      element.href = URL.createObjectURL(textFile);
+      element.download = `${activeProject.name}.json`;
+      document.body.appendChild(element);
+      element.click();
+    }
+    handleClose();
   };
 
   return (
@@ -96,7 +116,7 @@ export default function CustomizedMenus() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleExportProject} disableRipple>
           <GetAppIcon />
           Export Project
         </MenuItem>

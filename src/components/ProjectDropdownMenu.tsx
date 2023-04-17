@@ -13,6 +13,8 @@ import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { IconButton } from "@mui/material";
 import MoreVertSharpIcon from "@mui/icons-material/MoreVertSharp";
+import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
+import { useEditorState } from "../store/EditorStore";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -61,12 +63,31 @@ export default function ProjectDropdownMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const activeProject = useActiveProject();
+  const editorState = useEditorState();
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     console.log("click");
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleExportProject = () => {
+    console.log(activeProject)
+    if (activeProject) {
+      const updatedProjectState = { ...activeProject, state: editorState };
+      setActiveProject(updatedProjectState);
+      console.log(updatedProjectState)
+      const element = document.createElement("a");
+      const textFile = new Blob([JSON.stringify(updatedProjectState)], {type: 'application/json'}); //pass data from localStorage API to blob
+      element.href = URL.createObjectURL(textFile);
+      element.download = `${activeProject.name}.json`;
+      document.body.appendChild(element); 
+      element.click();
+    }
+    handleClose()
   };
 
   return (
@@ -102,7 +123,7 @@ export default function ProjectDropdownMenu() {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={()=>handleExportProject()} disableRipple>
           <GetAppIcon />
           Export Project
         </MenuItem>
