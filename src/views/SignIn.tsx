@@ -13,6 +13,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { AuthService } from "../services/auth";
+import { setUser } from "../store/GlobalStore";
+import localforage from "localforage";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -20,9 +23,22 @@ export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const authData = {
+      email: data.get("email"),
+      password: data.get("password"),
+    }
     console.log({
       email: data.get("email"),
       password: data.get("password"),
+    });
+    AuthService.signin(authData)
+    .then((res) => {
+      console.log(res);
+      localforage.setItem("user",res?.data)
+      navigate("/home")
+    })
+    .catch((err) => {
+      console.log(err);
     });
   };
 

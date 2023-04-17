@@ -13,7 +13,12 @@ import { initialEditorState } from "../dump/editor";
 import CreateProjectFormDialog from "../components/CreateProjectForm";
 import localforage from "localforage";
 import NetworkSwitch from "../components/NetworkSwitch";
-import { setNetworkMode, useNetworkMode } from "../store/GlobalStore";
+import {
+  setNetworkMode,
+  setUser,
+  useNetworkMode,
+  useUser,
+} from "../store/GlobalStore";
 
 type Props = {};
 
@@ -26,28 +31,7 @@ const Home = (props: Props) => {
   const projects = useProjects();
   const networkMode = useNetworkMode();
 
-  const rows = [
-    // {
-    //   name: "Project1",
-    //   createdAt: getNewDate(date + 1 * oneDay),
-    //   state: initialEditorState,
-    // },
-    // {
-    //   name: "Project2",
-    //   createdAt: getNewDate(date + 1 * oneDay),
-    //   state: initialEditorState,
-    // },
-    // {
-    //   name: "Project3",
-    //   createdAt: getNewDate(date + 1 * oneDay),
-    //   state: initialEditorState,
-    // },
-    // {
-    //   name: "Project4",
-    //   createdAt: getNewDate(date + 1 * oneDay),
-    //   state: initialEditorState,
-    // },
-  ];
+  const user = useUser();
 
   useEffect(() => {
     localforage.getItem("projects").then((cachedProjects: any) => {
@@ -56,14 +40,13 @@ const Home = (props: Props) => {
         setProjects(cachedProjects);
       }
     });
-    localforage.getItem("networkMode").then((nm:any)=>{
-      setNetworkMode(nm)
-    })
+    localforage.getItem("networkMode").then((nm: any) => {
+      setNetworkMode(nm);
+    });
+    localforage.getItem("user").then((usr: any) => {
+      setUser(usr);
+    });
   }, []);
-
-  const handleNewProjectCreate = () => {};
-
-  const openCreateProjectForm = () => {};
 
   const handleImportProject = () => {
     if (inputFile.current) {
@@ -128,14 +111,16 @@ const Home = (props: Props) => {
                 >
                   Pricing
                 </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    navigate("/signin");
-                  }}
-                >
-                  Sign In
-                </Button>
+                {!user && (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      navigate("/signin");
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                )}
               </>
             )}
           </div>
