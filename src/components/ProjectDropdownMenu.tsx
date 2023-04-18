@@ -80,14 +80,14 @@ export default function ProjectDropdownMenu({project}:any) {
 
   const handleExportProject = () => {
     console.log(activeProject)
-    if (activeProject) {
+    if (project) {
       const updatedProjectState = { ...activeProject, state: editorState };
-      setActiveProject(updatedProjectState);
+      // setActiveProject(updatedProjectState);
       console.log(updatedProjectState)
       const element = document.createElement("a");
-      const textFile = new Blob([JSON.stringify(updatedProjectState)], {type: 'application/json'}); //pass data from localStorage API to blob
+      const textFile = new Blob([JSON.stringify(project)], {type: 'application/json'}); //pass data from localStorage API to blob
       element.href = URL.createObjectURL(textFile);
-      element.download = `${activeProject.name}.json`;
+      element.download = `${project.name}.json`;
       document.body.appendChild(element); 
       element.click();
     }
@@ -138,10 +138,10 @@ export default function ProjectDropdownMenu({project}:any) {
           <GetAppIcon />
           Export Project
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        {/* <MenuItem onClick={handleClose} disableRipple>
           <EditIcon />
           Edit Project
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={handleProjectDelete} disableRipple>
           <DeleteIcon />
           Delete Project
