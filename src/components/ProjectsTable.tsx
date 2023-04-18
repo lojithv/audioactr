@@ -17,6 +17,7 @@ import { useNetworkMode, useUser } from "../store/GlobalStore";
 import Swal from "sweetalert2";
 import { projectService } from "../services/project";
 import { AxiosError } from "axios";
+import localforage from "localforage";
 
 // const rows = [
 //   createData("Project1", getNewDate(date + 1*oneDay), 6.0),
@@ -33,44 +34,45 @@ export default function ProjectsTable() {
 
   const networkMode = useNetworkMode();
 
-  const user = useUser();
-
   const handleProjectOpen = (project: ProjectState) => {
     console.log(project);
     navigate("/editor", { state: { projectState: project } });
   };
 
   const handleBackup = (project: any) => {
-    if (!user) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Sign in to backup projects!",
-      });
-    } else {
-      projectService
-        .saveProject({ project, user })
-        .then((res) => {
-          console.log(res);
-          if (res.status == 200) {
-            Swal.fire({
-              icon: "success",
-              title: "Project Saved!",
-            });
-          }
-        })
-        .catch((err: AxiosError) => {
-          console.log(err.response?.data);
-          const msg = err.response?.data?.toString();
-          if (msg) {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: msg,
-            });
-          }
+    console.log("handle backup")
+    localforage.getItem("user").then((user) => {
+      if (!user) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Sign in to backup projects!",
         });
-    }
+      } else {
+        projectService
+          .saveProject({ project, user })
+          .then((res) => {
+            console.log(res);
+            if (res.status == 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Project Saved!",
+              });
+            }
+          })
+          .catch((err: AxiosError) => {
+            console.log(err.response?.data);
+            const msg = err.response?.data?.toString();
+            if (msg) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: msg,
+              });
+            }
+          });
+      }
+    });
   };
 
   return (
