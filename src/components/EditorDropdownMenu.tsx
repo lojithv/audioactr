@@ -121,6 +121,7 @@ export default function CustomizedMenus() {
       console.log(updatedProjects);
       localforage.setItem("projects", updatedProjects);
     });
+    handleClose();
   };
 
   return (

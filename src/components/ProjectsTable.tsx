@@ -13,7 +13,9 @@ import { setActiveProject, useProjects } from "../store/ProjectsStore";
 import { ProjectState } from "../interfaces/ProjectState";
 import ProjectDropdownMenu from "./ProjectDropdownMenu";
 import BackupIcon from "@mui/icons-material/Backup";
-import { useNetworkMode } from "../store/GlobalStore";
+import { useNetworkMode, useUser } from "../store/GlobalStore";
+import Swal from "sweetalert2";
+import { projectService } from "../services/project";
 
 // const rows = [
 //   createData("Project1", getNewDate(date + 1*oneDay), 6.0),
@@ -30,9 +32,25 @@ export default function ProjectsTable() {
 
   const networkMode = useNetworkMode();
 
+  const user = useUser();
+
   const handleProjectOpen = (project: ProjectState) => {
     console.log(project);
     navigate("/editor", { state: { projectState: project } });
+  };
+
+  const handleBackup = (project: any) => {
+    if (!user) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Sign in to backup projects!",
+      });
+    } else {
+      projectService.saveProject({project,user}).then((res) => {
+        console.log(res);
+      });
+    }
   };
 
   return (
@@ -72,6 +90,7 @@ export default function ProjectsTable() {
                     aria-label="Cloud backup"
                     component="label"
                     disabled={!networkMode}
+                    onClick={() => handleBackup(project)}
                   >
                     <BackupIcon />
                   </IconButton>
