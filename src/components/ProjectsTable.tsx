@@ -16,6 +16,7 @@ import BackupIcon from "@mui/icons-material/Backup";
 import { useNetworkMode, useUser } from "../store/GlobalStore";
 import Swal from "sweetalert2";
 import { projectService } from "../services/project";
+import { AxiosError } from "axios";
 
 // const rows = [
 //   createData("Project1", getNewDate(date + 1*oneDay), 6.0),
@@ -47,9 +48,28 @@ export default function ProjectsTable() {
         text: "Sign in to backup projects!",
       });
     } else {
-      projectService.saveProject({project,user}).then((res) => {
-        console.log(res);
-      });
+      projectService
+        .saveProject({ project, user })
+        .then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            Swal.fire({
+              icon: "success",
+              title: "Project Saved!",
+            });
+          }
+        })
+        .catch((err: AxiosError) => {
+          console.log(err.response?.data);
+          const msg = err.response?.data?.toString();
+          if (msg) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: msg,
+            });
+          }
+        });
     }
   };
 
