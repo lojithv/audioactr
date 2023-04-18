@@ -13,9 +13,16 @@ import CloudDownloadRoundedIcon from "@mui/icons-material/CloudDownloadRounded";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { downloadAudio } from "../handlers/editor";
 import { EditorStore } from "../store/EditorStore";
-import { setActiveProject, useActiveProject } from "../store/ProjectsStore";
+import {
+  setActiveProject,
+  setProjects,
+  useActiveProject,
+  useProjects,
+} from "../store/ProjectsStore";
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router-dom";
+import SaveAsIcon from "@mui/icons-material/SaveAs";
+import localforage from "localforage";
 
 const StyledMenu = styled((props: MenuProps) => (
   <Menu
@@ -102,6 +109,20 @@ export default function CustomizedMenus() {
     handleClose();
   };
 
+  const handleProjectSave = () => {
+    localforage.getItem("projects").then((projects: any) => {
+      const updatedProjects = projects.map((p: any) => {
+        if (p.projectId === activeProject?.projectId) {
+          return { ...p, state: editorState };
+        } else {
+          return p;
+        }
+      });
+      console.log(updatedProjects);
+      localforage.setItem("projects", updatedProjects);
+    });
+  };
+
   return (
     <div>
       <Button
@@ -125,6 +146,10 @@ export default function CustomizedMenus() {
         open={open}
         onClose={handleClose}
       >
+        <MenuItem onClick={handleProjectSave} disableRipple>
+          <SaveAsIcon />
+          Save Project
+        </MenuItem>
         <MenuItem onClick={handleExportProject} disableRipple>
           <GetAppIcon />
           Export Project
