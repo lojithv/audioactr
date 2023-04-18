@@ -65,7 +65,7 @@ export default function ConetxtMenu() {
           <ul>
             <li onClick={() => handleOptionClick("play")}>Play</li>
             <li onClick={() => handleOptionClick("download")}>Download</li>
-            <li onClick={() => handleOptionClick("copy")}>Copy</li>
+            {/* <li onClick={() => handleOptionClick("copy")}>Copy</li> */}
             <li onClick={() => handleOptionClick("delete")}>Delete</li>
           </ul>
         </ContextMenu>

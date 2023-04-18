@@ -58,9 +58,6 @@ const Editor = () => {
       EditorStore.setEditorState(state.projectState.state);
       setActiveProject(state.projectState);
       PlayerStore.setPlayerState({ isPlaying: false });
-      console.log(process.env.SERVER_API_URL, "API URL");
-      console.log(process.env.REACT_APP_API_URL);
-      testServerConn();
     }
     localforage.getItem("networkMode").then((nm:any)=>{
       setNetworkMode(nm)

@@ -113,5 +113,5 @@ export const handleKeyDown = (
   voice: string
 ) => {
   console.log(event.code);
-  if (event.code === "Space") handlePlay(playerState, editorState, voice);
+  // if (event.code === "Space") handlePlay(playerState, editorState, voice);
 };

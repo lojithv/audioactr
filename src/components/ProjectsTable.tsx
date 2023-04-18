@@ -90,7 +90,7 @@ export default function ProjectsTable() {
           {projects.map((project, i) => (
             <TableRow
               key={i}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 }, cursor:'pointer' }}
             >
               <TableCell
                 component="th"
@@ -103,7 +103,7 @@ export default function ProjectsTable() {
                 align="center"
                 onClick={() => handleProjectOpen(project)}
               >
-                {project.createdAt.toString()}
+                {project.createdAt}
               </TableCell>
               <TableCell align="right">
                 <Tooltip title={networkMode ? "Cloud Backup" : "Cannot Backup"}>

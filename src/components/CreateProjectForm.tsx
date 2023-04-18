@@ -27,12 +27,13 @@ export default function CreateProjectFormDialog() {
   const projects = useProjects();
 
   const createNewProject = () => {
+    const date = new Date()
     const updatedProjectsList = [
       ...projects,
       {
         name: projectName,
         state: initialEditorState,
-        createdAt: Date.now(),
+        createdAt: date.toISOString(),
         projectId: uuidv4(),
       },
     ];
