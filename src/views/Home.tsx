@@ -76,6 +76,7 @@ const Home = (props: Props) => {
 
   const handleClearCache = () => {
     localforage.removeItem("projects");
+    setProjects([])
   };
 
   return (
