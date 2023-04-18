@@ -9,6 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { setProjects, useProjects } from "../store/ProjectsStore";
 import { initialEditorState } from "../dump/editor";
 import localforage from "localforage";
+import { v4 as uuidv4 } from "uuid";
 
 export default function CreateProjectFormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -28,10 +29,15 @@ export default function CreateProjectFormDialog() {
   const createNewProject = () => {
     const updatedProjectsList = [
       ...projects,
-      { name: projectName, state: initialEditorState, createdAt: Date.now() },
+      {
+        name: projectName,
+        state: initialEditorState,
+        createdAt: Date.now(),
+        projectId: uuidv4(),
+      },
     ];
     setProjects(updatedProjectsList);
-    localforage.setItem("projects",updatedProjectsList)
+    localforage.setItem("projects", updatedProjectsList);
     handleClose();
   };
 

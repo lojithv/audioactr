@@ -20,7 +20,6 @@ const stripePromise = loadStripe(
 export default function Payment() {
   const { state } = useLocation();
 
-
   const appearance: Appearance = {
     theme: "stripe",
     variables: {

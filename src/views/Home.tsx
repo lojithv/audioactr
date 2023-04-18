@@ -19,6 +19,8 @@ import {
   useNetworkMode,
   useUser,
 } from "../store/GlobalStore";
+import { AuthService } from "../services/auth";
+import { projectService } from "../services/project";
 
 type Props = {};
 
@@ -38,12 +40,34 @@ const Home = (props: Props) => {
       console.log(cachedProjects);
       if (cachedProjects) {
         setProjects(cachedProjects);
+      } else {
+        localforage.getItem("user").then((usr: any) => {
+          console.log(usr);
+          if (usr) {
+            projectService.getAllProjects(usr).then((res) => {
+              console.log(res);
+              if (res.status === 200) {
+                const fetchedProjects = res.data.map((p: any) => {
+                  return p.state;
+                });
+                setProjects(fetchedProjects);
+              }
+            });
+          }
+        });
       }
     });
     localforage.getItem("networkMode").then((nm: any) => {
       setNetworkMode(nm);
     });
     localforage.getItem("user").then((usr: any) => {
+      AuthService.getSelf({ usr })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       setUser(usr);
     });
   }, []);
@@ -76,6 +100,7 @@ const Home = (props: Props) => {
 
   const handleClearCache = () => {
     localforage.removeItem("projects");
+    setProjects([]);
   };
 
   return (
@@ -121,14 +146,17 @@ const Home = (props: Props) => {
             <NetworkSwitch />
             {networkMode && (
               <>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    navigate("/pricing");
-                  }}
-                >
-                  Pricing
-                </Button>
+                {((user && !user.paidUser) || !user) && (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      navigate("/pricing");
+                    }}
+                  >
+                    Pricing
+                  </Button>
+                )}
+
                 {!user && (
                   <Button
                     variant="contained"

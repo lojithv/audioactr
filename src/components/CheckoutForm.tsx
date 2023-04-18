@@ -7,6 +7,9 @@ import {
 } from "@stripe/react-stripe-js";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { setUser, useUser } from "../store/GlobalStore";
+import { SubscriptionService } from "../services/subscription";
+import localforage from "localforage";
 
 export default function CheckoutForm({ clientSecret }: any) {
   const stripe = useStripe();
@@ -35,11 +38,19 @@ export default function CheckoutForm({ clientSecret }: any) {
       switch (paymentIntent?.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
-          Swal.fire({
-            icon: "success",
-            title: "Payment succeeded!",
-            text: "",
-          });
+          // localforage.getItem("selectedPlan").then((v) => {
+          //   if (v) {
+          //     SubscriptionService.subscribeToAPlan({ user,plan: v }).then((res)=>{
+          //       console.log(res)
+          //     });
+          //     Swal.fire({
+          //       icon: "success",
+          //       title: "Payment succeeded!",
+          //       text: "",
+          //     });
+          //   }
+          // });
+
           break;
         case "processing":
           setMessage("Your payment is processing.");
@@ -91,16 +102,29 @@ export default function CheckoutForm({ clientSecret }: any) {
     // redirected to the `return_url`.
     if (error?.type === "card_error" || error?.type === "validation_error") {
       setMessage(error.message);
-    } else if(error) {
+    } else if (error) {
       setMessage("An unexpected error occurred.");
     } else {
-      Swal.fire({
-        icon: "success",
-        title: "Payment succeeded!",
-        text: "",
-      }).then((v)=>{
-        navigate("/home")
-      });
+      localforage.getItem("user").then((user)=>{
+        localforage.getItem("selectedPlan").then((v) => {
+          if (v) {
+            SubscriptionService.subscribeToAPlan({ user, plan: v }).then(
+              (res) => {
+                console.log(res);
+                localforage.setItem("user",res.data)
+              }
+            );
+            Swal.fire({
+              icon: "success",
+              title: "Payment succeeded!",
+              text: "",
+            }).then((v) => {
+              navigate("/home");
+            });
+          }
+        });   
+      })
+
     }
 
     setIsLoading(false);
@@ -117,7 +141,11 @@ export default function CheckoutForm({ clientSecret }: any) {
         onChange={(e: any) => setEmail(e.target?.value)}
       />
       <PaymentElement id="payment-element" />
-      <button className="payment-btn" disabled={isLoading || !stripe || !elements} id="submit">
+      <button
+        className="payment-btn"
+        disabled={isLoading || !stripe || !elements}
+        id="submit"
+      >
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>

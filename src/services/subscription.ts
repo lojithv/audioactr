@@ -3,9 +3,7 @@ import { serverConnInstance } from "../config/axiosInstance";
 export namespace SubscriptionService {
   export const subscribeToAPlan = async (data:any) => {
     return await serverConnInstance.post("/subscribe-to-a-plan",data).then((res) => {
-      if (res.data) {
-        console.log(res.data);
-      }
+      return res
     });
   };
 

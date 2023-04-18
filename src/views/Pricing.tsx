@@ -16,6 +16,7 @@ import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import { PaymentService } from "../services/payment";
+import localforage from "localforage";
 
 const tiers = [
   {
@@ -59,6 +60,17 @@ function PricingContent() {
       }
     });
   }, []);
+
+  const handlePlanSelect = (tier: any) => {
+    if (tier.price) {
+      navigate(tier.redirectUrl, {
+        state: { clientSecret, tier },
+      });
+      localforage.setItem("selectedPlan", tier);
+    } else {
+      navigate(tier.redirectUrl);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -153,13 +165,7 @@ function PricingContent() {
                   <Button
                     fullWidth
                     variant={tier.buttonVariant as "outlined" | "contained"}
-                    onClick={() =>
-                      tier.price
-                        ? navigate(tier.redirectUrl, {
-                            state: { clientSecret },
-                          })
-                        : navigate(tier.redirectUrl)
-                    }
+                    onClick={() => handlePlanSelect(tier)}
                   >
                     {tier.buttonText}
                   </Button>

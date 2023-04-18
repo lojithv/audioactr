@@ -21,7 +21,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Routes>
-            <Route path="/" element={<AllPages />} />
+            <Route path="/" element={<Home />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/pricing" element={<Pricing />} />
