@@ -172,11 +172,21 @@ def convertAudioToMp3(data):
             (track for track in tracks if track['id'] == phrase['trackId']), None)
         if (track):
             voice = track['voice']
+            volume = track['volume']
+            speechRate = track['speechRate']
         if (voice):
             engine.setProperty('voice', voice)
         else:
             engine.setProperty(
                 'voice', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens\\TTS_MS_EN-US_DAVID_11.0')
+        if (volume):
+            engine.setProperty('volume', volume/100)
+        else:
+            engine.setProperty('volume', 1.0)
+        if (speechRate):
+            engine.setProperty('rate', speechRate)
+        else:
+            engine.setProperty('rate', 200)
         # engine.say(phrase['phrase'])
 
         # Speak the current phrase and save the output to a file

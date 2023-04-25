@@ -115,7 +115,7 @@ const Phrase = ({ id, trackIndex, layerData, phraseIndex }: any) => {
       />
       {layerData.phrase.toString().length > 30 ? (
         <Text
-          text={`${phraseData?.phrase.substring(0, 50)}...`}
+          text={`${phraseData?.phrase.substring(0, 30)}...`}
           width={100}
           // wrap={"char"}
           fontSize={13}

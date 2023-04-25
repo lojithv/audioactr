@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { setUser, useUser } from "../store/GlobalStore";
 import { SubscriptionService } from "../services/subscription";
 import localforage from "localforage";
+import { Button } from "@mui/material";
 
 export default function CheckoutForm({ clientSecret }: any) {
   const stripe = useStripe();
@@ -150,6 +151,7 @@ export default function CheckoutForm({ clientSecret }: any) {
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
       </button>
+      <Button sx={{marginTop:'10px'}} onClick={()=>navigate('/pricing')}>Go Back</Button>
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
